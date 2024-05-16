@@ -2,7 +2,24 @@ export const Strings = {
     registration: "Registration",
     enter_first_name: "Enter First Name",
     save: "Save",
-    male:"Male",
-    female:"Female"
+    male: "Male",
+    female: "Female",
+    patient_id: "Patient id",
+    patient_num: "Patient number",
+    first_name: "First Name",
+    last_name: "Last Name",
+    birth_place: "Birth of place",
+    nearest_birth_place: "Nearest birth place",
+    enter_age: "Enter age",
+    birth_Date: "Birth Date",
+    birth_time: "Birth Time",
+    address: "Address",
+    state: "State",
+    district: "District",
+    select_option: "Select Option",
+    gender: "Gender",
+    male: "Male",
+    female: "Female",
+    radioButtonVal:"RadioButtonVal"
 
 }

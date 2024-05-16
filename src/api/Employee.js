@@ -1,7 +1,7 @@
 import { API_URLS } from "../constants/constants";
 import { fetchWrapper } from "../helpers/fetch-wrapper";
 
-export const City = {
+export const Employee = {
   getData,
 
 };

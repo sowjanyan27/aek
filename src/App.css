@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -28,11 +28,327 @@
   color: #61dafb;
 }
 
+.background_color_light_grey {
+  background-color: white
+}
+
+.text_align_left {
+  text-align: left;
+}
+
+.space-evenly {
+  justify-content: space-evenly;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+.shadow_box {
+  box-shadow: 8px 8px 11px #9E9EA3;
+}
+
+.shadow_box_input {
+  box-shadow: 8px 8px 11px #ffffff;
+}
+
+.shadow_none .form-control:focus {
+  box-shadow: none;
+}
+
+.input_hight_45 {
+  height: 45px;
+}
+
+.background_color_light_grey {
+  background-color: white
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+} */
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App_bg_red {
+  background-color: aquamarine;
+}
+
+.Nav_bg {
+  background-color: rgb(179, 220, 206);
+}
+
+.Container_bg {
+  background-color: rgb(142, 150, 147);
+}
+
+.fixed-head {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 999;
+}
+
+.Full_Screen {
+  width: "100%";
+  height: 100vh;
+}
+
+.padding_top {
+  padding-top: 70px;
+}
+
+.padding_top_carosuel {
+  padding-top: 70px;
+}
+
+.padding_left_4p {
+  padding-left: 4%;
+}
+
+.bg_orange_FFFFCC {
+  background-color: "#FFFFCC" !important;
+}
+
+.space-evenly {
+  justify-content: space-evenly;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+.shadow_box {
+  /* box-shadow: 8px 8px 11px #9E9EA3; */
+  box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.75);
+  background: #fff;
+  padding: 15px 10px;
+}
+
+.shadow_box_input {
+  box-shadow: 8px 8px 11px #ffffff;
+}
+
+.shadow_none .form-control:focus {
+  box-shadow: none;
+}
+
+.input_hight_45 {
+  height: 45px;
+}
+
+.background_color_light_grey {
+  background-color: white
+}
+
+.bg_orange {
+  background-color: orange;
+}
+
+.display_block {
+  display: inline-block;
+}
+
+.padding_25p {
+  padding: 25%;
+}
+
+.logo_color_red {
+  color: red;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-color: rgb(142, 150, 147);
+}
+
+.hide-content {
+  display: none;
+}
+
+.dummy_div {
+  height: 10px;
+  padding-top: 60px
+}
+
+.center-text {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  top: 50%;
+}
+
+.dropdown-show:hover .hide-content {
+  display: block;
+}
+
+.dropdown-show:hover {
+  color: red;
+}
+
+.color_red {
+  color: red;
+}
+
+.color_red:hover {
+  color: blue !important;
+}
+
+.width_100 {
+  width: 100%;
+}
+
+.padding_horizental_35 {
+  padding-left: 35px;
+  padding-right: 35px;
+}
+
+.padding_vertical_50 {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.text_align_left {
+  text-align: left;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.small_screen_hide {
+  display: block;
+}
+
+.margin_bottom_15 {
+  margin-bottom: 15px;
+}
+
+.marginTop_20 {
+  margin-top: 20px;
+}
+
+.marginTop_Radio_btn_50 {
+  margin-top: 50px;
+
+}
+
+.save_btn_margin_bottom_15 {
+  margin-bottom: 15px;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .margin_vertical_10 {
+    margin-top: 5%;
+    margin-bottom: 5%;
+  }
+
+  .text_align_left {
+    text-align: left;
+  }
+
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .small_screen_hide {
+    display: none;
+  }
+
+  .text_align_left {
+    text-align: left;
+  }
+}
+
+
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .small_screen_hide {
+    display: none;
+  }
+
+  .text_align_left {
+    text-align: left;
+  }
+
+}
+
+/*  Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .space-evenly {
+    justify-content: space-evenly;
+  }
+
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .space-evenly {
+    justify-content: space-evenly;
+  }
+
+}
+
+.label-text-left {
+  text-align: left;
+}
+
+.text_align_center {
+  text-align: center;
 }

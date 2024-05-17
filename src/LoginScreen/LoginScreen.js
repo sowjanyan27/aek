@@ -1,10 +1,15 @@
 import React, { Component } from "react";
 import { Strings } from "../strings.js/Strings";
 import { Button, Badge, Container } from 'react-bootstrap';
+import withRouter from "../helpers/Routers";
+import { ValidationMessage } from "../helpers/ValidationMessage";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
 
 
 
-export default class LoginScreen extends Component {
+
+ class LoginScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -76,6 +81,44 @@ export default class LoginScreen extends Component {
         if (field === Strings.radioButtonVal) {
             this.setState({ gender: value })
         }
+    }
+
+    loginclick(){
+        if (!this.state.patientid) {
+            toast.warn(ValidationMessage.p_id, {
+              toastId: "pid",
+            });
+            return;
+          }
+          if (!this.state.patientnum) {
+            toast.warn(ValidationMessage.p_num, {
+              toastId: "p_num",
+            });
+            return;
+          }
+          if (!this.state.firstName) {
+            toast.warn(ValidationMessage.p_firstname, {
+              toastId: "p_firstname",
+            });
+            return;
+          }
+          if (!this.state.lastName) {
+            toast.warn(ValidationMessage.p_lastname, {
+              toastId: "p_lastname",
+            });
+            return;
+          }
+          if (!this.state.patientid) {
+            toast.warn(ValidationMessage.p_id, {
+              toastId: "pid",
+            });
+            return;
+          }
+          else{
+            this.setState()
+          }
+        console.log("test")
+        this.props.router.navigate(`/Login`);
     }
     render() {
         return (
@@ -198,7 +241,7 @@ export default class LoginScreen extends Component {
                                 </div>
                             </div>
                             <div className="width_100 text-end save_btn_margin_bottom_15 ">
-                                <Button onClick={() => { console.warn("++radio", this.state.gender) }} className="btn btn-success padding_horizental_35">{Strings.save}</Button>
+                                <Button onClick={() => this.loginclick()} className="btn btn-success padding_horizental_35">{Strings.save}</Button>
                             </div>
                         </div>
                     </form >
@@ -207,3 +250,4 @@ export default class LoginScreen extends Component {
         );
     }
 }
+export default withRouter(LoginScreen)

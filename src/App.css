@@ -99,6 +99,14 @@
   background-color: rgb(142, 150, 147);
 }
 
+.font_size_default {
+  font-size: 14px;
+}
+
+.font_size_16_normal {
+  font-size: 16px;
+}
+
 .fixed-head {
   position: fixed;
   left: 0;
@@ -218,6 +226,10 @@ input[type="file"] {
   color: red;
 }
 
+.color_white {
+  color: rgb(255, 255, 255);
+}
+
 .color_red:hover {
   color: blue !important;
 }
@@ -273,6 +285,10 @@ input[type="file"] {
   margin-top: 20px;
 }
 
+.margin_right_10 {
+  margin-right: 10px;
+}
+
 .marginTop_Radio_btn_50 {
   margin-top: 50px;
 
@@ -281,6 +297,7 @@ input[type="file"] {
 .save_btn_margin_bottom_15 {
   margin-bottom: 15px;
 }
+
 
 @keyframes App-logo-spin {
   from {
@@ -291,6 +308,37 @@ input[type="file"] {
     transform: rotate(360deg);
   }
 }
+
+.right-align {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.display_flex{
+  display: flex;
+}
+
+.label-text-left {
+  text-align: left;
+}
+
+.text_align_center {
+  text-align: center;
+}
+
+.show_add_new {
+  display: none;
+}
+
+.add_btn:hover .show_add_new {
+  display: block;
+}
+
+
+/* Resposive css work  */
+
+
 
 @media (max-width: 575.98px) {
   .margin_vertical_10 {
@@ -343,12 +391,4 @@ input[type="file"] {
     justify-content: space-evenly;
   }
 
-}
-
-.label-text-left {
-  text-align: left;
-}
-
-.text_align_center {
-  text-align: center;
 }

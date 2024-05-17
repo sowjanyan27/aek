@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Employee } from './api/Employee';
 
+
 export default class Login extends Component {
       constructor(props){
         super(props)
@@ -24,20 +25,20 @@ export default class Login extends Component {
       }
 
       async getData() {
-        try {
-          const response = await Employee.getData();
-          if (response.length > 0) {
-            this.setState({
-              Maindata: response, dummyData: response, isLoading: false
-            })
-          }
-        } catch (e) {
-          console.log(e);
-        } finally {
-          this.setState({
-            isLoading: false,
-          });
-        }
+        // try {
+        //   const response = await Employee.getData();
+        //   if (response.length > 0) {
+        //     this.setState({
+        //       Maindata: response, dummyData: response, isLoading: false
+        //     })
+        //   }
+        // } catch (e) {
+        //   console.log(e);
+        // } finally {
+        //   this.setState({
+        //     isLoading: false,
+        //   });
+        // }
       }
   render() {
     return (

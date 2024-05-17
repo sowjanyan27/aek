@@ -3,7 +3,8 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './Login';
 import LoginScreen from './LoginScreen/LoginScreen';
-import { ToastContainer } from 'react-toastify';
+import DataScreen from './LoginScreen/DataScreen';
+import {ToastContainer} from "react-toastify"
 function App() {
   return (
     <BrowserRouter>

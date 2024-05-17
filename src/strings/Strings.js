@@ -2,6 +2,7 @@ export const Strings = {
     registration: "Registration",
     enter_first_name: "Enter First Name",
     save: "Save",
+    cancel: "Cancel",
     male: "Male",
     female: "Female",
     patient_id: "Patient id",
@@ -20,6 +21,8 @@ export const Strings = {
     gender: "Gender",
     male: "Male",
     female: "Female",
-    radioButtonVal:"RadioButtonVal"
+    radioButtonVal: "RadioButtonVal",
+    please_enter_value: "Please enter value",
+    please_select_one: "Please select one",
 
 }

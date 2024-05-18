@@ -314,6 +314,9 @@ input[type="file"] {
   justify-content: flex-end;
   width: 100%;
 }
+.font_family_serif{
+  FONT-FAMILY: serif !important;
+}
 
 .display_flex{
   display: flex;

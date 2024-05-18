@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Strings } from "../strings/Strings";
-import { Button, Badge, Container } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import withRouter from "../helpers/Routers";
 import { ValidationMessage } from "../helpers/ValidationMessage";
 import { toast } from "react-toastify";
@@ -29,8 +29,6 @@ class LoginScreen extends Component {
             state: "",
             district: "",
             dropDownVal: "",
-            gender: "",
-            username: "venkat",
             searchId: "",
             searchValue: "",
             filterData: [],
@@ -51,31 +49,44 @@ class LoginScreen extends Component {
                 { itemName: "Options 4", value: 4 },
             ],
             data: [
-                {
-                    id: 1,
-                    FName: 'Ghost',
-                    LName: 'busters',
-                    year: '1984/05/23',
-                    gender: "Male",
-                    PhNum: "87654321"
-                },
-                {
-                    id: 2,
-                    FName: 'John',
-                    LName: 'Sena',
-                    year: '1984/05/23',
-                    gender: "Male",
-                    PhNum: "76543821"
-                },
-                {
-                    id: 3,
-                    FName: 'Mia',
-                    LName: 'Maya',
-                    year: '1984/05/23',
-                    gender: "Female",
-                    PhNum: "65487321"
-                },
+                // {
+                //     id: 1,
+                //     FName: 'Ghost',
+                //     LName: 'busters',
+                //     year: '1997-05-29',
+                //     gender: "Male",
+                //     PhNum: "87654321"
+                // },
+                // {
+                //     id: 2,
+                //     FName: 'John',
+                //     LName: 'Sena',
+                //     year: '1967-05-26',
+                //     gender: "Male",
+                //     PhNum: "76543821"
+                // },
+                // {
+                //     id: 3,
+                //     FName: 'Mia',
+                //     LName: 'Maya',
+                //     year: '1967-01-29',
+                //     gender: "Female",
+                //     PhNum: "65487321"
+                // },
                 // Add more data as needed
+
+                { id: 1, FName: 'John', LName: 'Doe', email: 'john@example.com', year: '1967-01-29', gender: "Female", PhNum: "65487321" },
+                { id: 2, FName: 'Jane', LName: ' Dow', email: 'jane@example.com', year: '1988-11-23', gender: "Male", PhNum: "65487321" },
+                { id: 3, FName: 'Alice', LName: ' Smith', email: 'alice@example.com', year: '1907-09-19', gender: "Female", PhNum: "65487321" },
+                { id: 4, FName: 'Bob', LName: ' Johnson', email: 'bob@example.com', year: '1958-09-25', gender: "Male", PhNum: "65487321" },
+                { id: 5, FName: 'Charlie', LName: 'Brown', email: 'charlie@example.com', year: '1957-01-19', gender: "Female", PhNum: "65487321" },
+                { id: 6, FName: 'David', LName: 'Wilson', email: 'david@example.com', year: '1997-06-20', gender: "Female", PhNum: "65487321" },
+                { id: 7, FName: 'Eve', LName: 'Adams', email: 'eve@example.com', year: '1967-01-29', gender: "Male", PhNum: "65487321" },
+                { id: 8, FName: 'Frank', LName: 'Clark', email: 'frank@example.com', year: '1990-01-25', gender: "Female", PhNum: "3252566" },
+                { id: 9, FName: 'Grace', LName: 'Lee', email: 'grace@example.com', year: '1967-02-11', gender: "Female", PhNum: "65487321" },
+                { id: 10, FName: 'Hank', LName: 'Miller', email: 'hank@example.com', year: '1956-02-28', gender: "Male", PhNum: "4567321" },
+                { id: 11, FName: 'Ivy', LName: 'Martin', email: 'ivy@example.com', year: '1987-05-20', gender: "Female", PhNum: "342634521" },
+                { id: 12, FName: 'Jack', LName: 'Davis', email: 'jack@example.com', year: '1988-07-04', gender: "Female", PhNum: "134234135" }
             ]
         }
         // console.warn("++which one first")
@@ -267,18 +278,36 @@ class LoginScreen extends Component {
         // console.log("test")
         // this.props.router.navigate(`/Login`);
         toast.success(ValidationMessage.V_Added, {
-            toastId: "success"
+            toastId: 'success',
+            onClose: () => {
+                this.setState({ isFormView: false });
+                // this.dataClear()
+            }
         });
-        setTimeout(() => {
-
-            this.setState({ isFormView: false })
-        }, 1000)
+        this.setState({ isFormView: false });
     }
 
-
-
-
-
+    dataClear() {
+        this.setState({
+            patientid: "",
+            patientnum: "",
+            firstName: "",
+            lastName: "",
+            age: "",
+            dateofBirth: "",
+            timeofBirth: "",
+            birthofPlace: "",
+            address: "",
+            nearestBirthPlace: "",
+            mobile: "",
+            state: "",
+            district: "",
+            dropDownVal: "",
+            gender: "",
+            searchId: "",
+            searchValue: ""
+        })
+    }
 
     handleFilterId = (text) => {
         var value = text.target.value.toLowerCase();
@@ -311,6 +340,23 @@ class LoginScreen extends Component {
     };
     handleFormView = (item) => {
         this.setState({ isFormView: item })
+        if (!item) {
+            this.dataClear()
+        }
+    }
+
+    handleView = (item) => {
+        this.setState({ isFormView: true }, () => {
+            this.setState({
+                patientid: (item.id != null && item.id != undefined) ? item.id : "",
+                firstName: (item.FName != null && item.FName != undefined) ? item.FName : "",
+                lastName: (item.LName != null && item.LName != undefined) ? item.LName : "",
+                mobile: (item.PhNum != null && item.PhNum != undefined) ? item.PhNum : "",
+                gender: (item.gender != null && item.gender != undefined) ? item.gender : "",
+                dateofBirth: (item.year != null && item.year != undefined) ? item.year : ""
+            })
+        })
+        console.warn("++item", item)
     }
     render() {
         return (
@@ -322,73 +368,68 @@ class LoginScreen extends Component {
                                 <div className="margin_bottom_15 right-align ">
                                     <Button className="btn-secondary" onClick={() => { this.handleFormView(true) }}><i class="fa fa-plus color_white font_size_16_normal" aria-hidden="true"></i>
                                     </Button>
-                                    <div className="show_add_new">
-                                        <div >add new</div>
-                                    </div>
+
                                 </div>
 
-                                <div className="show_add_new">
-                                    <div >add new</div>
-                                </div>
                                 <TableContainer className="mt-4 mb-4" component={Paper}>
                                     <div className="mt-4 mb-4 width_100 space-between display_flex" >
                                         <input
-                                            className="ms-4"
+                                            className="ms-4 font_family_serif"
                                             type="number"
                                             value={this.state.searchId}
                                             onChange={(text) => { this.handleFilterId(text) }} // Changed parameter to e.target.value
                                             placeholder="Search Id"
                                         />
                                         <input
-                                            className="me-4"
+                                            className="me-4 font_family_serif"
                                             value={this.state.searchValue}
                                             onChange={(text) => { this.handleFilter(text) }} // Changed parameter to e.target.value
                                             placeholder="Search..."
                                         />
                                     </div>
-                                    <Table>
+                                    <Table className="table table-bordered">
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell>ID</TableCell>
-                                                <TableCell>First Name</TableCell>
-                                                <TableCell>Last Name</TableCell>
-                                                <TableCell>D.O.J</TableCell>
-                                                <TableCell>Gender</TableCell>
-                                                <TableCell>Phone Number</TableCell>
-                                                <TableCell>Action</TableCell>
+                                                <TableCell className="font_family_serif">ID</TableCell>
+                                                <TableCell className="font_family_serif">First Name</TableCell>
+                                                <TableCell className="font_family_serif">Last Name</TableCell>
+                                                <TableCell className="font_family_serif">D.O.J</TableCell>
+                                                <TableCell className="font_family_serif">Gender</TableCell>
+                                                <TableCell className="font_family_serif">Phone Number</TableCell>
+                                                <TableCell className="font_family_serif">Action</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
                                             {this.state.nodataFound ? (
                                                 <TableRow>
-                                                    <TableCell colSpan={7}>No data found</TableCell>
+                                                    <TableCell className="font_family_serif" colSpan={7}>No data found</TableCell>
                                                 </TableRow>
                                             ) : (
                                                 this.state.filterData.length === 0 ? (
                                                     this.state.data.map((row) => (
                                                         <TableRow key={row.id}>
-                                                            <TableCell>{row.id}</TableCell>
-                                                            <TableCell>{row.FName}</TableCell>
-                                                            <TableCell>{row.LName}</TableCell>
-                                                            <TableCell>{row.year}</TableCell>
-                                                            <TableCell>{row.gender}</TableCell>
-                                                            <TableCell>{row.PhNum}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.id}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.FName}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.LName}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.year}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.gender}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.PhNum}</TableCell>
                                                             <TableCell>
-                                                                <Button variant="outlined">View</Button>
+                                                                <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
                                                             </TableCell>
                                                         </TableRow>
                                                     ))
                                                 ) : (
                                                     this.state.filterData.map((row) => (
                                                         <TableRow key={row.id}>
-                                                            <TableCell>{row.id}</TableCell>
-                                                            <TableCell>{row.FName}</TableCell>
-                                                            <TableCell>{row.LName}</TableCell>
-                                                            <TableCell>{row.year}</TableCell>
-                                                            <TableCell>{row.gender}</TableCell>
-                                                            <TableCell>{row.PhNum}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.id}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.FName}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.LName}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.year}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.gender}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.PhNum}</TableCell>
                                                             <TableCell>
-                                                                <Button variant="outlined">View</Button>
+                                                                <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
                                                             </TableCell>
                                                         </TableRow>
                                                     ))
@@ -401,111 +442,111 @@ class LoginScreen extends Component {
                             </div>
                             :
                             <form>
-                                <h2 className="text_align_center pb-4 pt-2">{Strings.registration}</h2>
+                                <h2 className="text_align_center pb-4 pt-2 font_family_serif">{Strings.registration}</h2>
                                 <div className="w-75 me-auto ms-auto">
                                     <div className="row">
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12  ">
                                             <div className="form-group text_align_left ">
-                                                <label htmlFor="PatientId"> {Strings.patient_id} <span className="logo_color_red"> *</span></label>
-                                                <input type="text" onChange={(text) => this.handleSelectedData(text, Strings.patient_id)} className="form-control  input_hight_45" id="near_area" value={this.state.patientid} placeholder={Strings.patient_id} />
-                                                {this.state.showpatientIdview && <span style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
+                                                <label htmlFor="PatientId" className="font_family_serif"> {Strings.patient_id} <span className="logo_color_red"> *</span></label>
+                                                <input type="text" onChange={(text) => this.handleSelectedData(text, Strings.patient_id)} className="form-control font_family_serif  input_hight_45" id="near_area" value={this.state.patientid} placeholder={Strings.patient_id} />
+                                                {this.state.showpatientIdview && <span className="font_family_serif" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
                                             </div>
                                         </div>
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
                                             <div className="form-group text_align_left" >
-                                                <label htmlFor="PatientNumber">{Strings.patient_num} <span className="logo_color_red"> *</span></label>
-                                                <input type="text" onChange={(text) => this.handleSelectedData(text, Strings.patient_num)} className="form-control  input_hight_45" id="patientId" value={this.state.patientnum} placeholder={Strings.patient_num} />
-                                                {this.state.showpatientNumview && <span style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
+                                                <label htmlFor="PatientNumber" className="font_family_serif">{Strings.patient_num} <span className="logo_color_red"> *</span></label>
+                                                <input type="text" onChange={(text) => this.handleSelectedData(text, Strings.patient_num)} className="form-control font_family_serif input_hight_45" id="patientId" value={this.state.patientnum} placeholder={Strings.patient_num} />
+                                                {this.state.showpatientNumview && <span className="font_family_serif" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
 
                                             </div>
                                         </div>
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                             <div className="form-group text_align_left" >
-                                                <label htmlFor="firstName">  {Strings.first_name} <span className="logo_color_red"> *</span>
+                                                <label htmlFor="firstName" className="font_family_serif">  {Strings.first_name} <span className="logo_color_red"> *</span>
                                                 </label>
                                                 <input
                                                     type="text"
                                                     onChange={(text) => { this.handleSelectedData(text, Strings.first_name) }}
-                                                    className="form-control  input_hight_45"
+                                                    className="form-control font_family_serif input_hight_45"
                                                     id="firstName"
                                                     value={this.state.firstName}
                                                     placeholder={Strings.first_name}
                                                 />
-                                                {this.state.showpatientFirstnameview && <span style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
+                                                {this.state.showpatientFirstnameview && <span className="font_family_serif" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
 
                                             </div>
                                         </div>
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20  ">
                                             <div className="form-group text_align_left" >
-                                                <label htmlFor="lastName"> {Strings.last_name} <span className="logo_color_red"> *</span></label>
-                                                <input type="text" onChange={(text) => { this.handleSelectedData(text, Strings.last_name) }} className="form-control  input_hight_45" id="lastName" value={this.state.lastName} placeholder={Strings.last_name} />
-                                                {this.state.showpatientLastnameview && <span style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
+                                                <label htmlFor="lastName" className="font_family_serif"> {Strings.last_name} <span className="logo_color_red"> *</span></label>
+                                                <input type="text" onChange={(text) => { this.handleSelectedData(text, Strings.last_name) }} className="form-control font_family_serif input_hight_45" id="lastName" value={this.state.lastName} placeholder={Strings.last_name} />
+                                                {this.state.showpatientLastnameview && <span className="font_family_serif" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
                                             </div>
                                         </div>
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                             <div className="form-group text_align_left" >
-                                                <label htmlFor="BirthPlace">{Strings.birth_place}</label>
-                                                <input type="text" onChange={(text) => { this.handleSelectedData(text, Strings.birth_place) }} className="form-control  input_hight_45" id="birth_place" value={this.state.birthofPlace} placeholder={Strings.birth_place} />
+                                                <label htmlFor="BirthPlace" className="font_family_serif">{Strings.birth_place}</label>
+                                                <input type="text" onChange={(text) => { this.handleSelectedData(text, Strings.birth_place) }} className="form-control font_family_serif input_hight_45" id="birth_place" value={this.state.birthofPlace} placeholder={Strings.birth_place} />
                                             </div>
                                         </div>
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                             <div className="form-group text_align_left" >
-                                                <label htmlFor="NearBirthPlace">{Strings.nearest_birth_place}</label>
-                                                <input type="text" onChange={(text) => this.handleSelectedData(text, Strings.nearest_birth_place)} className="form-control  input_hight_45" id="near_area" value={this.state.nearestBirthPlace} placeholder={Strings.nearest_birth_place} />
+                                                <label htmlFor="NearBirthPlace" className="font_family_serif">{Strings.nearest_birth_place}</label>
+                                                <input type="text" onChange={(text) => this.handleSelectedData(text, Strings.nearest_birth_place)} className="form-control font_family_serif input_hight_45" id="near_area" value={this.state.nearestBirthPlace} placeholder={Strings.nearest_birth_place} />
                                             </div>
                                         </div>
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                             <div className="row">
                                                 <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                                                     <div className="form-group text_align_left" >
-                                                        <label htmlFor="EnterAge"> {Strings.enter_age} <span className="logo_color_red"> *</span></label>
-                                                        <input type="number" onChange={(text) => { this.handleSelectedData(text, Strings.enter_age) }} className="form-control  input_hight_45" id="age" value={this.state.enter_age} placeholder={Strings.enter_age} />
-                                                        {this.state.showageview && <span style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
+                                                        <label htmlFor="EnterAge" className="font_family_serif"> {Strings.enter_age} <span className="logo_color_red"> *</span></label>
+                                                        <input type="number" onChange={(text) => { this.handleSelectedData(text, Strings.enter_age) }} className="form-control font_family_serif input_hight_45" id="age" value={this.state.enter_age} placeholder={Strings.enter_age} />
+                                                        {this.state.showageview && <span className="font_family_serif" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
                                                     </div>
                                                 </div>
                                                 <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                                                     <div className="form-group text_align_left" >
-                                                        <label htmlFor="BirthDate"> {Strings.birth_Date} <span className="logo_color_red"> *</span></label>
-                                                        <input type="date" onChange={(text) => { this.handleSelectedData(text, Strings.birth_Date) }} className="form-control input_hight_45" id="firstName" value={this.state.dateofBirth} placeholder=" 00/00/00" />
-                                                        {this.state.showBirtDateview && <span style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
+                                                        <label htmlFor="BirthDate" className="font_family_serif"> {Strings.birth_Date} <span className="logo_color_red"> *</span></label>
+                                                        <input type="date" onChange={(text) => { this.handleSelectedData(text, Strings.birth_Date) }} className="form-control font_family_serif input_hight_45" id="firstName" value={this.state.dateofBirth} placeholder=" 00/00/00" />
+                                                        {this.state.showBirtDateview && <span className="font_family_serif" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
 
                                                     </div>
                                                 </div>
                                                 <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                                                     <div className="form-group text_align_left" >
                                                         <label htmlFor="BirthTime">{Strings.birth_time} <span className="logo_color_red"> *</span></label>
-                                                        <input type="time" onChange={(text) => this.handleSelectedData(text, Strings.birth_time)} className="form-control input_hight_45 " value={this.state.timeofBirth} id="birthTime" />
-                                                        {this.state.showBirthTimeview && <span style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
+                                                        <input type="time" onChange={(text) => this.handleSelectedData(text, Strings.birth_time)} className="form-control font_family_serif input_hight_45 " value={this.state.timeofBirth} id="birthTime" />
+                                                        {this.state.showBirthTimeview && <span className="font_family_serif" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                             <div className="form-group text_align_left" >
-                                                <label htmlFor="Address">{Strings.address}</label>
-                                                <textarea rows={4} cols={40} className="form-control  input_hight_45" onChange={(text) => { this.handleSelectedData(text, Strings.address) }} value={this.state.address} placeholder={Strings.address} />
+                                                <label htmlFor="Address" className="font_family_serif">{Strings.address}</label>
+                                                <textarea rows={4} cols={40} className="form-control font_family_serif input_hight_45" onChange={(text) => { this.handleSelectedData(text, Strings.address) }} value={this.state.address} placeholder={Strings.address} />
                                             </div>
                                         </div>
 
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                             <div className="form-group t{ext_align_left" >
-                                                <label htmlFor="State">{Strings.state}</label>
-                                                <input type="text" onChange={(text) => { this.handleSelectedData(text, Strings.state) }} className="form-control  input_hight_45" id="state" value={this.state.state} placeholder={Strings.state} />
+                                                <label htmlFor="State" className="font_family_serif">{Strings.state}</label>
+                                                <input type="text" onChange={(text) => { this.handleSelectedData(text, Strings.state) }} className="form-control font_family_serif input_hight_45" id="state" value={this.state.state} placeholder={Strings.state} />
                                             </div>
                                         </div>
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20 ">
                                             <div className="form-group text_align_left" >
-                                                <label htmlFor="District">{Strings.district}</label>
-                                                <input type="text" onChange={(text) => this.handleSelectedData(text, Strings.district)} className="form-control  input_hight_45" id="district" value={this.state.district} placeholder={Strings.district} />
+                                                <label htmlFor="District" className="font_family_serif">{Strings.district}</label>
+                                                <input type="text" onChange={(text) => this.handleSelectedData(text, Strings.district)} className="form-control font_family_serif input_hight_45" id="district" value={this.state.district} placeholder={Strings.district} />
                                             </div>
                                         </div>
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                             <div className="form-group text_align_left" >
-                                                <label htmlFor="selectOption"> {Strings.select_option} </label>
-                                                <select className="form-select input_hight_45" id="selectOption" onChange={(text) => this.handleSelectedData(text, Strings.select_option)}>
+                                                <label htmlFor="selectOption" className="font_family_serif"> {Strings.select_option} </label>
+                                                <select className="form-select font_family_serif input_hight_45" id="selectOption" onChange={(text) => this.handleSelectedData(text, Strings.select_option)}>
                                                     {this.state.dropDown_menu.map(item => {
                                                         return (
-                                                            <option value={item.value}>{item.itemName}</option>
+                                                            <option className="font_family_serif" value={item.value}>{item.itemName}</option>
                                                         )
                                                     })}
                                                 </select>
@@ -514,22 +555,22 @@ class LoginScreen extends Component {
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_Radio_btn_50
                                   ">
                                             <div className="form-group text_align_left" >
-                                                <label className="me-2">Gender: <span className="logo_color_red"> *</span></label>
+                                                <label className="me-2 font_family_serif">Gender: <span className="logo_color_red"> *</span></label>
                                                 <div class="form-check form-check-inline">
-                                                    <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value={Strings.male} checked={this.state.gender === Strings.male} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
-                                                    <label className="form-check-label" for="inlineRadio1">{Strings.male}</label>
+                                                    <input className="form-check-input font_family_serif" type="radio" name="inlineRadioOptions" id="inlineRadio1" value={Strings.male} checked={this.state.gender === Strings.male} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
+                                                    <label className="form-check-label font_family_serif" for="inlineRadio1">{Strings.male}</label>
                                                 </div>
                                                 <div className="form-check form-check-inline">
-                                                    <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value={Strings.female} checked={this.state.gender === Strings.female} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
-                                                    <label className="form-check-label" for="inlineRadio2">{Strings.female}</label>
+                                                    <input className="form-check-input font_family_serif" type="radio" name="inlineRadioOptions" id="inlineRadio2" value={Strings.female} checked={this.state.gender === Strings.female} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
+                                                    <label className="form-check-label font_family_serif" for="inlineRadio2">{Strings.female}</label>
                                                 </div>
-                                                {this.state.showgenderSelectionview && <span style={{ color: "red", fontSize: 12 }}>{Strings.please_select_one}</span>}
+                                                {this.state.showgenderSelectionview && <span className="font_family_serif" style={{ color: "red", fontSize: 12 }}>{Strings.please_select_one}</span>}
                                             </div>
                                         </div>
                                     </div>
                                     <div className="width_100 text-end save_btn_margin_bottom_15 ">
-                                        <Button onClick={() => this.handleFormView(false)} className="btn btn-secondary padding_horizental_35 margin_right_10">{Strings.cancel}</Button>
-                                        <Button onClick={() => this.loginclick()} className="btn btn-success padding_horizental_35">{Strings.save}</Button>
+                                        <Button onClick={() => this.handleFormView(false)} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
+                                        <Button onClick={() => this.loginclick()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.save}</Button>
                                     </div>
                                 </div>
                             </form >

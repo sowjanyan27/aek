@@ -24,5 +24,10 @@ export const Strings = {
     radioButtonVal: "RadioButtonVal",
     please_enter_value: "Please enter value",
     please_select_one: "Please select one",
+    first_visit: "First visit",
+    ph_num: "Enter Mobile number",
+    edit: "Edit",
+    delete: "Delete",
+    update: "Update"
 
 }

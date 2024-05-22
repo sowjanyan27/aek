@@ -428,7 +428,6 @@ class LoginScreen extends Component {
                                     <div className="show_content  p-2 rounded">Add New</div>
                                 </div>
 
-                                <button style={{ borderColor: "red", borderWidth: 1, borderStyle: "solid" }}>ho</button>
                                 <TableContainer className="mt-4 mb-4" component={Paper}>
                                     <div className="mt-4 mb-4 width_100 space-between display_flex" >
                                         <div className="position_relative">

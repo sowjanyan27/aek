@@ -9,7 +9,7 @@ export const Strings = {
     patient_num: "Patient number",
     first_name: "First Name",
     last_name: "Last Name",
-    birth_place: "Birth of place",
+    birth_place: "Place of birth",
     nearest_birth_place: "Nearest birth place",
     enter_age: "Enter age",
     birth_Date: "Birth Date",
@@ -28,6 +28,7 @@ export const Strings = {
     ph_num: "Enter Mobile number",
     edit: "Edit",
     delete: "Delete",
-    update: "Update"
+    update: "Update",
+    city: "City"
 
 }

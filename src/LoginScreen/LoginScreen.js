@@ -48,11 +48,19 @@ class LoginScreen extends Component {
             showageview: false,
             showUpDate_btn: false,
             showSave_btn: false,
-            dropDown_menu: [
-                { itemName: "Options 1", value: 1 },
-                { itemName: "Options 2", value: 2 },
-                { itemName: "Options 3", value: 3 },
-                { itemName: "Options 4", value: 4 },
+            showDelete_cancel_btn: false,
+            dropDown_States: [
+                { itemName: "Select State", value: "" },
+                { itemName: "Andhra Pradesh", value: "Andhra Pradesh" },
+                { itemName: "Tamilnadu", value: "Tamilnadu" },
+                { itemName: "Telangana", value: "Telangana" },
+            ],
+            dropDown_districts: [
+                { itemName: "Select District", value: "" },
+                { itemName: "Guntur ", value: "Guntur" },
+                { itemName: "Krishna ", value: "Krishna" },
+                { itemName: "Nalgonda", value: "Nalgonda" },
+                { itemName: "RangaReddy", value: "RangaReddy" },
             ],
             data: [
                 // {
@@ -144,7 +152,9 @@ class LoginScreen extends Component {
             if (value !== "") {
                 this.setState({ showageview: false })
             }
-            this.setState({ age: value })
+            var ageNum = Common.getNumericValue(value)
+            // console.warn("++ageNum", ageNum)
+            this.setState({ age: ageNum })
         }
         if (field === Strings.birth_Date) {
             if (value !== "") {
@@ -317,7 +327,6 @@ class LoginScreen extends Component {
             birthofPlace: "",
             address: "",
             nearestBirthPlace: "",
-
             state: "",
             district: "",
             dropDownVal: "",
@@ -360,10 +369,10 @@ class LoginScreen extends Component {
         this.setState({ filterData: filteredArray, nodataFound: filteredArray.length === 0 })
     };
     handleFormView = (item) => {
-        this.setState({ isFormView: item, disabledInput: true, disabledInput_part2: true })
+        this.setState({ isFormView: item, disabledInput: true, disabledInput_part2: true, showDelete_cancel_btn: false })
+        this.dataClear()
         if (!item) {
             this.setState({ showUpDate_btn: false })
-            this.dataClear()
             return
         }
         if (item) {
@@ -373,7 +382,7 @@ class LoginScreen extends Component {
     }
 
     handleView = (item) => {
-        this.setState({ isFormView: true, disabledInput: false, showSave_btn: false, showedit_btn: true, showUpDate_btn: false, disabledInput_part2: false }, () => {
+        this.setState({ isFormView: true, disabledInput: false, showSave_btn: false, showedit_btn: true, showUpDate_btn: false, showDelete_cancel_btn: true, disabledInput_part2: false }, () => {
             this.setState({
                 patientid: (item.id != null && item.id != undefined) ? item.id : "",
                 firstName: (item.FName != null && item.FName != undefined) ? item.FName : "",
@@ -386,7 +395,7 @@ class LoginScreen extends Component {
         console.warn("++item", item)
     }
     handleDisable() {
-        this.setState({ disabledInput: true, showUpDate_btn: true, showedit_btn: false })
+        this.setState({ disabledInput: true, showUpDate_btn: true, showedit_btn: false, showDelete_cancel_btn: false })
     }
 
     handleEditedValues() {
@@ -412,73 +421,90 @@ class LoginScreen extends Component {
                 <div className="w-100 padding_vertical_50" >
                     <div className="background_color_light_grey rounded shadow_box">
                         {!this.state.isFormView ?
-                            <div className="position_relatives">
+                            <div className="position_relative">
                                 <div className="margin_bottom_15 right-align ">
-                                    <Button className="btn handle_content" onClick={() => { this.handleFormView(true) }}><i class="fa fa-plus color_white font_size_16_normal" aria-hidden="true"></i>
+                                    <Button className="btn handle_content" onClick={() => { this.handleFormView(true) }}><i class="fa fa-plus handle_add_button_color_white  font_size_16_normal" aria-hidden="true"></i>
                                     </Button>
                                     <div className="show_content  p-2 rounded">Add New</div>
                                 </div>
 
+                                <button style={{ borderColor: "red", borderWidth: 1, borderStyle: "solid" }}>ho</button>
                                 <TableContainer className="mt-4 mb-4" component={Paper}>
                                     <div className="mt-4 mb-4 width_100 space-between display_flex" >
-                                        <input
-                                            ref={this.inputRef}
-                                            className="font_family_serif"
-                                            type="text"
-                                            value={this.state.searchId}
-                                            onChange={(text) => { this.handleFilterId(text) }} // Changed parameter to e.target.value
-                                            placeholder="Search Id"
-                                        />
-                                        <input
-                                            className="font_family_serif"
-                                            value={this.state.searchValue}
-                                            onChange={(text) => { this.handleFilter(text) }} // Changed parameter to e.target.value
-                                            placeholder="Search..."
-                                        />
+                                        <div className="position_relative">
+                                            <input
+                                                ref={this.inputRef}
+                                                className="font_family_serif "
+                                                type="text"
+                                                value={this.state.searchId}
+                                                onChange={(text) => { this.handleFilterId(text) }} // Changed parameter to e.target.value
+                                                placeholder="Search Id"
+                                            />
+                                            {!this.state.searchId &&
+                                                <i class="fa fa-search position_absolute text_color_grey top_6 right_10" aria-hidden="true"></i>
+                                            }
+                                        </div>
+                                        <div className="position_relative">
+                                            <input
+                                                className="font_family_serif"
+                                                value={this.state.searchValue}
+                                                onChange={(text) => { this.handleFilter(text) }} // Changed parameter to e.target.value
+                                                placeholder="Search..."
+                                            />
+                                            {!this.state.searchValue &&
+                                                <i class="fa fa-search position_absolute text_color_grey top_6 right_10" aria-hidden="true"></i>
+                                            }
+                                        </div>
                                     </div>
                                     <Table className="table table-bordered">
                                         <TableHead className="table_header_light_grey">
                                             <TableRow>
-                                                <TableCell className="font_family_serif table_header_text_maroon">ID</TableCell>
-                                                <TableCell className="font_family_serif table_header_text_maroon">First Name</TableCell>
-                                                <TableCell className="font_family_serif table_header_text_maroon">Last Name</TableCell>
-                                                <TableCell className="font_family_serif table_header_text_maroon">D.O.J</TableCell>
-                                                <TableCell className="font_family_serif table_header_text_maroon">Gender</TableCell>
-                                                <TableCell className="font_family_serif table_header_text_maroon">Phone Number</TableCell>
-                                                <TableCell className="font_family_serif table_header_text_maroon">Action</TableCell>
+                                                <TableCell className="font_family_serif table_header_text_maroon text-center">ID</TableCell>
+                                                <TableCell className="font_family_serif table_header_text_maroon text-center">First Name</TableCell>
+                                                <TableCell className="font_family_serif table_header_text_maroon text-center">Last Name</TableCell>
+                                                <TableCell className="font_family_serif table_header_text_maroon text-center">D.O.J</TableCell>
+                                                <TableCell className="font_family_serif table_header_text_maroon text-center">Gender</TableCell>
+                                                <TableCell className="font_family_serif table_header_text_maroon text-center">Phone Number</TableCell>
+                                                <TableCell className="font_family_serif table_header_text_maroon text-center">Action</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
                                             {this.state.nodataFound ? (
                                                 <TableRow>
-                                                    <TableCell className="font_family_serif" colSpan={7}>No data found</TableCell>
+                                                    <TableCell className="font_family_serif text-center" colSpan={7}>No data found</TableCell>
                                                 </TableRow>
                                             ) : (
                                                 this.state.filterData.length === 0 ? (
                                                     this.state.data.map((row) => (
                                                         <TableRow key={row.id}>
-                                                            <TableCell className="font_family_serif">{row.id}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.FName}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.LName}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.year}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.gender}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.PhNum}</TableCell>
-                                                            <TableCell>
-                                                                <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
+                                                            <TableCell className="font_family_serif text-center">{row.id}</TableCell>
+                                                            <TableCell className="font_family_serif text-center">{row.FName}</TableCell>
+                                                            <TableCell className="font_family_serif text-center">{row.LName}</TableCell>
+                                                            <TableCell className="font_family_serif text-center">{row.year}</TableCell>
+                                                            <TableCell className="font_family_serif text-center">{row.gender}</TableCell>
+                                                            <TableCell className="font_family_serif text-center">{row.PhNum}</TableCell>
+                                                            <TableCell className="d-flex justify-content-center align-items-center">
+                                                                <Button className="font_family_serif custom_black_border_button text-center justifyContent-center" onClick={() => { this.handleView(row) }}><i class="fa fa-eye" aria-hidden="true"></i>
+                                                                </Button>
                                                             </TableCell>
                                                         </TableRow>
                                                     ))
                                                 ) : (
                                                     this.state.filterData.map((row) => (
                                                         <TableRow key={row.id}>
-                                                            <TableCell className="font_family_serif">{row.id}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.FName}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.LName}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.year}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.gender}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.PhNum}</TableCell>
-                                                            <TableCell>
-                                                                <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
+                                                            <TableCell className="font_family_serif text-center">{row.id}</TableCell>
+                                                            <TableCell className="font_family_serif text-center">{row.FName}</TableCell>
+                                                            <TableCell className="font_family_serif text-center">{row.LName}</TableCell>
+                                                            <TableCell className="font_family_serif text-center">{row.year}</TableCell>
+                                                            <TableCell className="font_family_serif text-center">{row.gender}</TableCell>
+                                                            <TableCell className="font_family_serif text-center">{row.PhNum}</TableCell>
+                                                            {/* <TableCell>
+                                                                <Button className="font_family_serif  custom_black_border_button" onClick={() => { this.handleView(row) }}><i class="fa fa-eye" aria-hidden="true"></i>
+                                                                </Button>
+                                                            </TableCell> */}
+                                                            <TableCell className="d-flex justify-content-center align-items-center">
+                                                                <Button className="font_family_serif custom_black_border_button text-center justifyContent-center" onClick={() => { this.handleView(row) }}><i class="fa fa-eye" aria-hidden="true"></i>
+                                                                </Button>
                                                             </TableCell>
                                                         </TableRow>
                                                     ))
@@ -491,30 +517,29 @@ class LoginScreen extends Component {
                             </div>
                             :
                             <form>
-                                <div style={{ position: "relative", display: "flex", justifyContent: "space-between" }} className="w-75 me-auto ms-auto">
-                                    <div></div>
-                                    <h2 className="text_align_center pb-4 pt-2 font_family_serif">{Strings.registration}</h2>
-                                    <div className="mt-2">
-                                        {this.state.showedit_btn ?
+                                <div className="position_relative display_flex space-between w-75 me-auto ms-auto  mt-4 margin_bottom_50" >
+                                    {/* <div></div> */}
+                                    <h2 className=" center-text pb-4 mb-4 mt-4 pt-2 font_family_serif">{Strings.registration}</h2>
+                                    <div className="mt-2 position_absolute top_right_0">
+                                        {this.state.showedit_btn &&
                                             <div>
-                                                <Button onClick={() => this.handleDisable()} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.edit}</Button>
-                                                <Button onClick={() => this.handleFormView(false)} className="btn btn-danger padding_horizental_35 font_family_serif">{Strings.delete}</Button>
+                                                {/* <Button onClick={() => this.handleDisable()} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.edit}</Button> */}
+                                                <Button onClick={() => this.handleDisable()} className="btn btn-secondary  font_family_serif"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+                                                {/* <Button onClick={() => this.handleFormView(false)} className="btn btn-danger padding_horizental_35 font_family_serif">{Strings.delete}</Button> */}
                                             </div>
-                                            :
-                                            <div></div>
                                         }
                                     </div>
                                 </div>
                                 <div className="w-75 me-auto ms-auto">
                                     <div className="row">
-                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12  ">
+                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20 ">
                                             <div className="form-group text_align_left ">
                                                 <label htmlFor="PatientId" className="font_family_serif"> {Strings.patient_id} <span className="logo_color_red"> *</span></label>
                                                 <input type="text" disabled={true} onChange={(text) => this.handleSelectedData(text, Strings.patient_id)} className="form-control font_family_serif  input_hight_45" id="near_area" value={this.state.patientid} placeholder={Strings.patient_id} />
                                                 {this.state.showpatientIdview && <span className="font_family_serif" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
                                             </div>
                                         </div>
-                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
+                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                             <div className="form-group text_align_left" >
                                                 <label htmlFor="PatientNumber" className="font_family_serif">{Strings.patient_num} <span className="logo_color_red"> *</span></label>
                                                 <input required type="text" disabled={!this.state.disabledInput_part2} onChange={(text) => this.handleSelectedData(text, Strings.patient_num)} className="form-control font_family_serif input_hight_45" id="patientId" value={this.state.patientnum} placeholder={Strings.patient_num} />
@@ -564,7 +589,7 @@ class LoginScreen extends Component {
                                                 <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                                                     <div className="form-group text_align_left" >
                                                         <label htmlFor="EnterAge" className="font_family_serif"> {Strings.enter_age} <span className="logo_color_red"> *</span></label>
-                                                        <input required type="number" disabled={!this.state.disabledInput} onChange={(text) => { this.handleSelectedData(text, Strings.enter_age) }} className="form-control font_family_serif input_hight_45" id="age" value={this.state.enter_age} placeholder={Strings.enter_age} />
+                                                        <input required type="text" disabled={!this.state.disabledInput} onChange={(text) => { this.handleSelectedData(text, Strings.enter_age) }} className="form-control font_family_serif input_hight_45" id="age" value={this.state.age} placeholder={Strings.enter_age} />
                                                         {this.state.showageview && <span className="font_family_serif" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
                                                     </div>
                                                 </div>
@@ -592,7 +617,7 @@ class LoginScreen extends Component {
                                             </div>
                                         </div>
 
-                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
+                                        {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                             <div className="form-group t{ext_align_left" >
                                                 <label htmlFor="State" className="font_family_serif">{Strings.state}</label>
                                                 <input type="text" disabled={!this.state.disabledInput} onChange={(text) => { this.handleSelectedData(text, Strings.state) }} className="form-control font_family_serif input_hight_45" id="state" value={this.state.state} placeholder={Strings.state} />
@@ -603,12 +628,13 @@ class LoginScreen extends Component {
                                                 <label htmlFor="District" className="font_family_serif">{Strings.district}</label>
                                                 <input type="text" disabled={!this.state.disabledInput} onChange={(text) => this.handleSelectedData(text, Strings.district)} className="form-control font_family_serif input_hight_45" id="district" value={this.state.district} placeholder={Strings.district} />
                                             </div>
-                                        </div>
+                                        </div> */}
+
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                             <div className="form-group text_align_left" >
-                                                <label htmlFor="selectOption" className="font_family_serif"> {Strings.select_option} </label>
-                                                <select disabled={!this.state.disabledInput} className="form-select font_family_serif input_hight_45" id="selectOption" onChange={(text) => this.handleSelectedData(text, Strings.select_option)}>
-                                                    {this.state.dropDown_menu.map(item => {
+                                                <label htmlFor="selectOption" className="font_family_serif"> {Strings.state} </label>
+                                                <select disabled={!this.state.disabledInput} className="form-select font_family_serif input_hight_45" id="state" onChange={(text) => this.handleSelectedData(text, Strings.state)} value={this.state.state} placeholder={Strings.state} >
+                                                    {this.state.dropDown_States.map(item => {
                                                         return (
                                                             <option className="font_family_serif" value={item.value}>{item.itemName}</option>
                                                         )
@@ -616,8 +642,59 @@ class LoginScreen extends Component {
                                                 </select>
                                             </div>
                                         </div>
-                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_Radio_btn_50
-                                  ">
+
+                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
+                                            <div className="form-group text_align_left" >
+                                                <label htmlFor="selectOption" className="font_family_serif"> {Strings.district} </label>
+                                                <select disabled={this.state.state == ""} className="form-select font_family_serif input_hight_45" id="state" onChange={(text) => this.handleSelectedData(text, Strings.district)} value={this.state.district} placeholder={Strings.district} >
+                                                    {this.state.dropDown_districts.map(item => {
+                                                        return (
+                                                            <option className="font_family_serif" value={item.value}>{item.itemName}</option>
+                                                        )
+                                                    })}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20  margin_bottom_25">
+                                            <div className="form-group t{ext_align_left" >
+                                                <label htmlFor="firstVisit" className="font_family_serif">{Strings.first_visit}</label>
+                                                <input type="date" disabled={!this.state.disabledInput} onChange={(text) => { this.handleSelectedData(text, Strings.first_visit) }} className="form-control font_family_serif input_hight_45" id="firstVisit" value={this.state.firstVisit} placeholder={Strings.first_visit} />
+                                            </div>
+                                        </div>
+                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20 margin_bottom_25 ">
+                                            <div className="form-group text_align_left" >
+                                                <label htmlFor="phNum" className="font_family_serif">{Strings.ph_num}</label>
+                                                <input type="text" maxLength={10} pattern="6[0-9]{9}" disabled={!this.state.disabledInput} onChange={(text) => this.handleSelectedData(text, Strings.ph_num)} className="form-control font_family_serif input_hight_45" id="phNum" value={this.state.phoneNumber} placeholder={Strings.ph_num} />
+                                            </div>
+                                        </div>
+
+                                        {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
+                                            <div className="form-group text_align_left" >
+                                                <label htmlFor="selectOption" className="font_family_serif"> {Strings.select_option} </label>
+                                                <select disabled={!this.state.disabledInput} className="form-select font_family_serif input_hight_45" id="selectOption" onChange={(text) => this.handleSelectedData(text, Strings.select_option)}>
+                                                    {this.state.dropDown_districts.map(item => {
+                                                        return (
+                                                            <option className="font_family_serif" value={item.value}>{item.itemName}</option>
+                                                        )
+                                                    })}
+                                                </select>
+                                            </div>
+                                        </div> 
+                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_Radio_btn_50 ">
+                                            <div className="form-group text_align_left" >
+                                                <label className="me-2 font_family_serif">Gender: <span className="logo_color_red"> *</span></label>
+                                                <div class="form-check form-check-inline">
+                                                    <input required disabled={!this.state.disabledInput} className="form-check-input font_family_serif" type="radio" name="inlineRadioOptions" id="inlineRadio1" value={Strings.male} checked={this.state.gender === Strings.male} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
+                                                    <label className="form-check-label font_family_serif" for="inlineRadio1">{Strings.male}</label>
+                                                </div>
+                                                <div className="form-check form-check-inline">
+                                                    <input required disabled={!this.state.disabledInput} className="form-check-input font_family_serif" type="radio" name="inlineRadioOptions" id="inlineRadio2" value={Strings.female} checked={this.state.gender === Strings.female} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
+                                                    <label className="form-check-label font_family_serif" for="inlineRadio2">{Strings.female}</label>
+                                                </div>
+                                                {this.state.showgenderSelectionview && <span className="font_family_serif" style={{ color: "red", fontSize: 12 }}>{Strings.please_select_one}</span>}
+                                            </div>
+                                                </div> */}
+                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
                                             <div className="form-group text_align_left" >
                                                 <label className="me-2 font_family_serif">Gender: <span className="logo_color_red"> *</span></label>
                                                 <div class="form-check form-check-inline">
@@ -632,20 +709,24 @@ class LoginScreen extends Component {
                                             </div>
                                         </div>
 
-                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20  margin_bottom_25">
-                                            <div className="form-group t{ext_align_left" >
-                                                <label htmlFor="firstVisit" className="font_family_serif">{Strings.first_visit}</label>
-                                                <input type="date" disabled={!this.state.disabledInput} onChange={(text) => { this.handleSelectedData(text, Strings.first_visit) }} className="form-control font_family_serif input_hight_45" id="firstVisit" value={this.state.firstVisit} placeholder={Strings.first_visit} />
-                                            </div>
-                                        </div>
-                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20 margin_bottom_25 ">
-                                            <div className="form-group text_align_left" >
-                                                <label htmlFor="phNum" className="font_family_serif">{Strings.ph_num}</label>
-                                                <input type="text" maxLength={10} pattern="6[0-9]{9}" disabled={!this.state.disabledInput} onChange={(text) => this.handleSelectedData(text, Strings.ph_num)} className="form-control font_family_serif input_hight_45" id="phNum" value={this.state.phoneNumber} placeholder={Strings.ph_num} />
-                                            </div>
-                                        </div>
+
                                     </div>
-                                    {this.state.showUpDate_btn &&
+
+                                    <div className="width_100 text-end save_btn_margin_bottom_15 ">
+                                        <Button onClick={() => { this.handleDeletion() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
+
+                                        {this.state.showUpDate_btn &&
+                                            <Button onClick={() => this.handleEditedValues()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.update}</Button>
+                                        }
+                                        {this.state.showDelete_cancel_btn &&
+                                            <Button onClick={() => this.handleFormView(false)} className="btn btn-danger padding_horizental_35 font_family_serif">{Strings.delete}</Button>
+                                        }
+                                        {this.state.showSave_btn &&
+                                            <Button onClick={() => this.loginclick()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.save}</Button>
+                                        }
+                                    </div>
+
+                                    {/* {this.state.showUpDate_btn &&
                                         // <div className="width_100 text-end save_btn_margin_bottom_15 ">
                                         //     <Button onClick={() => this.handleFormView(false)} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
                                         //     <Button onClick={() => this.loginclick()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.save}</Button>
@@ -655,12 +736,20 @@ class LoginScreen extends Component {
                                             <Button onClick={() => this.handleEditedValues()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.update}</Button>
                                         </div>
                                     }
+
+                                    {this.state.showDelete_cancel_btn &&
+                                        <div className="width_100 text-end save_btn_margin_bottom_15 ">
+                                            <Button onClick={() => { this.handleDeletion() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
+                                            <Button onClick={() => this.handleFormView(false)} className="btn btn-danger padding_horizental_35 font_family_serif">{Strings.delete}</Button>
+                                        </div>
+                                    }
+
                                     {this.state.showSave_btn &&
                                         <div className="width_100 text-end save_btn_margin_bottom_15 ">
                                             <Button onClick={() => this.handleFormView(false)} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
                                             <Button onClick={() => this.loginclick()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.save}</Button>
                                         </div>
-                                    }
+                                    } */}
                                 </div>
                             </form >
                         }

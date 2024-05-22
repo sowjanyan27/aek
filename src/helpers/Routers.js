@@ -3,12 +3,12 @@ import { useLocation, useNavigate, useParams, useSearchParams } from "react-rout
 function withRouter(Component) {
 
   function ComponentWithRouterProp(props) {
-    console.warn("++props", props)
+    // console.warn("++props", props)
     let location = useLocation();
     let navigate = useNavigate();
     let params = useParams();
     let search = useSearchParams();
-    console.log('test')
+    // console.log('test')
     return (
       <Component
         {...props}

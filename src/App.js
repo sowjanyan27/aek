@@ -9,8 +9,8 @@ function App() {
     <BrowserRouter>
       <ToastContainer />
       <Routes>
-        <Route path="/" exact element={<LoginScreen />} />
-        <Route path="/Login" exact element={<Login />} />
+        {/* <Route path="/" exact element={<LoginScreen />} /> */}
+        <Route path="/" exact element={<Login />} />
 
       </Routes>
     </BrowserRouter>

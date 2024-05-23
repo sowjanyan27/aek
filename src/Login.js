@@ -18,19 +18,39 @@ export default class Login extends Component {
             isLoading: true,
           },
           () => {
-            this.getData();
+            // this.getData();
+            this.getAllStates();
           }
         );
 
       }
 
-      async getData() {
+      // async getData() {
+      //   try {
+      //     const response = await Employee.getData();
+      //     if (response.length > 0) {
+      //       this.setState({
+      //         Maindata: response, dummyData: response, isLoading: false
+      //       })
+      //     }
+      //   } catch (e) {
+      //     console.log(e);
+      //   } finally {
+      //     this.setState({
+      //       isLoading: false,
+      //     });
+      //   }
+      // }
+
+      async getAllStates() {
         try {
-          const response = await Employee.getData();
+          const response = await Employee.getallstates();
           if (response.length > 0) {
             this.setState({
               Maindata: response, dummyData: response, isLoading: false
+             
             })
+            console.log(this.state.Maindata,'patients')
           }
         } catch (e) {
           console.log(e);
@@ -40,6 +60,7 @@ export default class Login extends Component {
           });
         }
       }
+
   render() {
     return (
       <div>

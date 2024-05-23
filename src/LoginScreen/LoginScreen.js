@@ -5,6 +5,7 @@ import withRouter from "../helpers/Routers";
 import { ValidationMessage } from "../helpers/ValidationMessage";
 import { toast } from "react-toastify";
 import { Common } from "../helpers/common";
+import { Employee } from "../api/Employee";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css"
 
@@ -21,6 +22,7 @@ class LoginScreen extends Component {
             lastName: "",
             age: "",
             gender: "",
+            gender_name: '',
             dateofBirth: "",
             timeofBirth: "",
             birthofPlace: "",
@@ -48,6 +50,28 @@ class LoginScreen extends Component {
             showageview: false,
             showUpDate_btn: false,
             showSave_btn: false,
+            patient_details_id:"",
+            patient_number:"",
+            patient_first_visit_date:"",
+            patient_first_name:"",
+            patient_last_name:"",
+            patient_gender_id:"",
+            patient_age:"",
+            patient_dob:"",
+            patient_tob:"",
+            patient_birth_place:"",
+            patient_nearest_birth_place:"",
+            patient_address:"",
+            patient_mobile_no:"",
+            patient_district:"",
+            patient_state_id:"",
+            gender_id:"",
+            gender_name:"",
+            state_id:"",
+            state_name:"",
+            country_id:"",
+            is_active:"",
+
             dropDown_menu: [
                 { itemName: "Options 1", value: 1 },
                 { itemName: "Options 2", value: 2 },
@@ -57,43 +81,45 @@ class LoginScreen extends Component {
             data: [
                 // {
                 //     id: 1,
-                //     FName: 'Ghost',
-                //     LName: 'busters',
-                //     year: '1997-05-29',
+                //     patient_first_name: 'Ghost',
+                //     patient_last_name: 'busters',
+                //     patient_dob: '1997-05-29',
                 //     gender: "Male",
                 //     PhNum: "87654321"
                 // },
                 // {
                 //     id: 2,
-                //     FName: 'John',
-                //     LName: 'Sena',
-                //     year: '1967-05-26',
+                //     patient_first_name: 'John',
+                //     patient_last_name: 'Sena',
+                //     patient_dob: '1967-05-26',
                 //     gender: "Male",
                 //     PhNum: "76543821"
                 // },
                 // {
                 //     id: 3,
-                //     FName: 'Mia',
-                //     LName: 'Maya',
-                //     year: '1967-01-29',
+                //     patient_first_name: 'Mia',
+                //     patient_last_name: 'Maya',
+                //     patient_dob: '1967-01-29',
                 //     gender: "Female",
                 //     PhNum: "65487321"
                 // },
                 // Add more data as needed
 
-                { id: 1, FName: 'John', LName: 'Doe', email: 'john@example.com', year: '1967-01-29', gender: "Female", PhNum: "65487321" },
-                { id: 2, FName: 'Jane', LName: ' Dow', email: 'jane@example.com', year: '1988-11-23', gender: "Male", PhNum: "65487321" },
-                { id: 3, FName: 'Alice', LName: ' Smith', email: 'alice@example.com', year: '1907-09-19', gender: "Female", PhNum: "65487321" },
-                { id: 4, FName: 'Bob', LName: ' Johnson', email: 'bob@example.com', year: '1958-09-25', gender: "Male", PhNum: "65487321" },
-                { id: 5, FName: 'Charlie', LName: 'Brown', email: 'charlie@example.com', year: '1957-01-19', gender: "Female", PhNum: "65487321" },
-                { id: 6, FName: 'David', LName: 'Wilson', email: 'david@example.com', year: '1997-06-20', gender: "Female", PhNum: "65487321" },
-                { id: 7, FName: 'Eve', LName: 'Adams', email: 'eve@example.com', year: '1967-01-29', gender: "Male", PhNum: "65487321" },
-                { id: 8, FName: 'Frank', LName: 'Clark', email: 'frank@example.com', year: '1990-01-25', gender: "Female", PhNum: "3252566" },
-                { id: 9, FName: 'Grace', LName: 'Lee', email: 'grace@example.com', year: '1967-02-11', gender: "Female", PhNum: "65487321" },
-                { id: 10, FName: 'Hank', LName: 'Miller', email: 'hank@example.com', year: '1956-02-28', gender: "Male", PhNum: "4567321" },
-                { id: 11, FName: 'Ivy', LName: 'Martin', email: 'ivy@example.com', year: '1987-05-20', gender: "Female", PhNum: "342634521" },
-                { id: 12, FName: 'Jack', LName: 'Davis', email: 'jack@example.com', year: '1988-07-04', gender: "Female", PhNum: "134234135" }
-            ]
+                { id: 1, patient_first_name: 'John', patient_last_name: 'Doe', email: 'john@example.com', patient_dob: '1967-01-29', gender: "Female", PhNum: "65487321" },
+                { id: 2, patient_first_name: 'Jane', patient_last_name: ' Dow', email: 'jane@example.com', patient_dob: '1988-11-23', gender: "Male", PhNum: "65487321" },
+                { id: 3, patient_first_name: 'Alice', patient_last_name: ' Smith', email: 'alice@example.com', patient_dob: '1907-09-19', gender: "Female", PhNum: "65487321" },
+                { id: 4, patient_first_name: 'Bob', patient_last_name: ' Johnson', email: 'bob@example.com', patient_dob: '1958-09-25', gender: "Male", PhNum: "65487321" },
+                { id: 5, patient_first_name: 'Charlie', patient_last_name: 'Brown', email: 'charlie@example.com', patient_dob: '1957-01-19', gender: "Female", PhNum: "65487321" },
+                { id: 6, patient_first_name: 'David', patient_last_name: 'Wilson', email: 'david@example.com', patient_dob: '1997-06-20', gender: "Female", PhNum: "65487321" },
+                { id: 7, patient_first_name: 'Eve', patient_last_name: 'Adams', email: 'eve@example.com', patient_dob: '1967-01-29', gender: "Male", PhNum: "65487321" },
+                { id: 8, patient_first_name: 'Frank', patient_last_name: 'Clark', email: 'frank@example.com', patient_dob: '1990-01-25', gender: "Female", PhNum: "3252566" },
+                { id: 9, patient_first_name: 'Grace', patient_last_name: 'Lee', email: 'grace@example.com', patient_dob: '1967-02-11', gender: "Female", PhNum: "65487321" },
+                { id: 10, patient_first_name: 'Hank', patient_last_name: 'Miller', email: 'hank@example.com', patient_dob: '1956-02-28', gender: "Male", PhNum: "4567321" },
+                { id: 11, patient_first_name: 'Ivy', patient_last_name: 'Martin', email: 'ivy@example.com', patient_dob: '1987-05-20', gender: "Female", PhNum: "342634521" },
+                { id: 12, patient_first_name: 'Jack', patient_last_name: 'Davis', email: 'jack@example.com', patient_dob: '1988-07-04', gender: "Female", PhNum: "134234135" }
+            ],
+            Maindata: [],
+            dummyData: [],
         }
         this.inputRef = React.createRef()
         // console.warn("++which one first")
@@ -102,10 +128,29 @@ class LoginScreen extends Component {
 
 
     componentDidMount() {
-        // this.inputRef.current.focus()
+        // this.inputRef.current.focus() 
+        this.getAllStates();
     }
 
 
+    async getAllStates() {
+        try {
+            const response = await Employee.getallstates();
+            if (response.length > 0) {
+                this.setState({
+                    Maindata: response, dummyData: response, isLoading: false
+
+                })
+                console.log(this.state.Maindata, 'patients')
+            }
+        } catch (e) {
+            console.log(e);
+        } finally {
+            this.setState({
+                isLoading: false,
+            });
+        }
+    }
 
     handleSelectedData = (text, field) => {
         var value = text.target.value
@@ -174,7 +219,7 @@ class LoginScreen extends Component {
             if (value !== "") {
                 this.setState({ showgenderSelectionview: false })
             }
-            this.setState({ gender: value })
+            this.setState({ gender_name: value })
         }
         if (field === Strings.ph_num) {
             const formattedNumber = Common.mobileNumberFormat(value);
@@ -284,7 +329,7 @@ class LoginScreen extends Component {
             });
             return;
         }
-        if (!this.state.gender) {
+        if (!this.state.gender_name) {
             toast.warn(ValidationMessage.p_gender, {
                 toastId: "p_gender",
             });
@@ -322,6 +367,7 @@ class LoginScreen extends Component {
             district: "",
             dropDownVal: "",
             gender: "",
+            gender_name: '',
             searchId: "",
             searchValue: "",
             firstVisit: "",
@@ -333,12 +379,12 @@ class LoginScreen extends Component {
         // var value = text.target.value.toLowerCase();
         var value = await Common.getNumericValue(text.target.value); // validate the numberic values
         this.setState({ searchId: value })
-        var filteredArray = this.state.data.filter(item => {
+        var filteredArray = this.state.dummyData.filter(item => {
             return (
-                item.id.toString().toLowerCase().includes(value)
+                item.patient_details_id.toString().includes(value)
             );
         });
-        this.setState({ filterData: filteredArray, nodataFound: filteredArray.length === 0 })
+        this.setState({ Maindata: filteredArray, nodataFound: filteredArray.length === 0 })
 
     }
 
@@ -347,18 +393,37 @@ class LoginScreen extends Component {
         var value = text.target.value.toLowerCase();
         this.setState({ searchValue: value })
 
-        const filteredArray = this.state.data.filter(item => {
+        const filteredArray = this.state.dummyData.filter(item => {
             return (
-                item.id.toString().toLowerCase().includes(value) ||
-                item.FName.toLowerCase().includes(value) ||
-                item.LName.toLowerCase().includes(value) ||
-                item.year.toLowerCase().includes(value) ||
-                item.gender.toLowerCase().includes(value) ||
-                item.PhNum.toLowerCase().includes(value)
+                item.patient_details_id.toString().includes(value) ||
+                item.patient_first_name.toLowerCase().includes(value) ||
+                item.patient_last_name.toLowerCase().includes(value) ||
+                item.patient_dob.toLowerCase().includes(value) ||
+                item.gender_name.toLowerCase().includes(value)
+                // ||
+                // item.patient_mobile_no.toLowerCase().includes(value)
             );
         });
-        this.setState({ filterData: filteredArray, nodataFound: filteredArray.length === 0 })
+        this.setState({ Maindata: filteredArray, nodataFound: filteredArray.length === 0 })
     };
+
+
+    // handleFilter = (event) => {
+    //     const searchWord = event.target.value;
+    //     const newFilter = this.state.dummyData.filter((value) => {
+    //       return (
+    //         // value.patient_details_id.toLowerCase().includes(searchWord.toLowerCase()) || 
+    //         value.patient_first_name.toLowerCase().includes(searchWord.toLowerCase())
+    //       );
+    //     });
+    //     this.setState(
+    //       {
+    //         Maindata: newFilter,
+    //         search: searchWord,
+    //       },
+    //       () => { console.log(this.state.Maindata,'search')}
+    //     );
+    //   };
     handleFormView = (item) => {
         this.setState({ isFormView: item, disabledInput: true, disabledInput_part2: true })
         if (!item) {
@@ -375,12 +440,12 @@ class LoginScreen extends Component {
     handleView = (item) => {
         this.setState({ isFormView: true, disabledInput: false, showSave_btn: false, showedit_btn: true, showUpDate_btn: false, disabledInput_part2: false }, () => {
             this.setState({
-                patientid: (item.id != null && item.id != undefined) ? item.id : "",
-                firstName: (item.FName != null && item.FName != undefined) ? item.FName : "",
-                lastName: (item.LName != null && item.LName != undefined) ? item.LName : "",
-                phoneNumber: (item.PhNum != null && item.PhNum != undefined) ? item.PhNum : "",
-                gender: (item.gender != null && item.gender != undefined) ? item.gender : "",
-                dateofBirth: (item.year != null && item.year != undefined) ? item.year : ""
+                patientid: (item.patient_details_id != null && item.patient_details_id != undefined) ? item.patient_details_id : "",
+                firstName: (item.patient_first_name != null && item.patient_first_name != undefined) ? item.patient_first_name : "",
+                lastName: (item.patient_last_name != null && item.patient_last_name != undefined) ? item.patient_last_name : "",
+                phoneNumber: (item.patient_mobile_no != null && item.patient_mobile_no != undefined) ? item.patient_mobile_no : "",
+                gender: (item.gender_name != null && item.gender_name != undefined) ? item.gender_name : "",
+                dateofBirth: (item.patient_dob != null && item.patient_dob != undefined) ? item.patient_dob : ""
             })
         })
         console.warn("++item", item)
@@ -431,7 +496,7 @@ class LoginScreen extends Component {
                                         />
                                         <input
                                             className="font_family_serif"
-                                            value={this.state.searchValue}
+                                            // value={this.state.searchValue}
                                             onChange={(text) => { this.handleFilter(text) }} // Changed parameter to e.target.value
                                             placeholder="Search..."
                                         />
@@ -442,7 +507,7 @@ class LoginScreen extends Component {
                                                 <TableCell className="font_family_serif table_header_text_maroon">ID</TableCell>
                                                 <TableCell className="font_family_serif table_header_text_maroon">First Name</TableCell>
                                                 <TableCell className="font_family_serif table_header_text_maroon">Last Name</TableCell>
-                                                <TableCell className="font_family_serif table_header_text_maroon">D.O.J</TableCell>
+                                                <TableCell className="font_family_serif table_header_text_maroon">D.O.B</TableCell>
                                                 <TableCell className="font_family_serif table_header_text_maroon">Gender</TableCell>
                                                 <TableCell className="font_family_serif table_header_text_maroon">Phone Number</TableCell>
                                                 <TableCell className="font_family_serif table_header_text_maroon">Action</TableCell>
@@ -454,29 +519,29 @@ class LoginScreen extends Component {
                                                     <TableCell className="font_family_serif" colSpan={7}>No data found</TableCell>
                                                 </TableRow>
                                             ) : (
-                                                this.state.filterData.length === 0 ? (
+                                                this.state.Maindata.length === 0 ? (
                                                     this.state.data.map((row) => (
-                                                        <TableRow key={row.id}>
-                                                            <TableCell className="font_family_serif">{row.id}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.FName}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.LName}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.year}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.gender}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.PhNum}</TableCell>
+                                                        <TableRow key={row.patient_details_id}>
+                                                            <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.gender_name}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
                                                             <TableCell>
                                                                 <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
                                                             </TableCell>
                                                         </TableRow>
                                                     ))
                                                 ) : (
-                                                    this.state.filterData.map((row) => (
-                                                        <TableRow key={row.id}>
-                                                            <TableCell className="font_family_serif">{row.id}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.FName}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.LName}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.year}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.gender}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.PhNum}</TableCell>
+                                                    this.state.Maindata.map((row) => (
+                                                        <TableRow key={row.patient_details_id}>
+                                                            <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.gender_name}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
                                                             <TableCell>
                                                                 <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
                                                             </TableCell>
@@ -621,11 +686,11 @@ class LoginScreen extends Component {
                                             <div className="form-group text_align_left" >
                                                 <label className="me-2 font_family_serif">Gender: <span className="logo_color_red"> *</span></label>
                                                 <div class="form-check form-check-inline">
-                                                    <input required disabled={!this.state.disabledInput} className="form-check-input font_family_serif" type="radio" name="inlineRadioOptions" id="inlineRadio1" value={Strings.male} checked={this.state.gender === Strings.male} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
+                                                    <input required disabled={!this.state.disabledInput} className="form-check-input font_family_serif" type="radio" name="inlineRadioOptions" id="inlineRadio1" value={Strings.male} checked={this.state.gender_name === Strings.male} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
                                                     <label className="form-check-label font_family_serif" for="inlineRadio1">{Strings.male}</label>
                                                 </div>
                                                 <div className="form-check form-check-inline">
-                                                    <input required disabled={!this.state.disabledInput} className="form-check-input font_family_serif" type="radio" name="inlineRadioOptions" id="inlineRadio2" value={Strings.female} checked={this.state.gender === Strings.female} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
+                                                    <input required disabled={!this.state.disabledInput} className="form-check-input font_family_serif" type="radio" name="inlineRadioOptions" id="inlineRadio2" value={Strings.female} checked={this.state.gender_name === Strings.female} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
                                                     <label className="form-check-label font_family_serif" for="inlineRadio2">{Strings.female}</label>
                                                 </div>
                                                 {this.state.showgenderSelectionview && <span className="font_family_serif" style={{ color: "red", fontSize: 12 }}>{Strings.please_select_one}</span>}
@@ -640,8 +705,8 @@ class LoginScreen extends Component {
                                         </div>
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20 margin_bottom_25 ">
                                             <div className="form-group text_align_left" >
-                                                <label htmlFor="phNum" className="font_family_serif">{Strings.ph_num}</label>
-                                                <input type="text" maxLength={10} pattern="6[0-9]{9}" disabled={!this.state.disabledInput} onChange={(text) => this.handleSelectedData(text, Strings.ph_num)} className="form-control font_family_serif input_hight_45" id="phNum" value={this.state.phoneNumber} placeholder={Strings.ph_num} />
+                                                <label htmlFor="patient_mobile_no" className="font_family_serif">{Strings.ph_num}</label>
+                                                <input type="text" maxLength={10} pattern="6[0-9]{9}" disabled={!this.state.disabledInput} onChange={(text) => this.handleSelectedData(text, Strings.ph_num)} className="form-control font_family_serif input_hight_45" id="patient_mobile_no" value={this.state.phoneNumber} placeholder={Strings.ph_num} />
                                             </div>
                                         </div>
                                     </div>

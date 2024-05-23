@@ -22,7 +22,7 @@
 # yarn-debug.log*
 # yarn-error.log*
 .DS_STORE
-node_modules
+/node_modules
 scripts/flow/*/.flowconfig
 .flowconfig
 *~

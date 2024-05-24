@@ -50,27 +50,27 @@ class LoginScreen extends Component {
             showageview: false,
             showUpDate_btn: false,
             showSave_btn: false,
-            patient_details_id:"",
-            patient_number:"",
-            patient_first_visit_date:"",
-            patient_first_name:"",
-            patient_last_name:"",
-            patient_gender_id:"",
-            patient_age:"",
-            patient_dob:"",
-            patient_tob:"",
-            patient_birth_place:"",
-            patient_nearest_birth_place:"",
-            patient_address:"",
-            patient_mobile_no:"",
-            patient_district:"",
-            patient_state_id:"",
-            gender_id:"",
-            gender_name:"",
-            state_id:"",
-            state_name:"",
-            country_id:"",
-            is_active:"",
+            patient_details_id: "",
+            patient_number: "",
+            patient_first_visit_date: "",
+            patient_first_name: "",
+            patient_last_name: "",
+            patient_gender_id: "",
+            patient_age: "",
+            patient_dob: "",
+            patient_tob: "",
+            patient_birth_place: "",
+            patient_nearest_birth_place: "",
+            patient_address: "",
+            patient_mobile_no: "",
+            patient_district: "",
+            patient_state_id: "",
+            gender_id: "",
+            gender_name: "",
+            state_id: "",
+            state_name: "",
+            country_id: "",
+            is_active: "",
 
             dropDown_menu: [
                 { itemName: "Options 1", value: 1 },
@@ -78,46 +78,61 @@ class LoginScreen extends Component {
                 { itemName: "Options 3", value: 3 },
                 { itemName: "Options 4", value: 4 },
             ],
-            data: [
-                // {
-                //     id: 1,
-                //     patient_first_name: 'Ghost',
-                //     patient_last_name: 'busters',
-                //     patient_dob: '1997-05-29',
-                //     gender: "Male",
-                //     PhNum: "87654321"
-                // },
-                // {
-                //     id: 2,
-                //     patient_first_name: 'John',
-                //     patient_last_name: 'Sena',
-                //     patient_dob: '1967-05-26',
-                //     gender: "Male",
-                //     PhNum: "76543821"
-                // },
-                // {
-                //     id: 3,
-                //     patient_first_name: 'Mia',
-                //     patient_last_name: 'Maya',
-                //     patient_dob: '1967-01-29',
-                //     gender: "Female",
-                //     PhNum: "65487321"
-                // },
-                // Add more data as needed
 
-                { id: 1, patient_first_name: 'John', patient_last_name: 'Doe', email: 'john@example.com', patient_dob: '1967-01-29', gender: "Female", PhNum: "65487321" },
-                { id: 2, patient_first_name: 'Jane', patient_last_name: ' Dow', email: 'jane@example.com', patient_dob: '1988-11-23', gender: "Male", PhNum: "65487321" },
-                { id: 3, patient_first_name: 'Alice', patient_last_name: ' Smith', email: 'alice@example.com', patient_dob: '1907-09-19', gender: "Female", PhNum: "65487321" },
-                { id: 4, patient_first_name: 'Bob', patient_last_name: ' Johnson', email: 'bob@example.com', patient_dob: '1958-09-25', gender: "Male", PhNum: "65487321" },
-                { id: 5, patient_first_name: 'Charlie', patient_last_name: 'Brown', email: 'charlie@example.com', patient_dob: '1957-01-19', gender: "Female", PhNum: "65487321" },
-                { id: 6, patient_first_name: 'David', patient_last_name: 'Wilson', email: 'david@example.com', patient_dob: '1997-06-20', gender: "Female", PhNum: "65487321" },
-                { id: 7, patient_first_name: 'Eve', patient_last_name: 'Adams', email: 'eve@example.com', patient_dob: '1967-01-29', gender: "Male", PhNum: "65487321" },
-                { id: 8, patient_first_name: 'Frank', patient_last_name: 'Clark', email: 'frank@example.com', patient_dob: '1990-01-25', gender: "Female", PhNum: "3252566" },
-                { id: 9, patient_first_name: 'Grace', patient_last_name: 'Lee', email: 'grace@example.com', patient_dob: '1967-02-11', gender: "Female", PhNum: "65487321" },
-                { id: 10, patient_first_name: 'Hank', patient_last_name: 'Miller', email: 'hank@example.com', patient_dob: '1956-02-28', gender: "Male", PhNum: "4567321" },
-                { id: 11, patient_first_name: 'Ivy', patient_last_name: 'Martin', email: 'ivy@example.com', patient_dob: '1987-05-20', gender: "Female", PhNum: "342634521" },
-                { id: 12, patient_first_name: 'Jack', patient_last_name: 'Davis', email: 'jack@example.com', patient_dob: '1988-07-04', gender: "Female", PhNum: "134234135" }
+            showDelete_cancel_btn: false,
+            dropDown_States: [
+                { itemName: "Select State", value: "" },
+                { itemName: "Andhra Pradesh", value: "Andhra Pradesh" },
+                { itemName: "Tamilnadu", value: "Tamilnadu" },
+                { itemName: "Telangana", value: "Telangana" },
             ],
+            dropDown_districts: [
+                { itemName: "Select District", value: "" },
+                { itemName: "Guntur ", value: "Guntur" },
+                { itemName: "Krishna ", value: "Krishna" },
+                { itemName: "Nalgonda", value: "Nalgonda" },
+                { itemName: "RangaReddy", value: "RangaReddy" },
+            ],
+            // data: [
+            //     // {
+            //     //     id: 1,
+            //     //     patient_first_name: 'Ghost',
+            //     //     patient_last_name: 'busters',
+            //     //     patient_dob: '1997-05-29',
+            //     //     gender: "Male",
+            //     //     PhNum: "87654321"
+            //     // },
+            //     // {
+            //     //     id: 2,
+            //     //     patient_first_name: 'John',
+            //     //     patient_last_name: 'Sena',
+            //     //     patient_dob: '1967-05-26',
+            //     //     gender: "Male",
+            //     //     PhNum: "76543821"
+            //     // },
+            //     // {
+            //     //     id: 3,
+            //     //     patient_first_name: 'Mia',
+            //     //     patient_last_name: 'Maya',
+            //     //     patient_dob: '1967-01-29',
+            //     //     gender: "Female",
+            //     //     PhNum: "65487321"
+            //     // },
+            //     // Add more data as needed
+
+            //     { id: 1, patient_first_name: 'John', patient_last_name: 'Doe', email: 'john@example.com', patient_dob: '1967-01-29', gender: "Female", PhNum: "65487321" },
+            //     { id: 2, patient_first_name: 'Jane', patient_last_name: ' Dow', email: 'jane@example.com', patient_dob: '1988-11-23', gender: "Male", PhNum: "65487321" },
+            //     { id: 3, patient_first_name: 'Alice', patient_last_name: ' Smith', email: 'alice@example.com', patient_dob: '1907-09-19', gender: "Female", PhNum: "65487321" },
+            //     { id: 4, patient_first_name: 'Bob', patient_last_name: ' Johnson', email: 'bob@example.com', patient_dob: '1958-09-25', gender: "Male", PhNum: "65487321" },
+            //     { id: 5, patient_first_name: 'Charlie', patient_last_name: 'Brown', email: 'charlie@example.com', patient_dob: '1957-01-19', gender: "Female", PhNum: "65487321" },
+            //     { id: 6, patient_first_name: 'David', patient_last_name: 'Wilson', email: 'david@example.com', patient_dob: '1997-06-20', gender: "Female", PhNum: "65487321" },
+            //     { id: 7, patient_first_name: 'Eve', patient_last_name: 'Adams', email: 'eve@example.com', patient_dob: '1967-01-29', gender: "Male", PhNum: "65487321" },
+            //     { id: 8, patient_first_name: 'Frank', patient_last_name: 'Clark', email: 'frank@example.com', patient_dob: '1990-01-25', gender: "Female", PhNum: "3252566" },
+            //     { id: 9, patient_first_name: 'Grace', patient_last_name: 'Lee', email: 'grace@example.com', patient_dob: '1967-02-11', gender: "Female", PhNum: "65487321" },
+            //     { id: 10, patient_first_name: 'Hank', patient_last_name: 'Miller', email: 'hank@example.com', patient_dob: '1956-02-28', gender: "Male", PhNum: "4567321" },
+            //     { id: 11, patient_first_name: 'Ivy', patient_last_name: 'Martin', email: 'ivy@example.com', patient_dob: '1987-05-20', gender: "Female", PhNum: "342634521" },
+            //     { id: 12, patient_first_name: 'Jack', patient_last_name: 'Davis', email: 'jack@example.com', patient_dob: '1988-07-04', gender: "Female", PhNum: "134234135" }
+            // ],
             Maindata: [],
             dummyData: [],
         }
@@ -128,6 +143,7 @@ class LoginScreen extends Component {
 
 
     componentDidMount() {
+        // alert("hello")
         // this.inputRef.current.focus() 
         this.getAllStates();
     }
@@ -480,7 +496,7 @@ class LoginScreen extends Component {
                         {!this.state.isFormView ?
                             <div className="position_relative">
                                 <div className="margin_bottom_15 right-align ">
-                                    <Button className="btn handle_content" onClick={() => { this.handleFormView(true) }}><i class="fa fa-plus handle_add_button_color_white  font_size_16_normal" aria-hidden="true"></i>
+                                    <Button className="btn handle_content" onClick={() => { this.handleFormView(true) }}><i className="fa fa-plus handle_add_button_color_white  font_size_16_normal" aria-hidden="true"></i>
                                     </Button>
                                     <div className="show_content  p-2 rounded">Add New</div>
                                 </div>
@@ -519,37 +535,57 @@ class LoginScreen extends Component {
                                                 <TableRow>
                                                     <TableCell className="font_family_serif text-center" colSpan={7}>No data found</TableCell>
                                                 </TableRow>
-                                            ) : (
-                                                this.state.Maindata.length === 0 ? (
-                                                    this.state.data.map((row) => (
-                                                        <TableRow key={row.patient_details_id}>
-                                                            <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.gender_name}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
-                                                            <TableCell>
-                                                                <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))
-                                                ) : (
-                                                    this.state.Maindata.map((row) => (
-                                                        <TableRow key={row.patient_details_id}>
-                                                            <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.gender_name}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
-                                                            <TableCell>
-                                                                <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))
-                                                )
-                                            )}
+                                            ) :
+                                                this.state.Maindata.map((row) => (
+                                                    <TableRow key={row.patient_details_id}>
+                                                        <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
+                                                        <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
+                                                        <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
+                                                        <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
+                                                        <TableCell className="font_family_serif">{row.gender_name}</TableCell>
+                                                        <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
+                                                        <TableCell>
+                                                            <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))
+
+                                                // (
+                                                //     this.state.Maindata.length === 0 ? (
+                                                //         this.state.Maindata.map((row) => (
+                                                //             <TableRow key={row.patient_details_id}>
+                                                //                 <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
+                                                //                 <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
+                                                //                 <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
+                                                //                 <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
+                                                //                 <TableCell className="font_family_serif">{row.gender_name}</TableCell>
+                                                //                 <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
+                                                //                 <TableCell>
+                                                //                     <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
+                                                //                 </TableCell>
+                                                //             </TableRow>
+                                                //         ))
+                                                //     )
+                                                //      : (
+                                                //         this.state.Maindata.map((row) => (
+                                                //             <TableRow key={row.patient_details_id}>
+                                                //                 <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
+                                                //                 <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
+                                                //                 <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
+                                                //                 <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
+                                                //                 <TableCell className="font_family_serif">{row.gender_name}</TableCell>
+                                                //                 <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
+                                                //                 <TableCell>
+                                                //                     <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
+                                                //                 </TableCell>
+                                                //             </TableRow>
+                                                //         ))
+                                                //     )
+                                                // )
+
+
+
+                                            }
                                         </TableBody>
 
                                     </Table>
@@ -564,7 +600,7 @@ class LoginScreen extends Component {
                                         {this.state.showedit_btn &&
                                             <div>
                                                 {/* <Button onClick={() => this.handleDisable()} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.edit}</Button> */}
-                                                <Button onClick={() => this.handleDisable()} className="btn btn-secondary  font_family_serif"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+                                                <Button onClick={() => this.handleDisable()} className="btn btn-secondary  font_family_serif"> <i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
                                                 {/* <Button onClick={() => this.handleFormView(false)} className="btn btn-danger padding_horizental_35 font_family_serif">{Strings.delete}</Button> */}
                                             </div>
                                         }
@@ -738,7 +774,7 @@ class LoginScreen extends Component {
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
                                             <div className="form-group text_align_left" >
                                                 <label className="me-2 font_family_serif">Gender: <span className="logo_color_red"> *</span></label>
-                                                <div class="form-check form-check-inline">
+                                                <div className="form-check form-check-inline">
                                                     <input required disabled={!this.state.disabledInput} className="form-check-input font_family_serif" type="radio" name="inlineRadioOptions" id="inlineRadio1" value={Strings.male} checked={this.state.gender_name === Strings.male} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
                                                     <label className="form-check-label font_family_serif" for="inlineRadio1">{Strings.male}</label>
                                                 </div>
@@ -750,19 +786,22 @@ class LoginScreen extends Component {
                                             </div>
                                         </div>
 
-                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20  margin_bottom_25">
-                                            <div className="form-group t{ext_align_left" >
-                                                <label htmlFor="firstVisit" className="font_family_serif">{Strings.first_visit}</label>
-                                                <input type="date" disabled={!this.state.disabledInput} onChange={(text) => { this.handleSelectedData(text, Strings.first_visit) }} className="form-control font_family_serif input_hight_45" id="firstVisit" value={this.state.firstVisit} placeholder={Strings.first_visit} />
-                                            </div>
-                                        </div>
-                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20 margin_bottom_25 ">
-                                            <div className="form-group text_align_left" >
-                                                <label htmlFor="patient_mobile_no" className="font_family_serif">{Strings.ph_num}</label>
-                                                <input type="text" maxLength={10} pattern="6[0-9]{9}" disabled={!this.state.disabledInput} onChange={(text) => this.handleSelectedData(text, Strings.ph_num)} className="form-control font_family_serif input_hight_45" id="patient_mobile_no" value={this.state.phoneNumber} placeholder={Strings.ph_num} />
-                                            </div>
-                                        </div>
                                     </div>
+
+                                    <div className="width_100 text-end save_btn_margin_bottom_15 ">
+                                        <Button onClick={() => { this.handleDeletion() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
+
+                                        {this.state.showUpDate_btn &&
+                                            <Button onClick={() => this.handleEditedValues()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.update}</Button>
+                                        }
+                                        {this.state.showDelete_cancel_btn &&
+                                            <Button onClick={() => this.handleFormView(false)} className="btn btn-danger padding_horizental_35 font_family_serif">{Strings.delete}</Button>
+                                        }
+                                        {this.state.showSave_btn &&
+                                            <Button onClick={() => this.loginclick()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.save}</Button>
+                                        }
+                                    </div>
+
 
                                     {/* {this.state.showUpDate_btn &&
                                         // <div className="width_100 text-end save_btn_margin_bottom_15 ">
@@ -773,15 +812,15 @@ class LoginScreen extends Component {
                                             <Button onClick={() => { this.handleDeletion() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
                                             <Button onClick={() => this.handleEditedValues()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.update}</Button>
                                         </div>
-                                    }
+                                    } */}
 
-                                    {this.state.showDelete_cancel_btn &&
+                                    {/* {this.state.showDelete_cancel_btn &&
                                         <div className="width_100 text-end save_btn_margin_bottom_15 ">
                                             <Button onClick={() => { this.handleDeletion() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
                                             <Button onClick={() => this.handleFormView(false)} className="btn btn-danger padding_horizental_35 font_family_serif">{Strings.delete}</Button>
                                         </div>
-                                    }
-
+                                    } */}
+                                    {/* 
                                     {this.state.showSave_btn &&
                                         <div className="width_100 text-end save_btn_margin_bottom_15 ">
                                             <Button onClick={() => this.handleFormView(false)} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>

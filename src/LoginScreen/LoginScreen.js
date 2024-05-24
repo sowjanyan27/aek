@@ -416,9 +416,8 @@ class LoginScreen extends Component {
                 item.patient_first_name.toLowerCase().includes(value) ||
                 item.patient_last_name.toLowerCase().includes(value) ||
                 item.patient_dob.toLowerCase().includes(value) ||
-                item.gender_name.toLowerCase().includes(value)
-                // ||
-                // item.patient_mobile_no.toLowerCase().includes(value)
+                item.gender_name.toLowerCase().includes(value) ||
+                item.patient_mobile_no.toLowerCase().includes(value)
             );
         });
         this.setState({ Maindata: filteredArray, nodataFound: filteredArray.length === 0 })

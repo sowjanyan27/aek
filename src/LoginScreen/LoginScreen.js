@@ -6,8 +6,9 @@ import { ValidationMessage } from "../helpers/ValidationMessage";
 import { toast } from "react-toastify";
 import { Common } from "../helpers/common";
 import { Employee } from "../api/Employee";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, TableFooter } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css"
+import TablePaginationActions from "../helpers/Pagination";
 
 
 
@@ -50,27 +51,29 @@ class LoginScreen extends Component {
             showageview: false,
             showUpDate_btn: false,
             showSave_btn: false,
-            patient_details_id:"",
-            patient_number:"",
-            patient_first_visit_date:"",
-            patient_first_name:"",
-            patient_last_name:"",
-            patient_gender_id:"",
-            patient_age:"",
-            patient_dob:"",
-            patient_tob:"",
-            patient_birth_place:"",
-            patient_nearest_birth_place:"",
-            patient_address:"",
-            patient_mobile_no:"",
-            patient_district:"",
-            patient_state_id:"",
-            gender_id:"",
-            gender_name:"",
-            state_id:"",
-            state_name:"",
-            country_id:"",
-            is_active:"",
+            patient_details_id: "",
+            patient_number: "",
+            patient_first_visit_date: "",
+            patient_first_name: "",
+            patient_last_name: "",
+            patient_gender_id: "",
+            patient_age: "",
+            patient_dob: "",
+            patient_tob: "",
+            patient_birth_place: "",
+            patient_nearest_birth_place: "",
+            patient_address: "",
+            patient_mobile_no: "",
+            patient_district: "",
+            patient_state_id: "",
+            gender_id: "",
+            gender_name: "",
+            state_id: "",
+            state_name: "",
+            country_id: "",
+            is_active: "",
+            page: 0,
+            rowsPerPage: 10,
 
             dropDown_menu: [
                 { itemName: "Options 1", value: 1 },
@@ -151,7 +154,16 @@ class LoginScreen extends Component {
             });
         }
     }
+    handleChangePage = (event, newPage) => {
+        this.setState({ page: newPage });
+    };
 
+    handleChangeRowsPerPage = (event) => {
+        this.setState({
+            rowsPerPage: parseInt(event.target.value, 10),
+            page: 0
+        });
+    };
     handleSelectedData = (text, field) => {
         var value = text.target.value
         if (field === Strings.patient_id) {
@@ -347,9 +359,70 @@ class LoginScreen extends Component {
                 // this.dataClear()
             }
         });
+        
+            const patientDetails = {
+                // patient_details_id: this.state.patient_details_id,
+                patient_number: this.state.patient_number,
+                patient_first_visit_date: this.state.patient_first_visit_date,
+                patient_first_name: this.state.patient_first_name,
+                patient_last_name: this.state.patient_last_name,
+                patient_gender_id: this.state.patient_gender_id,
+                patient_age: this.state.patient_age,
+                patient_dob: this.state.patient_dob,
+                patient_tob: this.state.patient_tob,
+                patient_birth_place: this.state.patient_birth_place,
+                patient_nearest_birth_place: this.state.patient_nearest_birth_place,
+                patient_address: this.state.patient_address,
+                patient_mobile_no: this.state.patient_mobile_no,
+                patient_district: this.state.patient_district,
+                patient_state_id: this.state.patient_state_id,
+                gender_id: this.state.gender_id,
+                // gender_name: this.state.gender_name,
+                state_id: this.state.state_id,
+                state_name: this.state.state_name,
+                country_id: this.state.country_id,
+                is_active: this.state.is_active
+            }
+            console.log(patientDetails,'patientdetails')
+            this.CreateItem(patientDetails)
+        
         this.setState({ isFormView: false });
     }
 
+
+
+    async CreateItem(item) {
+        // console.log(item);
+        try {
+          const response = await Employee.insert_patientdetails(item);
+          console.log(response);
+          toast.success(ValidationMessage.P_added, {
+            toastId: "add_success",
+          });
+        }
+        catch (e) {
+          console.log(e)
+          toast.error(ValidationMessage.p_failed, {
+            toastId: "addFail",
+          });
+        }
+        finally {
+        
+    
+          this.setState(
+            {
+             
+    
+            },
+            () => {
+              
+              this.getAllStates();
+    
+            }
+          );
+        }
+    
+      }
     dataClear() {
         this.setState({
             patientid: "1",
@@ -407,23 +480,6 @@ class LoginScreen extends Component {
         this.setState({ Maindata: filteredArray, nodataFound: filteredArray.length === 0 })
     };
 
-
-    // handleFilter = (event) => {
-    //     const searchWord = event.target.value;
-    //     const newFilter = this.state.dummyData.filter((value) => {
-    //       return (
-    //         // value.patient_details_id.toLowerCase().includes(searchWord.toLowerCase()) || 
-    //         value.patient_first_name.toLowerCase().includes(searchWord.toLowerCase())
-    //       );
-    //     });
-    //     this.setState(
-    //       {
-    //         Maindata: newFilter,
-    //         search: searchWord,
-    //       },
-    //       () => { console.log(this.state.Maindata,'search')}
-    //     );
-    //   };
     handleFormView = (item) => {
         this.setState({ isFormView: item, disabledInput: true, disabledInput_part2: true })
         if (!item) {
@@ -472,6 +528,8 @@ class LoginScreen extends Component {
     }
 
     render() {
+        const {  page, rowsPerPage} = this.state;
+
         return (
             <div className="container">
                 <div className="w-100 padding_vertical_50" >
@@ -483,7 +541,6 @@ class LoginScreen extends Component {
                                     </Button>
                                     <div className="show_content  p-2 rounded">Add New</div>
                                 </div>
-
                                 <TableContainer className="mt-4 mb-4" component={Paper}>
                                     <div className="mt-4 mb-4 width_100 space-between display_flex" >
                                         <input
@@ -514,45 +571,39 @@ class LoginScreen extends Component {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {this.state.nodataFound ? (
-                                                <TableRow>
-                                                    <TableCell className="font_family_serif" colSpan={7}>No data found</TableCell>
-                                                </TableRow>
-                                            ) : (
-                                                this.state.Maindata.length === 0 ? (
-                                                    this.state.data.map((row) => (
-                                                        <TableRow key={row.patient_details_id}>
-                                                            <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.gender_name}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
-                                                            <TableCell>
-                                                                <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))
-                                                ) : (
-                                                    this.state.Maindata.map((row) => (
-                                                        <TableRow key={row.patient_details_id}>
-                                                            <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.gender_name}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
-                                                            <TableCell>
-                                                                <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))
-                                                )
-                                            )}
+                                            {(this.state.rowsPerPage > 0
+                                                ? this.state.Maindata.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                : this.state.Maindata
+                                            ).map((row) => (
+                                                <TableRow key={row.patient_details_id}>
+                                                <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
+                                                <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
+                                                <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
+                                                <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
+                                                <TableCell className="font_family_serif">{row.gender_name}</TableCell>
+                                                <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
+                                                <TableCell>
+                                                    <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
+                                                </TableCell>
+                                            </TableRow>
+                                            ))}
                                         </TableBody>
-
+                                        <TableFooter>
+                                            <TableRow>
+                                                <TablePagination
+                                                    rowsPerPageOptions={[10, 20, 30, { label: 'All', value: -1 }]}
+                                                    count={this.state.Maindata.length}
+                                                    rowsPerPage={this.state.rowsPerPage}
+                                                    page={this.state.page}
+                                                    onPageChange={this.handleChangePage}
+                                                    onRowsPerPageChange={this.handleChangeRowsPerPage}
+                                                    ActionsComponent={TablePaginationActions}
+                                                />
+                                            </TableRow>
+                                        </TableFooter>
                                     </Table>
                                 </TableContainer>
+
                             </div>
                             :
                             <form>
@@ -736,3 +787,5 @@ class LoginScreen extends Component {
     }
 }
 export default withRouter(LoginScreen)
+
+

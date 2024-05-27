@@ -6,8 +6,9 @@ import { ValidationMessage } from "../helpers/ValidationMessage";
 import { toast } from "react-toastify";
 import { Common } from "../helpers/common";
 import { Employee } from "../api/Employee";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, TableFooter } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css"
+import TablePaginationActions from "../helpers/Pagination";
 
 
 
@@ -50,27 +51,27 @@ class LoginScreen extends Component {
             showageview: false,
             showUpDate_btn: false,
             showSave_btn: false,
-            patient_details_id: "",
-            patient_number: "",
-            patient_first_visit_date: "",
-            patient_first_name: "",
-            patient_last_name: "",
-            patient_gender_id: "",
-            patient_age: "",
-            patient_dob: "",
-            patient_tob: "",
-            patient_birth_place: "",
-            patient_nearest_birth_place: "",
-            patient_address: "",
-            patient_mobile_no: "",
-            patient_district: "",
-            patient_state_id: "",
-            gender_id: "",
-            gender_name: "",
-            state_id: "",
-            state_name: "",
-            country_id: "",
-            is_active: "",
+            patient_details_id:"",
+            patient_number:"",
+            patient_first_visit_date:"",
+            patient_first_name:"",
+            patient_last_name:"",
+            patient_gender_id:"",
+            patient_age:"",
+            patient_dob:"",
+            patient_tob:"",
+            patient_birth_place:"",
+            patient_nearest_birth_place:"",
+            patient_address:"",
+            patient_mobile_no:"",
+            patient_district:"",
+            patient_state_id:"",
+            gender_id:"",
+            gender_name:"",
+            state_id:"",
+            state_name:"",
+            country_id:"",
+            is_active:"",
 
             dropDown_menu: [
                 { itemName: "Options 1", value: 1 },
@@ -93,48 +94,10 @@ class LoginScreen extends Component {
                 { itemName: "Nalgonda", value: "Nalgonda" },
                 { itemName: "RangaReddy", value: "RangaReddy" },
             ],
-            // data: [
-            //     // {
-            //     //     id: 1,
-            //     //     patient_first_name: 'Ghost',
-            //     //     patient_last_name: 'busters',
-            //     //     patient_dob: '1997-05-29',
-            //     //     gender: "Male",
-            //     //     PhNum: "87654321"
-            //     // },
-            //     // {
-            //     //     id: 2,
-            //     //     patient_first_name: 'John',
-            //     //     patient_last_name: 'Sena',
-            //     //     patient_dob: '1967-05-26',
-            //     //     gender: "Male",
-            //     //     PhNum: "76543821"
-            //     // },
-            //     // {
-            //     //     id: 3,
-            //     //     patient_first_name: 'Mia',
-            //     //     patient_last_name: 'Maya',
-            //     //     patient_dob: '1967-01-29',
-            //     //     gender: "Female",
-            //     //     PhNum: "65487321"
-            //     // },
-            //     // Add more data as needed
-
-            //     { id: 1, patient_first_name: 'John', patient_last_name: 'Doe', email: 'john@example.com', patient_dob: '1967-01-29', gender: "Female", PhNum: "65487321" },
-            //     { id: 2, patient_first_name: 'Jane', patient_last_name: ' Dow', email: 'jane@example.com', patient_dob: '1988-11-23', gender: "Male", PhNum: "65487321" },
-            //     { id: 3, patient_first_name: 'Alice', patient_last_name: ' Smith', email: 'alice@example.com', patient_dob: '1907-09-19', gender: "Female", PhNum: "65487321" },
-            //     { id: 4, patient_first_name: 'Bob', patient_last_name: ' Johnson', email: 'bob@example.com', patient_dob: '1958-09-25', gender: "Male", PhNum: "65487321" },
-            //     { id: 5, patient_first_name: 'Charlie', patient_last_name: 'Brown', email: 'charlie@example.com', patient_dob: '1957-01-19', gender: "Female", PhNum: "65487321" },
-            //     { id: 6, patient_first_name: 'David', patient_last_name: 'Wilson', email: 'david@example.com', patient_dob: '1997-06-20', gender: "Female", PhNum: "65487321" },
-            //     { id: 7, patient_first_name: 'Eve', patient_last_name: 'Adams', email: 'eve@example.com', patient_dob: '1967-01-29', gender: "Male", PhNum: "65487321" },
-            //     { id: 8, patient_first_name: 'Frank', patient_last_name: 'Clark', email: 'frank@example.com', patient_dob: '1990-01-25', gender: "Female", PhNum: "3252566" },
-            //     { id: 9, patient_first_name: 'Grace', patient_last_name: 'Lee', email: 'grace@example.com', patient_dob: '1967-02-11', gender: "Female", PhNum: "65487321" },
-            //     { id: 10, patient_first_name: 'Hank', patient_last_name: 'Miller', email: 'hank@example.com', patient_dob: '1956-02-28', gender: "Male", PhNum: "4567321" },
-            //     { id: 11, patient_first_name: 'Ivy', patient_last_name: 'Martin', email: 'ivy@example.com', patient_dob: '1987-05-20', gender: "Female", PhNum: "342634521" },
-            //     { id: 12, patient_first_name: 'Jack', patient_last_name: 'Davis', email: 'jack@example.com', patient_dob: '1988-07-04', gender: "Female", PhNum: "134234135" }
-            // ],
             Maindata: [],
             dummyData: [],
+            page: 0,
+            rowsPerPage: 10,
         }
         this.inputRef = React.createRef()
         // console.warn("++which one first")
@@ -167,7 +130,16 @@ class LoginScreen extends Component {
             });
         }
     }
+    handleChangePage = (event, newPage) => {
+        this.setState({ page: newPage });
+    };
 
+    handleChangeRowsPerPage = (event) => {
+        this.setState({
+            rowsPerPage: parseInt(event.target.value, 10),
+            page: 0
+        });
+    };
     handleSelectedData = (text, field) => {
         var value = text.target.value
         if (field === Strings.patient_id) {
@@ -365,9 +337,70 @@ class LoginScreen extends Component {
                 // this.dataClear()
             }
         });
+        
+            const patientDetails = {
+                // patient_details_id: this.state.patient_details_id,
+                patient_number: this.state.patient_number,
+                patient_first_visit_date: this.state.patient_first_visit_date,
+                patient_first_name: this.state.patient_first_name,
+                patient_last_name: this.state.patient_last_name,
+                patient_gender_id: this.state.patient_gender_id,
+                patient_age: this.state.patient_age,
+                patient_dob: this.state.patient_dob,
+                patient_tob: this.state.patient_tob,
+                patient_birth_place: this.state.patient_birth_place,
+                patient_nearest_birth_place: this.state.patient_nearest_birth_place,
+                patient_address: this.state.patient_address,
+                patient_mobile_no: this.state.patient_mobile_no,
+                patient_district: this.state.patient_district,
+                patient_state_id: this.state.patient_state_id,
+                gender_id: this.state.gender_id,
+                // gender_name: this.state.gender_name,
+                state_id: this.state.state_id,
+                state_name: this.state.state_name,
+                country_id: this.state.country_id,
+                is_active: this.state.is_active
+            }
+            console.log(patientDetails,'patientdetails')
+            this.CreateItem(patientDetails)
+        
         this.setState({ isFormView: false });
     }
 
+
+
+    async CreateItem(item) {
+        // console.log(item);
+        try {
+          const response = await Employee.insert_patientdetails(item);
+          console.log(response);
+          toast.success(ValidationMessage.P_added, {
+            toastId: "add_success",
+          });
+        }
+        catch (e) {
+          console.log(e)
+          toast.error(ValidationMessage.p_failed, {
+            toastId: "addFail",
+          });
+        }
+        finally {
+        
+    
+          this.setState(
+            {
+             
+    
+            },
+            () => {
+              
+              this.getAllStates();
+    
+            }
+          );
+        }
+    
+      }
     dataClear() {
         this.setState({
             patientid: "1",
@@ -423,23 +456,6 @@ class LoginScreen extends Component {
         this.setState({ Maindata: filteredArray, nodataFound: filteredArray.length === 0 })
     };
 
-
-    // handleFilter = (event) => {
-    //     const searchWord = event.target.value;
-    //     const newFilter = this.state.dummyData.filter((value) => {
-    //       return (
-    //         // value.patient_details_id.toLowerCase().includes(searchWord.toLowerCase()) || 
-    //         value.patient_first_name.toLowerCase().includes(searchWord.toLowerCase())
-    //       );
-    //     });
-    //     this.setState(
-    //       {
-    //         Maindata: newFilter,
-    //         search: searchWord,
-    //       },
-    //       () => { console.log(this.state.Maindata,'search')}
-    //     );
-    //   };
     handleFormView = (item) => {
         this.setState({ isFormView: item, disabledInput: true, disabledInput_part2: true, showDelete_cancel_btn: false })
         this.dataClear()
@@ -488,6 +504,8 @@ class LoginScreen extends Component {
     }
 
     render() {
+        const {  page, rowsPerPage} = this.state;
+
         return (
             <div className="container">
                 <div className="w-100 padding_vertical_50" >
@@ -499,7 +517,6 @@ class LoginScreen extends Component {
                                     </Button>
                                     <div className="show_content  p-2 rounded">Add New</div>
                                 </div>
-
                                 <TableContainer className="mt-4 mb-4" component={Paper}>
                                     <div className="mt-4 mb-4 width_100 space-between display_flex" >
                                         <input
@@ -586,9 +603,22 @@ class LoginScreen extends Component {
 
                                             }
                                         </TableBody>
-
+                                        <TableFooter>
+                                            <TableRow>
+                                                <TablePagination
+                                                    rowsPerPageOptions={[10, 20, 30, { label: 'All', value: -1 }]}
+                                                    count={this.state.Maindata.length}
+                                                    rowsPerPage={this.state.rowsPerPage}
+                                                    page={this.state.page}
+                                                    onPageChange={this.handleChangePage}
+                                                    onRowsPerPageChange={this.handleChangeRowsPerPage}
+                                                    ActionsComponent={TablePaginationActions}
+                                                />
+                                            </TableRow>
+                                        </TableFooter>
                                     </Table>
                                 </TableContainer>
+
                             </div>
                             :
                             <form>
@@ -836,3 +866,5 @@ class LoginScreen extends Component {
     }
 }
 export default withRouter(LoginScreen)
+
+

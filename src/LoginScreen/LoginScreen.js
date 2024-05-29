@@ -17,7 +17,7 @@ class LoginScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            patientid: "1",
+            patient_id: " ",
             patientnum: "",
             firstName: "",
             lastName: "",
@@ -51,27 +51,6 @@ class LoginScreen extends Component {
             showageview: false,
             showUpDate_btn: false,
             showSave_btn: false,
-            patient_details_id:"",
-            patient_number:"",
-            patient_first_visit_date:"",
-            patient_first_name:"",
-            patient_last_name:"",
-            patient_gender_id:"",
-            patient_age:"",
-            patient_dob:"",
-            patient_tob:"",
-            patient_birth_place:"",
-            patient_nearest_birth_place:"",
-            patient_address:"",
-            patient_mobile_no:"",
-            patient_district:"",
-            patient_state_id:"",
-            gender_id:"",
-            gender_name:"",
-            state_id:"",
-            state_name:"",
-            country_id:"",
-            is_active:"",
 
             dropDown_menu: [
                 { itemName: "Options 1", value: 1 },
@@ -146,7 +125,7 @@ class LoginScreen extends Component {
             if (value !== "") {
                 this.setState({ showpatientIdview: false })
             }
-            this.setState({ patientid: value })
+            this.setState({ patient_id: value })
             return
         }
         if (field === Strings.patient_num) {
@@ -209,7 +188,7 @@ class LoginScreen extends Component {
             if (value !== "") {
                 this.setState({ showgenderSelectionview: false })
             }
-            this.setState({ gender_name: value })
+            this.setState({ gender: value })
         }
         if (field === Strings.ph_num) {
             const formattedNumber = Common.mobileNumberFormat(value);
@@ -223,187 +202,178 @@ class LoginScreen extends Component {
     }
 
 
-    loginclick() {
+    async loginclick() {
 
-        //   // extra text view // // 
-
-        // if (!this.state.patientid) {
-        //     this.setState({ showpatientIdview: true })
-        //     return
-        // }
-        // if (!this.state.patientnum) {
-        //     this.setState({ showpatientNumview: true })
-        //     return
-        // }
-        // if (!this.state.firstName) {
-        //     this.setState({ showpatientFirstnameview: true })
-        //     return
-        // }
-        // if (!this.state.lastName) {
-        //     this.setState({ showpatientLastnameview: true })
-        //     return
-        // }
-        // if (!this.state.age) {
-        //     this.setState({ showageview: true })
-        //     return
-        // }
-        // if (!this.state.dateofBirth) {
-        //     this.setState({ showBirtDateview: true })
-        //     return
-        // }
-        // if (!this.state.timeofBirth) {
-        //     this.setState({ showBirthTimeview: true })
-        //     return
-        // }
-        // if (!this.state.gender) {
-        //     this.setState({ showgenderSelectionview: true })
-        //     return
-        // }
-        // toast.success(ValidationMessage.V_Added, {
-        //     toastId: "success"
-        // });
-        // setTimeout(() => {
-
-        //     this.setState({ isFormView: false })
-        // }, 1000)
-
-        // return
-
-        // // Showing pop up // //
-
-        if (!this.state.patientid) {
-            toast.warn(ValidationMessage.p_id, {
-                toastId: "pid",
-            });
-            return;
-        }
-        if (!this.state.patientnum) {
+        if (this.state.patientnum === '' || this.state.patientnum === null) {
             toast.warn(ValidationMessage.p_num, {
                 toastId: "p_num",
             });
             return;
         }
-        if (!this.state.firstName) {
+        if (this.state.firstName === '' || this.state.firstName === '') {
             toast.warn(ValidationMessage.p_firstname, {
                 toastId: "p_firstname",
             });
             return;
         }
-        if (!this.state.lastName) {
-            toast.warn(ValidationMessage.p_lastname, {
-                toastId: "p_lastname",
-            });
+
+        if (this.state.lastName === '' || this.state.lastName === null) {
+            alert("Provide patient last name")
             return;
         }
-        if (!this.state.patientid) {
-            toast.warn(ValidationMessage.p_id, {
-                toastId: "pid",
-            });
-            return;
-        }
-        if (!this.state.age) {
+
+        if (this.state.age === '' || this.state.age === null) {
             toast.warn(ValidationMessage.p_age, {
                 toastId: "p_age",
             });
             return;
+
         }
-        if (!this.state.dateofBirth) {
-            toast.warn(ValidationMessage.p_birth_date, {
-                toastId: "p_birthDate",
-            });
-            return;
-        }
-        if (!this.state.timeofBirth) {
-            toast.warn(ValidationMessage.p_birth_time, {
-                toastId: "p_birthTime",
-            });
-            return;
-        }
-        if (!this.state.gender_name) {
+        if (this.state.gender === '' || this.state.gender === null) {
             toast.warn(ValidationMessage.p_gender, {
                 toastId: "p_gender",
             });
             return;
         }
-        // else {
-        //     this.setState()
-        // }
-        // console.log("test")
-        // this.props.router.navigate(`/Login`);
-        toast.success(ValidationMessage.V_Added, {
-            toastId: 'success',
-            onClose: () => {
-                this.setState({ isFormView: false });
-                // this.dataClear()
-            }
-        });
+
+        if (this.state.dateofBirth === '' || this.state.dateofBirth === null) {
+            toast.warn(ValidationMessage.p_birth_date, {
+                toastId: "p_birthDate",
+            });
+            return;
+        }
+
+        if (this.state.timeofBirth === '' || this.state.timeofBirth === null) {
+            toast.warn(ValidationMessage.p_birth_time, {
+                toastId: "p_birthTime",
+            });
+            return;
+        }
+
+        if (this.state.birthofPlace === '' || this.state.birthofPlace === null) {
+            toast.warn(ValidationMessage.p_birthplace, {
+                toastId: "p_birthplace",
+            });
+            return;
+        }
+        if (this.state.nearestBirthPlace === '' || this.state.nearestBirthPlace === null) {
+            toast.warn(ValidationMessage.p_nearestbirthplace, {
+                toastId: "p_nearestbirthplace",
+            });
+            return;
+        }
+
+        if (this.state.address === '' || this.state.address === null) {
+            toast.warn(ValidationMessage.p_address, {
+                toastId: "p_address",
+            });
+            return;
+        }
+
+
+        if (this.state.phoneNumber === '' || this.state.phoneNumber === null) {
+            toast.warn(ValidationMessage.p_mobileno, {
+                toastId: "p_mobileno",
+            });
+            return;
+        }
+
+        if (this.state.state === '' || this.state.state === null) {
+            toast.warn(ValidationMessage.p_stateid, {
+                toastId: "p_stateid",
+            });
+            return;
+        }
+        if (this.state.district === '' || this.state.district === null) {
+            toast.warn(ValidationMessage.p_district, {
+                toastId: "p_district",
+            });
+            return;
+        }
+        if (this.state.firstVisit === '' || this.state.firstVisit === null) {
+            toast.warn(ValidationMessage.p_firstvisit, {
+                toastId: "p_firstvisit",
+            });
+            return;
+        }
+
+        const obj = {
+            patientid:Number(0),
+            patient_num: this.state.patientnum,
+            first_visitdate: this.state.firstVisit,
+            p_first_name: this.state.firstName,
+            p_last_name: this.state.lastName,
+            p_gender: Number(this.state.gender),
+            p_age: Number(this.state.age),
+            p_dob: this.state.dateofBirth,
+            p_tob: this.state.timeofBirth,
+            p_birthplace: this.state.birthofPlace,
+            pn_birthplace: this.state.nearestBirthPlace,
+            p_address: this.state.address,
+            p_mobileno: Number(this.state.phoneNumber),
+            p_district: this.state.district,
+            p_stateid: 2
+        }
+        console.log(obj,'obj')
+        // const json_obj = JSON.stringify(obj)
+        // console.log(json_obj,'json_obj')
+        try {
+                    const response = await Employee.insert_patientdetails(obj);
+                    console.log(response);
+                    toast.success(ValidationMessage.P_added, {
+                        toastId: "add_success",
+                    });
+                }
+                catch (e) {
+                    console.log(e)
+                    toast.error(ValidationMessage.p_failed, {
+                        toastId: "addFail",
+                    });
+                }
+                finally {
         
-            const patientDetails = {
-                // patient_details_id: this.state.patient_details_id,
-                patient_number: this.state.patient_number,
-                patient_first_visit_date: this.state.patient_first_visit_date,
-                patient_first_name: this.state.patient_first_name,
-                patient_last_name: this.state.patient_last_name,
-                patient_gender_id: this.state.patient_gender_id,
-                patient_age: this.state.patient_age,
-                patient_dob: this.state.patient_dob,
-                patient_tob: this.state.patient_tob,
-                patient_birth_place: this.state.patient_birth_place,
-                patient_nearest_birth_place: this.state.patient_nearest_birth_place,
-                patient_address: this.state.patient_address,
-                patient_mobile_no: this.state.patient_mobile_no,
-                patient_district: this.state.patient_district,
-                patient_state_id: this.state.patient_state_id,
-                gender_id: this.state.gender_id,
-                // gender_name: this.state.gender_name,
-                state_id: this.state.state_id,
-                state_name: this.state.state_name,
-                country_id: this.state.country_id,
-                is_active: this.state.is_active
-            }
-            console.log(patientDetails,'patientdetails')
-            this.CreateItem(patientDetails)
         
-        this.setState({ isFormView: false });
+                    this.setState({ },() => { this.getAllStates();} ); }
+       
     }
 
 
 
-    async CreateItem(item) {
-        // console.log(item);
-        try {
-          const response = await Employee.insert_patientdetails(item);
-          console.log(response);
-          toast.success(ValidationMessage.P_added, {
-            toastId: "add_success",
-          });
-        }
-        catch (e) {
-          console.log(e)
-          toast.error(ValidationMessage.p_failed, {
-            toastId: "addFail",
-          });
-        }
-        finally {
-        
-    
-          this.setState(
-            {
-             
-    
-            },
-            () => {
-              
-              this.getAllStates();
-    
-            }
-          );
-        }
-    
-      }
+    // async CreateItem(item) {
+    //     // console.log(item);
+    //     try {
+    //         const response = await Employee.insert_patientdetails(item);
+    //         console.log(response);
+    //         toast.success(ValidationMessage.P_added, {
+    //             toastId: "add_success",
+    //         });
+    //     }
+    //     catch (e) {
+    //         console.log(e)
+    //         toast.error(ValidationMessage.p_failed, {
+    //             toastId: "addFail",
+    //         });
+    //     }
+    //     finally {
+
+
+    //         this.setState(
+    //             {
+
+
+    //             },
+    //             () => {
+
+    //                 this.getAllStates();
+
+    //             }
+    //         );
+    //     }
+
+    // }
     dataClear() {
         this.setState({
-            patientid: "1",
+            patient_id: "",
             patientnum: "",
             firstName: "",
             lastName: "",
@@ -472,12 +442,12 @@ class LoginScreen extends Component {
     handleView = (item) => {
         this.setState({ isFormView: true, disabledInput: false, showSave_btn: false, showedit_btn: true, showUpDate_btn: false, showDelete_cancel_btn: true, disabledInput_part2: false }, () => {
             this.setState({
-                patientid: (item.patient_details_id != null && item.patient_details_id != undefined) ? item.patient_details_id : "",
-                firstName: (item.patient_first_name != null && item.patient_first_name != undefined) ? item.patient_first_name : "",
-                lastName: (item.patient_last_name != null && item.patient_last_name != undefined) ? item.patient_last_name : "",
-                phoneNumber: (item.patient_mobile_no != null && item.patient_mobile_no != undefined) ? item.patient_mobile_no : "",
-                gender: (item.gender_name != null && item.gender_name != undefined) ? item.gender_name : "",
-                dateofBirth: (item.patient_dob != null && item.patient_dob != undefined) ? item.patient_dob : ""
+                patient_id: (item.patient_details_id !== null && item.patient_details_id !== undefined) ? item.patient_details_id : "",
+                firstName: (item.patient_first_name !== null && item.patient_first_name !== undefined) ? item.patient_first_name : "",
+                lastName: (item.patient_last_name !== null && item.patient_last_name !== undefined) ? item.patient_last_name : "",
+                phoneNumber: (item.patient_mobile_no !== null && item.patient_mobile_no !== undefined) ? item.patient_mobile_no : "",
+                gender: (item.gender_name !== null && item.gender_name !== undefined) ? item.gender_name : "",
+                dateofBirth: (item.patient_dob !== null && item.patient_dob !== undefined) ? item.patient_dob : ""
             })
         })
         console.warn("++item", item)
@@ -504,7 +474,7 @@ class LoginScreen extends Component {
     }
 
     render() {
-        const {  page, rowsPerPage} = this.state;
+        const { page, rowsPerPage } = this.state;
 
         return (
             <div className="container">
@@ -640,7 +610,7 @@ class LoginScreen extends Component {
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20 ">
                                             <div className="form-group text_align_left ">
                                                 <label htmlFor="PatientId" className="font_family_serif"> {Strings.patient_id} <span className="logo_color_red"> *</span></label>
-                                                <input type="text" disabled={true} onChange={(text) => this.handleSelectedData(text, Strings.patient_id)} className="form-control font_family_serif  input_hight_45" id="near_area" value={this.state.patientid} placeholder={Strings.patient_id} />
+                                                <input type="text" disabled={true} onChange={(text) => this.handleSelectedData(text, Strings.patient_id)} className="form-control font_family_serif  input_hight_45" id="near_area" value={this.state.patient_id} placeholder={Strings.patient_id} />
                                                 {this.state.showpatientIdview && <span className="font_family_serif" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
                                             </div>
                                         </div>
@@ -748,7 +718,7 @@ class LoginScreen extends Component {
                                             </div>
                                         </div>
 
-                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
+                                        {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                             <div className="form-group text_align_left" >
                                                 <label htmlFor="selectOption" className="font_family_serif"> {Strings.district} </label>
                                                 <select disabled={this.state.state == ""} className="form-select font_family_serif input_hight_45" id="state" onChange={(text) => this.handleSelectedData(text, Strings.district)} value={this.state.district} placeholder={Strings.district} >
@@ -758,6 +728,12 @@ class LoginScreen extends Component {
                                                         )
                                                     })}
                                                 </select>
+                                            </div>
+                                        </div> */}
+                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20 ">
+                                            <div className="form-group text_align_left" >
+                                                <label htmlFor="District" className="font_family_serif">{Strings.district}</label>
+                                                <input type="text" disabled={!this.state.disabledInput} onChange={(text) => this.handleSelectedData(text, Strings.district)} className="form-control font_family_serif input_hight_45" id="district" value={this.state.district} placeholder={Strings.district} />
                                             </div>
                                         </div>
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20  margin_bottom_25">
@@ -804,11 +780,11 @@ class LoginScreen extends Component {
                                             <div className="form-group text_align_left" >
                                                 <label className="me-2 font_family_serif">Gender: <span className="logo_color_red"> *</span></label>
                                                 <div className="form-check form-check-inline">
-                                                    <input required disabled={!this.state.disabledInput} className="form-check-input font_family_serif" type="radio" name="inlineRadioOptions" id="inlineRadio1" value={Strings.male} checked={this.state.gender_name === Strings.male} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
+                                                    <input required disabled={!this.state.disabledInput} className="form-check-input font_family_serif" type="radio" name="inlineRadioOptions" id="inlineRadio1" value={"1"} checked={this.state.gender === "1"} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
                                                     <label className="form-check-label font_family_serif" for="inlineRadio1">{Strings.male}</label>
                                                 </div>
                                                 <div className="form-check form-check-inline">
-                                                    <input required disabled={!this.state.disabledInput} className="form-check-input font_family_serif" type="radio" name="inlineRadioOptions" id="inlineRadio2" value={Strings.female} checked={this.state.gender_name === Strings.female} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
+                                                    <input required disabled={!this.state.disabledInput} className="form-check-input font_family_serif" type="radio" name="inlineRadioOptions" id="inlineRadio2" value={"2"} checked={this.state.gender === "2"} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
                                                     <label className="form-check-label font_family_serif" for="inlineRadio2">{Strings.female}</label>
                                                 </div>
                                                 {this.state.showgenderSelectionview && <span className="font_family_serif" style={{ color: "red", fontSize: 12 }}>{Strings.please_select_one}</span>}

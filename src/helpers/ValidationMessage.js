@@ -9,6 +9,14 @@ export const ValidationMessage = {
     p_birth_date: "Please Enter Patient Birth Date",
     p_gender: "Please Select Patient Gender",
     P_added:"Data Added Successfylly",
-    p_failed:"Failed to Insert the data"
+    p_failed:"Failed to Insert the data",
+    p_birthplace:"Please provide the birth place",
+    p_nearestbirthplace:"Please provide the nearest place",
+    p_address: "Please provide the address",
+    p_mobileno:"Please provide the patient mobile number",
+    p_stateid:"Please select the state",
+    p_district:"Please provide the district",
+    p_firstvisit:"Please select the patient first visit date",
+
 
 }

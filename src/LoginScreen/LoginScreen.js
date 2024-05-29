@@ -185,6 +185,7 @@ class LoginScreen extends Component {
             this.setState({ dropDownVal: value })
         }
         if (field === Strings.radioButtonVal) {
+            console.warn("++value", value)
             if (value !== "") {
                 this.setState({ showgenderSelectionview: false })
             }
@@ -371,6 +372,38 @@ class LoginScreen extends Component {
     //     }
 
     // }
+    async CreateItem(item) {
+        // console.log(item);
+        try {
+            const response = await Employee.insert_patientdetails(item);
+            console.log(response);
+            toast.success(ValidationMessage.P_added, {
+                toastId: "add_success",
+            });
+        }
+        catch (e) {
+            console.log(e)
+            toast.error(ValidationMessage.p_failed, {
+                toastId: "addFail",
+            });
+        }
+        finally {
+
+
+            this.setState(
+                {
+
+
+                },
+                () => {
+
+                    this.getAllStates();
+
+                }
+            );
+        }
+
+    }
     dataClear() {
         this.setState({
             patient_id: "",
@@ -420,7 +453,7 @@ class LoginScreen extends Component {
                 item.patient_last_name.toLowerCase().includes(value) ||
                 item.patient_dob.toLowerCase().includes(value) ||
                 item.gender_name.toLowerCase().includes(value) ||
-                item.patient_mobile_no.toLowerCase().includes(value)
+                item.patient_mobile_no.toString().includes(value)
             );
         });
         this.setState({ Maindata: filteredArray, nodataFound: filteredArray.length === 0 })
@@ -504,7 +537,7 @@ class LoginScreen extends Component {
                                             placeholder="Search..."
                                         />
                                     </div>
-                                    <Table className="table table-bordered">
+                                    <Table className="table table-bordered align_p_tag">
                                         <TableHead className="table_header_light_grey">
                                             <TableRow>
                                                 <TableCell className="font_family_serif table_header_text_maroon">ID</TableCell>
@@ -535,42 +568,6 @@ class LoginScreen extends Component {
                                                         </TableCell>
                                                     </TableRow>
                                                 ))
-
-                                                // (
-                                                //     this.state.Maindata.length === 0 ? (
-                                                //         this.state.Maindata.map((row) => (
-                                                //             <TableRow key={row.patient_details_id}>
-                                                //                 <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
-                                                //                 <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
-                                                //                 <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
-                                                //                 <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
-                                                //                 <TableCell className="font_family_serif">{row.gender_name}</TableCell>
-                                                //                 <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
-                                                //                 <TableCell>
-                                                //                     <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
-                                                //                 </TableCell>
-                                                //             </TableRow>
-                                                //         ))
-                                                //     )
-                                                //      : (
-                                                //         this.state.Maindata.map((row) => (
-                                                //             <TableRow key={row.patient_details_id}>
-                                                //                 <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
-                                                //                 <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
-                                                //                 <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
-                                                //                 <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
-                                                //                 <TableCell className="font_family_serif">{row.gender_name}</TableCell>
-                                                //                 <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
-                                                //                 <TableCell>
-                                                //                     <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
-                                                //                 </TableCell>
-                                                //             </TableRow>
-                                                //         ))
-                                                //     )
-                                                // )
-
-
-
                                             }
                                         </TableBody>
                                         <TableFooter>
@@ -671,7 +668,7 @@ class LoginScreen extends Component {
                                                 <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                                                     <div className="form-group text_align_left" >
                                                         <label htmlFor="BirthDate" className="font_family_serif"> {Strings.birth_Date} <span className="logo_color_red"> *</span></label>
-                                                        <input required type="date" disabled={!this.state.disabledInput} onChange={(text) => { this.handleSelectedData(text, Strings.birth_Date) }} className="form-control font_family_serif input_hight_45" id="firstName" value={this.state.dateofBirth} />
+                                                        <input required type="date" disabled={!this.state.disabledInput} onChange={(text) => { this.handleSelectedData(text, Strings.birth_Date) }} className="form-control font_family_serif input_hight_45 handle_padding_text_input-birthdat" id="firstName" value={this.state.dateofBirth} />
                                                         {this.state.showBirtDateview && <span className="font_family_serif" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
 
                                                     </div>
@@ -806,32 +803,6 @@ class LoginScreen extends Component {
                                             <Button onClick={() => this.loginclick()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.save}</Button>
                                         }
                                     </div>
-
-
-                                    {/* {this.state.showUpDate_btn &&
-                                        // <div className="width_100 text-end save_btn_margin_bottom_15 ">
-                                        //     <Button onClick={() => this.handleFormView(false)} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
-                                        //     <Button onClick={() => this.loginclick()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.save}</Button>
-                                        // </div>
-                                        <div className="width_100 text-end save_btn_margin_bottom_15 ">
-                                            <Button onClick={() => { this.handleDeletion() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
-                                            <Button onClick={() => this.handleEditedValues()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.update}</Button>
-                                        </div>
-                                    } */}
-
-                                    {/* {this.state.showDelete_cancel_btn &&
-                                        <div className="width_100 text-end save_btn_margin_bottom_15 ">
-                                            <Button onClick={() => { this.handleDeletion() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
-                                            <Button onClick={() => this.handleFormView(false)} className="btn btn-danger padding_horizental_35 font_family_serif">{Strings.delete}</Button>
-                                        </div>
-                                    } */}
-                                    {/* 
-                                    {this.state.showSave_btn &&
-                                        <div className="width_100 text-end save_btn_margin_bottom_15 ">
-                                            <Button onClick={() => this.handleFormView(false)} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
-                                            <Button onClick={() => this.loginclick()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.save}</Button>
-                                        </div>
-                                    } */}
                                 </div>
                             </form >
                         }

@@ -535,7 +535,7 @@ class LoginScreen extends Component {
                                             placeholder="Search..."
                                         />
                                     </div>
-                                    <Table className="table table-bordered align_p_tag">
+                                    <Table className="table table-bordered">
                                         <TableHead className="table_header_light_grey">
                                             <TableRow>
                                                 <TableCell className="font_family_serif table_header_text_maroon">ID</TableCell>
@@ -548,25 +548,22 @@ class LoginScreen extends Component {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {this.state.nodataFound ? (
-                                                <TableRow>
-                                                    <TableCell className="font_family_serif text-center" colSpan={7}>No data found</TableCell>
+                                            {(this.state.rowsPerPage > 0
+                                                ? this.state.Maindata.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                : this.state.Maindata
+                                            ).map((row) => (
+                                                <TableRow key={row.patient_details_id}>
+                                                    <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
+                                                    <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
+                                                    <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
+                                                    <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
+                                                    <TableCell className="font_family_serif">{row.gender_name}</TableCell>
+                                                    <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
+                                                    <TableCell>
+                                                        <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
+                                                    </TableCell>
                                                 </TableRow>
-                                            ) :
-                                                this.state.Maindata.map((row) => (
-                                                    <TableRow key={row.patient_details_id}>
-                                                        <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
-                                                        <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
-                                                        <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
-                                                        <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
-                                                        <TableCell className="font_family_serif">{row.gender_name}</TableCell>
-                                                        <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
-                                                        <TableCell>
-                                                            <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                ))
-                                            }
+                                            ))}
                                         </TableBody>
                                         <TableFooter>
                                             <TableRow>
@@ -583,6 +580,7 @@ class LoginScreen extends Component {
                                         </TableFooter>
                                     </Table>
                                 </TableContainer>
+
 
                             </div>
                             :

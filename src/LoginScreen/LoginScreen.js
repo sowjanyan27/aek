@@ -566,26 +566,23 @@ class LoginScreen extends Component {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {this.state.nodataFound ? (
-                                                <TableRow>
-                                                    <TableCell className="font_family_serif text-center" colSpan={7}>No data found</TableCell>
-                                                </TableRow>
-                                            ) :
-                                                this.state.Maindata.map((row) => (
-                                                    <TableRow key={row.patient_details_id}>
-                                                        <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
-                                                        <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
-                                                        <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
-                                                        <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
-                                                        <TableCell className="font_family_serif">{row.gender_name}</TableCell>
-                                                        <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
-                                                        <TableCell>
+                                            {(this.state.rowsPerPage > 0
+                                                ? this.state.Maindata.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                : this.state.Maindata
+                                            ).map((row) => (
+                                                <TableRow key={row.patient_details_id}>
+                                                    <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
+                                                    <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
+                                                    <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
+                                                    <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
+                                                    <TableCell className="font_family_serif">{row.gender_name}</TableCell>
+                                                    <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
+                                                    <TableCell>
                                                             <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}><i class="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
                                                             <Button variant="outlined" className="font_family_serif"><i class="fa fa-file-o" style={{ color: "#00d000" }} aria-hidden="true"></i></Button>
                                                             <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleMedicinePage() }}><i class="fa fa-medkit" style={{ color: "orange" }} aria-hidden="true"></i></Button>                                                        </TableCell>
-                                                    </TableRow>
-                                                ))
-                                            }
+                                                </TableRow>
+                                            ))}
                                         </TableBody>
                                         <TableFooter>
                                             <TableRow>

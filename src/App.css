@@ -193,10 +193,10 @@
 .logo_color_red {
   color: red;
 }
-
+/* 
 input[type="file"] {
   display: none;
-}
+} */
 
 .custom-file-upload {
   border: 1px solid #ccc;

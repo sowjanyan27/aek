@@ -114,6 +114,10 @@
   z-index: 999;
 }
 
+.align_p_tag p {
+  margin: 0 !important;
+}
+
 .Full_Screen {
   width: "100%";
   height: 100vh;

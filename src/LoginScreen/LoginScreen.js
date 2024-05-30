@@ -395,19 +395,19 @@ class LoginScreen extends Component {
             });
         }
         finally {
-        
-    
-          this.setState(
-            {
-             
-    
-            },
-            () => {
-              
-              this.getAllStates();
-    
-            }
-          );
+
+
+            this.setState(
+                {
+
+
+                },
+                () => {
+
+                    this.getAllStates();
+
+                }
+            );
         }
 
     }
@@ -517,14 +517,18 @@ class LoginScreen extends Component {
         this.setState({ isTableView: true, isMadicineScreen: true })
     }
 
+    closeMedicineScreen = () => {
+        this.setState({ isMadicineScreen: false, isTableView: false })
+    }
+
     render() {
-        const {  page, rowsPerPage} = this.state;
+        const { page, rowsPerPage } = this.state;
 
         return (
             <div className="container">
                 <div className="w-100 mt-4 tables-shadow" >
                     <div className="background_color_light_grey shadow_box">
-                        {!this.state.isFormView ?
+                        {!this.state.isTableView &&
                             <div className="position_relative">
                                 <div className="margin_bottom_15 evens-align border_w_2">
                                     <h3 className="info-text">Patient Info</h3>
@@ -576,8 +580,9 @@ class LoginScreen extends Component {
                                                         <TableCell className="font_family_serif">{row.gender_name}</TableCell>
                                                         <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
                                                         <TableCell>
-                                                            <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
-                                                        </TableCell>
+                                                            <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}><i class="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
+                                                            <Button variant="outlined" className="font_family_serif"><i class="fa fa-file-o" style={{ color: "#00d000" }} aria-hidden="true"></i></Button>
+                                                            <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleMedicinePage() }}><i class="fa fa-medkit" style={{ color: "orange" }} aria-hidden="true"></i></Button>                                                        </TableCell>
                                                     </TableRow>
                                                 ))
                                             }
@@ -729,7 +734,7 @@ class LoginScreen extends Component {
                                             </div>
                                         </div>
 
-                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
+                                        {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                             <div className="form-group text_align_left" >
                                                 <label htmlFor="selectOption" className="font_family_serif"> {Strings.district} </label>
                                                 <select disabled={this.state.state == ""} className="form-select font_family_serif input_hight_45" id="state" onChange={(text) => this.handleSelectedData(text, Strings.district)} value={this.state.district} placeholder={Strings.district} >
@@ -739,6 +744,13 @@ class LoginScreen extends Component {
                                                         )
                                                     })}
                                                 </select>
+                                            </div>
+                                        </div> */}
+
+                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20 ">
+                                            <div className="form-group text_align_left" >
+                                                <label htmlFor="District" className="font_family_serif">{Strings.district}</label>
+                                                <input type="text" disabled={!this.state.disabledInput} onChange={(text) => this.handleSelectedData(text, Strings.district)} className="form-control font_family_serif input_hight_45" id="district" value={this.state.district} placeholder={Strings.district} />
                                             </div>
                                         </div>
                                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20  margin_bottom_25">
@@ -796,14 +808,14 @@ class LoginScreen extends Component {
                                             </div>
                                         </div>
 
-                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12  margin_bottom_25">
+                                        <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 marginTop_20 margin_bottom_25">
                                             <div className="form-group text_align_left">
                                                 <label htmlFor="fileInput" className="font_family_serif">
                                                     {Strings.upload_file}
                                                 </label>
                                                 <input
                                                     type="file"
-                                                    className="form-control font_family_serif input_hight_45"
+                                                    className="form-control font_family_serif input_hight_38"
                                                     id="fileInput"
                                                     onChange={this.handleFileChange}
                                                 />
@@ -828,12 +840,13 @@ class LoginScreen extends Component {
                                     </div>
                                 </div>
                             </form >
-                            :
-                            <MedicineScreen></MedicineScreen>
+
                         }
 
                         {this.state.isMadicineScreen &&
-                            <BoostModal></BoostModal>
+                            // <BoostModal></BoostModal>
+                            <MedicineScreen closeMedicineScreen={this.closeMedicineScreen}></MedicineScreen>
+
                         }
                     </div>
                 </div >

@@ -509,6 +509,10 @@ class LoginScreen extends Component {
         alert("hi")
     }
 
+    closeMedicine = () => {
+        this.setState({ isFormView: false })
+    }
+
     render() {
         const { page, rowsPerPage } = this.state;
 
@@ -630,7 +634,7 @@ class LoginScreen extends Component {
 
                             </div>
                             :
-                            <MedicineScreen></MedicineScreen>
+                            <MedicineScreen closeMedicine={this.closeMedicine}></MedicineScreen>
                         }
                     </div>
                 </div >

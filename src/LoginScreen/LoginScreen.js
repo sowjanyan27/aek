@@ -578,8 +578,9 @@ class LoginScreen extends Component {
                                                     <TableCell className="font_family_serif">{row.gender_name}</TableCell>
                                                     <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
                                                     <TableCell>
-                                                        <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}>View</Button>
-                                                    </TableCell>
+                                                            <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}><i class="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
+                                                            <Button variant="outlined" className="font_family_serif"><i class="fa fa-file-o" style={{ color: "#00d000" }} aria-hidden="true"></i></Button>
+                                                            <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleMedicinePage() }}><i class="fa fa-medkit" style={{ color: "orange" }} aria-hidden="true"></i></Button>                                                        </TableCell>
                                                 </TableRow>
                                             ))}
                                         </TableBody>

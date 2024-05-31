@@ -743,6 +743,10 @@ input[type="file"] {
 }
 
 
+.pdf-height{
+  height:500px;
+}
+
 
 /* Resposive css work  */
 

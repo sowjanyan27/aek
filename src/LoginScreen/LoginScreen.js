@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css"
 import TablePaginationActions from "../helpers/Pagination";
 import BoostModal from "./BoostModal";
 import MedicineScreen from './MedicineScreen';
+import FIleUpload from "./FIleUpload";
 
 
 class LoginScreen extends Component {
@@ -74,6 +75,7 @@ class LoginScreen extends Component {
             state_name: "",
             country_id: "",
             is_active: "",
+            file_name: "",
 
             dropDown_menu: [
                 { itemName: "Options 1", value: 1 },
@@ -107,9 +109,13 @@ class LoginScreen extends Component {
             dummyData: [],
             page: 0,
             rowsPerPage: 10,
+            fileScreenData: [],
+            fileuploadScreenrow: []
         }
         this.inputRef = React.createRef()
-        // console.warn("++which one first")
+        // this.handleFileChange = this.handleFileChange.bind(this);
+        // this.uploadFile = this.uploadFile.bind(this);
+        this.fileInputRef = React.createRef();
     }
 
 
@@ -124,6 +130,7 @@ class LoginScreen extends Component {
     async getAllStates() {
         try {
             const response = await Employee.getallstates();
+            console.log(response, 'data get --')
             if (response.length > 0) {
                 this.setState({
                     Maindata: response, dummyData: response, isLoading: false
@@ -369,7 +376,8 @@ class LoginScreen extends Component {
             state_id: this.state.state_id,
             state_name: this.state.state_name,
             country_id: this.state.country_id,
-            is_active: this.state.is_active
+            is_active: this.state.is_active,
+            attachment: this.state.file_name
         }
         console.log(patientDetails, 'patientdetails')
         this.CreateItem(patientDetails)
@@ -516,10 +524,68 @@ class LoginScreen extends Component {
     handleMedicinePage() {
         this.setState({ isTableView: true, isMadicineScreen: true })
     }
+    handleFileScreen = (data) => {
+        var rowData = { ...this.state.fileuploadScreenrow, data }
+        this.setState({ isTableView: true, fileScreenView: true, fileScreenData: rowData }, () => {
+            // console.log(this.state.fileScreenData,'filedata')
+        })
+        // this.setState({selectedPatient:data}) 
+    }
 
     closeMedicineScreen = () => {
         this.setState({ isMadicineScreen: false, isTableView: false })
     }
+
+    // file upload starts
+    handlemenuImgchange = (event) => {
+        event.preventDefault();
+        this.setState({
+            db_img_path: ""
+        });
+
+        const file = event.target.files[0];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+
+        if (fileExtension !== 'pdf') {
+            toast.warn('Please select a PDF file.', {
+                toastId: 'invalid_file_format',
+            });
+            return;
+        }
+
+        if (file.size > 2000000) { // 2MB limit
+            toast.warn('File size exceeds 2MB limit', {
+                toastId: 'file_size',
+            });
+            return;
+        }
+
+        this.setState(
+            {
+                menu_ing_name: file.name,
+            },
+            () => {
+                let formData = new FormData();
+                formData.append("uploads", file, file.name);
+                this.insert_image(formData);
+            }
+        );
+    };
+
+    async insert_image(file_path) {
+        try {
+            const response = await Employee.ins_img_service(file_path);
+
+            if (response !== "") {
+                this.setState({
+                    db_img_path: response,
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    // file upload ends
 
     render() {
         const { page, rowsPerPage } = this.state;
@@ -553,7 +619,7 @@ class LoginScreen extends Component {
                                             placeholder="Search..."
                                         />
                                     </div>
-                                    <Table className="table table-bordered">
+                                    <Table className="table table-bordered align_p_tag">
                                         <TableHead className="table_header_light_grey">
                                             <TableRow>
                                                 <TableCell className="font_family_serif table_header_text_maroon">ID</TableCell>
@@ -579,7 +645,7 @@ class LoginScreen extends Component {
                                                     <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
                                                     <TableCell>
                                                             <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}><i class="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
-                                                            <Button variant="outlined" className="font_family_serif"><i class="fa fa-file-o" style={{ color: "#00d000" }} aria-hidden="true"></i></Button>
+                                                        <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleFileScreen(row) }}><i class="fa fa-file-o" style={{ color: row.attachment_name ? "#00d000" : 'red' }} aria-hidden="true"></i></Button>
                                                             <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleMedicinePage() }}><i class="fa fa-medkit" style={{ color: "orange" }} aria-hidden="true"></i></Button>                                                        </TableCell>
                                                 </TableRow>
                                             ))}
@@ -599,7 +665,6 @@ class LoginScreen extends Component {
                                         </TableFooter>
                                     </Table>
                                 </TableContainer>
-
 
                             </div>
                         }
@@ -815,7 +880,12 @@ class LoginScreen extends Component {
                                                     type="file"
                                                     className="form-control font_family_serif input_hight_38"
                                                     id="fileInput"
+                                                    name="objection_letter"
                                                     onChange={this.handleFileChange}
+                                                    onClick={(event) => {
+                                                        event.target.value = null;
+                                                    }}
+                                                    ref={this.fileInputRef}
                                                 />
                                             </div>
                                         </div>
@@ -845,6 +915,9 @@ class LoginScreen extends Component {
                             // <BoostModal></BoostModal>
                             <MedicineScreen closeMedicineScreen={this.closeMedicineScreen}></MedicineScreen>
 
+                        }
+                        {this.state.fileScreenView &&
+                            <FIleUpload fileScreenData={this.state.fileScreenData} ></FIleUpload>
                         }
                     </div>
                 </div >

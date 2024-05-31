@@ -5,12 +5,14 @@ import { fetchWrapper } from "../helpers/fetch-wrapper";
 export const Employee = {
   getData,
   getallstates,
-  insert_patientdetails
+  insert_patientdetails,
+  getmedaticationdetails
 
 };
 const get_data = API_URLS.getdata_api;
 const getall_states=API_URLS.getallstates
 const  postpatientdeials=API_URLS.insertpatientdetails
+const get_madication=API_URLS.getmedicationdetails
 
 
 function getData() {
@@ -22,4 +24,8 @@ function getData() {
   }
   function insert_patientdetails(){
     return fetchWrapper.post(postpatientdeials)
+  }
+  function getmedaticationdetails(){
+    return fetchWrapper.get(get_madication)
+  
   }

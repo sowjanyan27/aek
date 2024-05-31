@@ -29,6 +29,7 @@ export const Strings = {
     edit: "Edit",
     delete: "Delete",
     update: "Update",
-    city: "City"
+    city: "City",
+    upload_file: "file upload"
 
 }

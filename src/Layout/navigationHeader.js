@@ -20,25 +20,30 @@ class NavigationHeader extends Component {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <a className="nav-link active" aria-current="page" href="#">Potential Mangement <i className="fa fa-angle-down" aria-hidden="true"></i></a>
+                                <a className="nav-link active" aria-current="page" href="#">Portal Mangement <i className="fa fa-angle-down" aria-hidden="true"></i></a>
                                 <ul className="sub-menu list-unstyled drop-down-slide">
-                                    <li><a href="#">About us</a></li>
-                                    <li><a href="#">Blog</a>
+                                    <li><a href="#">Branches</a></li>
+                                    <li><a href="#">Roles</a>
                                         <ul className="child-sub-menu list-unstyled drop-down-slide">
                                             <li><a href="#"><span>Price list</span></a></li>
                                             <li><a href="#"><span>Price list</span></a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="#">Price list</a></li>
-                                    <li><a href="#">Contact us</a></li>
+                                    <li><a href="#">Users</a></li>
+                                    <li><a href="#">Portal</a></li>
                                 </ul>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">Branch Operations <i className="fa fa-angle-down" aria-hidden="true"></i></a>
+                                <a className="nav-link" href="#"> Medicine Master<i className="fa fa-angle-down" aria-hidden="true"></i></a>
+                                <ul className="sub-menu list-unstyled drop-down-slide">
+                                    <li><a href="#">Potencies</a></li>
+                                    <li><a href="#">Medicine Types</a></li>
+                                    <li><a href="#">Medicines</a></li>
+                                </ul>
                             </li>
 
                             <li className="nav-item">
-                                <a className="nav-link">Medicine Master<i className="fa fa-angle-down" aria-hidden="true"></i></a>
+                                <a className="nav-link">Branch Operations<i className="fa fa-angle-down" aria-hidden="true"></i></a>
                             </li>
                         </ul>
                         <form class="d-flex" role="search">

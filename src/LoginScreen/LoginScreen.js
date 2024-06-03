@@ -98,14 +98,14 @@ class LoginScreen extends Component {
                 { itemName: "Nalgonda", value: "Nalgonda" },
                 { itemName: "RangaReddy", value: "RangaReddy" },
             ],
-            Maindata: [],
-            // Maindata: [{ patient_details_id: "1", patient_first_name: "venkat", patient_last_name: "Padyala", patient_dob: "1995-04-23", gender_name: "Male", patient_mobile_no: "8989898989" },
-            // { patient_details_id: "2", patient_first_name: "sanath", patient_last_name: "Padyala", patient_dob: "1995-04-23", gender_name: "Male", patient_mobile_no: "8989898989" },
-            // { patient_details_id: "3", patient_first_name: "vijay", patient_last_name: "Padyala", patient_dob: "1995-04-23", gender_name: "Male", patient_mobile_no: "8989898989" },
-            // { patient_details_id: "4", patient_first_name: "Rajesh", patient_last_name: "Padyala", patient_dob: "1995-04-23", gender_name: "Male", patient_mobile_no: "8989898989" },
-            // { patient_details_id: "5", patient_first_name: "Harsha", patient_last_name: "Padyala", patient_dob: "1995-04-23", gender_name: "Male", patient_mobile_no: "8989898989" },
-            // { patient_details_id: "6", patient_first_name: "Bhavana", patient_last_name: "Padyala", patient_dob: "1995-04-23", gender_name: "Male", patient_mobile_no: "8989898989" }
-            // ],
+            // Maindata: [],
+            Maindata: [{ patient_details_id: "1", patient_first_name: "venkat", patient_last_name: "Padyala", patient_dob: "1995-04-23", gender_name: "Male", patient_mobile_no: "8989898989" },
+            { patient_details_id: "2", patient_first_name: "sanath", patient_last_name: "Padyala", patient_dob: "1995-04-23", gender_name: "Male", patient_mobile_no: "8989898989" },
+            { patient_details_id: "3", patient_first_name: "vijay", patient_last_name: "Padyala", patient_dob: "1995-04-23", gender_name: "Male", patient_mobile_no: "8989898989" },
+            { patient_details_id: "4", patient_first_name: "Rajesh", patient_last_name: "Padyala", patient_dob: "1995-04-23", gender_name: "Male", patient_mobile_no: "8989898989" },
+            { patient_details_id: "5", patient_first_name: "Harsha", patient_last_name: "Padyala", patient_dob: "1995-04-23", gender_name: "Male", patient_mobile_no: "8989898989" },
+            { patient_details_id: "6", patient_first_name: "Bhavana", patient_last_name: "Padyala", patient_dob: "1995-04-23", gender_name: "Male", patient_mobile_no: "8989898989" }
+            ],
             dummyData: [],
             page: 0,
             rowsPerPage: 10,
@@ -644,9 +644,9 @@ class LoginScreen extends Component {
                                                     <TableCell className="font_family_serif">{row.gender_name}</TableCell>
                                                     <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
                                                     <TableCell>
-                                                            <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}><i class="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
+                                                        <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}><i class="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
                                                         <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleFileScreen(row) }}><i class="fa fa-file-o" style={{ color: row.attachment_name ? "#00d000" : 'red' }} aria-hidden="true"></i></Button>
-                                                            <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleMedicinePage() }}><i class="fa fa-medkit" style={{ color: "orange" }} aria-hidden="true"></i></Button>                                                        </TableCell>
+                                                        <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleMedicinePage() }}><i class="fa fa-medkit" style={{ color: "orange" }} aria-hidden="true"></i></Button>                                                        </TableCell>
                                                 </TableRow>
                                             ))}
                                         </TableBody>

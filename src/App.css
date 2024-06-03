@@ -335,6 +335,162 @@ ul.child-sub-menu li:hover a span {
   justify-content: space-around;
 }
 
+.login_width{
+  width: 950px;
+  margin:0 auto;
+  background: #fff;
+  box-shadow: 0px 0px 9px 0px rgba(46,46,46,1);
+}
+.left-bg-login{
+  background: #fd8111;
+  padding:10px;
+}
+.grid-system {
+  display: grid;
+  /*grid-template-columns: repeat(5, minmax(0, 1fr));*/
+  /*grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));*/
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-gap: 10px 15px;
+}
+/* .equal-height {
+  display: flex;
+  flex-wrap: wrap;
+} */
+
+
+/*Login-start*/
+.login_center{
+  display: flex;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+.content {
+  width: 330px;
+  padding: 40px 30px;
+  background: #dde1e7;
+  border-radius: 10px;
+  box-shadow: -3px -3px 7px #ffffff73,
+               2px 2px 5px rgba(94,104,121,0.288);
+}
+
+.content .text_login {
+  font-size: 33px;
+  font-weight: 600;
+  margin-bottom: 35px;
+  color: #595959;
+  text-align: center;
+}
+
+.field {
+  height: 50px;
+  width: 100%;
+  display: flex;
+  position: relative;
+}
+
+.field:nth-child(2) {
+  margin-top: 20px;
+}
+
+.field .input {
+  height: 100%;
+  width: 100%;
+  padding-left: 45px;
+  outline: none;
+  border: none;
+  font-size: 18px;
+  background: #dde1e7;
+  color: #595959;
+  border-radius: 25px;
+  box-shadow: inset 2px 2px 5px #BABECC,
+              inset -5px -5px 10px #ffffff73;
+}
+
+.field .input:focus {
+  box-shadow: inset 1px 1px 2px #BABECC,
+              inset -1px -1px 2px #ffffff73;
+}
+
+.field .span {
+  position: absolute;
+  color: #595959;
+  width: 50px;
+  line-height: 50px;
+  text-align: center;
+}
+.field .span .fa{
+  font-size: 20px;
+}
+
+.field .label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 45px;
+  pointer-events: none;
+  color: #666666;
+}
+
+.field .input:valid ~ label {
+  opacity: 0;
+}
+
+.forgot-pass {
+  text-align: left;
+  margin: 10px 0 10px 5px;
+}
+
+.forgot-pass a {
+  font-size: 16px;
+  color: #666666;
+  text-decoration: none;
+}
+
+.forgot-pass:hover a {
+  text-decoration: underline;
+}
+
+.buttonSign {
+  margin: 15px 0;
+  width: 100%;
+  height: 50px;
+  font-size: 18px;
+  line-height: 50px;
+  font-weight: 600;
+  background: #dde1e7;
+  border-radius: 25px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #595959;
+  box-shadow: 2px 2px 5px #BABECC,
+             -5px -5px 10px #ffffff73;
+}
+
+.buttonSign:focus {
+  color: #3498db;
+  box-shadow: inset 2px 2px 5px #BABECC,
+             inset -5px -5px 10px #ffffff73;
+}
+
+.sign-up {
+  margin: 10px 0;
+  color: #595959;
+  font-size: 16px;
+}
+
+.sign-up a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.sign-up a:hover {
+  text-decoration: underline;
+}
+/*Login-end*/
+
+
 .shadow_box {
   /* box-shadow: 8px 8px 11px #9E9EA3; */
   /* box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.75);

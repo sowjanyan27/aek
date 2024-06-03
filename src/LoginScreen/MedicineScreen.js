@@ -5,13 +5,14 @@ export default class MedicineScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            MainMadicationdata:[],
-            dummyMainMadicationdata:[],
-
+            MainMadicationdata: [],
+            dummyMainMadicationdata: [],
+            isRightBranchHidden: false
         }
+        this.handleClick = this.handleClick.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getmedaticationdetails()
     }
 
@@ -33,10 +34,20 @@ export default class MedicineScreen extends Component {
             });
         }
     }
+
+    handleClick() {
+        this.setState({ isRightBranchHidden: !this.state.isRightBranchHidden });
+        // this.setState(prevState => ({
+        //     isRightBranchHidden: !prevState.isRightBranchHidden
+        //   }));
+
+    }
+
     backToMain() {
-        this.props.closeMedicine()
+        this.props.closeMedicineScreen()
     }
     render() {
+        const { isRightBranchHidden } = this.state;
         return (
             <div>
                 <div>
@@ -116,182 +127,191 @@ export default class MedicineScreen extends Component {
                     </div>
                     <div className="cards_view mt-3">
                         <div className="container-fluid">
+                            <div className="text-end">
+                                <button onClick={this.handleClick} id="clicksButton">clicked</button>
+                            </div>
                             <div className="row">
-                                <div className="col-md-6">
+                                <div className={isRightBranchHidden ? 'col-md-12' : 'col-md-6'} id="leftBranch">
                                     <div className="flow-y">
-                                    <div className="row">
-                                        <div className="col-md-6">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div className="row">
-                                                        <div className="col-6">
-                                                            <h5 className="card-title"><i class="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
+                                        <div className="row">
+                                            <div className="grid-system equal-height">
+                                            <div>
+                                                <div className="card">
+                                                    <div className="card-body">
+                                                        <div className="row">
+                                                            <div className="col-6">
+                                                                <h5 className="card-title"><i class="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
+                                                            </div>
+                                                            <div className="col-6">
+                                                                <span className="dateSpan">12-03-2024</span>
+                                                            </div>
                                                         </div>
-                                                        <div className="col-6">
-                                                            <span className="dateSpan">12-03-2024</span>
+                                                        <div className="mt-4 tabletslistview">
+                                                            <h4 className="tablets_list pb-2">
+                                                                Tablet List
+                                                            </h4>
+                                                            <ul class="list-unstyled">
+                                                                <li> Acetaminophen</li>
+                                                                <li> Gabapentin enacarbil</li>
+                                                                <li> Dolo</li>
+                                                                <li> Methylprednisolone </li>
+                                                                <li> Divalproex sodium</li>
+                                                                <li> Wart Remover </li>
+                                                            </ul>
                                                         </div>
-                                                    </div>
-                                                    <div className="mt-4 tabletslistview">
-                                                        <h4 className="tablets_list pb-2">
-                                                            Tablet List
-                                                        </h4>
-                                                        <ul class="list-unstyled">
-                                                            <li> Acetaminophen</li>
-                                                            <li> Gabapentin enacarbil</li>
-                                                            <li> Dolo</li>
-                                                            <li> Methylprednisolone </li>
-                                                            <li> Divalproex sodium</li>
-                                                            <li> Wart Remover </li>
-                                                        </ul>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div className="row">
-                                                        <div className="col-6">
-                                                            <h5 className="card-title"><i class="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
+                                            <div>
+                                                <div className="card">
+                                                    <div className="card-body">
+                                                        <div className="row">
+                                                            <div className="col-6">
+                                                                <h5 className="card-title"><i class="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
+                                                            </div>
+                                                            <div className="col-6">
+                                                                <span className="dateSpan">12-03-2024</span>
+                                                            </div>
                                                         </div>
-                                                        <div className="col-6">
-                                                            <span className="dateSpan">12-03-2024</span>
+                                                        <div className="mt-4 tabletslistview">
+                                                            <h4 className="tablets_list pb-2">
+                                                                Tablet List
+                                                            </h4>
+                                                            <ul class="list-unstyled">
+                                                                <li> Acetaminophen</li>
+                                                                <li> Gabapentin enacarbil</li>
+                                                                <li> Dolo</li>
+                                                                <li> Methylprednisolone </li>
+                                                                <li> Divalproex sodium</li>
+                                                                <li> Wart Remover </li>
+                                                            </ul>
                                                         </div>
-                                                    </div>
-                                                    <div className="mt-4 tabletslistview">
-                                                        <h4 className="tablets_list pb-2">
-                                                            Tablet List
-                                                        </h4>
-                                                        <ul class="list-unstyled">
-                                                            <li> Acetaminophen</li>
-                                                            <li> Gabapentin enacarbil</li>
-                                                            <li> Dolo</li>
-                                                            <li> Methylprednisolone </li>
-                                                            <li> Divalproex sodium</li>
-                                                            <li> Wart Remover </li>
-                                                        </ul>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div className="col-md-6 margin_tp_22">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div className="row">
-                                                        <div className="col-6">
-                                                            <h5 className="card-title"><i class="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
+                                            <div className="">
+                                                <div className="card">
+                                                    <div className="card-body">
+                                                        <div className="row">
+                                                            <div className="col-6">
+                                                                <h5 className="card-title"><i class="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
+                                                            </div>
+                                                            <div className="col-6">
+                                                                <span className="dateSpan">12-03-2024</span>
+                                                            </div>
                                                         </div>
-                                                        <div className="col-6">
-                                                            <span className="dateSpan">12-03-2024</span>
+                                                        <div className="mt-4 tabletslistview">
+                                                            <h4 className="tablets_list pb-2">
+                                                                Tablet List
+                                                            </h4>
+                                                            <ul class="list-unstyled">
+                                                                <li> Acetaminophen</li>
+                                                                <li> Gabapentin enacarbil</li>
+                                                                <li> Dolo</li>
+                                                                <li> Methylprednisolone </li>
+                                                                <li> Divalproex sodium</li>
+                                                                <li> Wart Remover </li>
+                                                            </ul>
                                                         </div>
-                                                    </div>
-                                                    <div className="mt-4 tabletslistview">
-                                                        <h4 className="tablets_list pb-2">
-                                                            Tablet List
-                                                        </h4>
-                                                        <ul class="list-unstyled">
-                                                            <li> Acetaminophen</li>
-                                                            <li> Gabapentin enacarbil</li>
-                                                            <li> Dolo</li>
-                                                            <li> Methylprednisolone </li>
-                                                            <li> Divalproex sodium</li>
-                                                            <li> Wart Remover </li>
-                                                        </ul>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="col-md-6 margin_tp_22">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div className="row">
-                                                        <div className="col-6">
-                                                            <h5 className="card-title"><i class="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
+                                            <div className="">
+                                                <div className="card">
+                                                    <div className="card-body">
+                                                        <div className="row">
+                                                            <div className="col-6">
+                                                                <h5 className="card-title"><i class="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
+                                                            </div>
+                                                            <div className="col-6">
+                                                                <span className="dateSpan">12-03-2024</span>
+                                                            </div>
                                                         </div>
-                                                        <div className="col-6">
-                                                            <span className="dateSpan">12-03-2024</span>
+                                                        <div className="mt-4 tabletslistview">
+                                                            <h4 className="tablets_list pb-2">
+                                                                Tablet List
+                                                            </h4>
+                                                            <ul class="list-unstyled">
+                                                                <li> Acetaminophen</li>
+                                                                <li> Gabapentin enacarbil</li>
+                                                                <li> Dolo</li>
+                                                                <li> Methylprednisolone </li>
+                                                                <li> Divalproex sodium</li>
+                                                                <li> Wart Remover </li>
+                                                            </ul>
                                                         </div>
-                                                    </div>
-                                                    <div className="mt-4 tabletslistview">
-                                                        <h4 className="tablets_list pb-2">
-                                                            Tablet List
-                                                        </h4>
-                                                        <ul class="list-unstyled">
-                                                            <li> Acetaminophen</li>
-                                                            <li> Gabapentin enacarbil</li>
-                                                            <li> Dolo</li>
-                                                            <li> Methylprednisolone </li>
-                                                            <li> Divalproex sodium</li>
-                                                            <li> Wart Remover </li>
-                                                        </ul>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div className="col-md-6 margin_tp_22">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div className="row">
-                                                        <div className="col-6">
-                                                            <h5 className="card-title"><i class="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
+                                            <div className="">
+                                                <div className="card">
+                                                    <div className="card-body">
+                                                        <div className="row">
+                                                            <div className="col-6">
+                                                                <h5 className="card-title"><i class="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
+                                                            </div>
+                                                            <div className="col-6">
+                                                                <span className="dateSpan">12-03-2024</span>
+                                                            </div>
                                                         </div>
-                                                        <div className="col-6">
-                                                            <span className="dateSpan">12-03-2024</span>
+                                                        <div className="mt-4 tabletslistview">
+                                                            <h4 className="tablets_list pb-2">
+                                                                Tablet List
+                                                            </h4>
+                                                            <ul class="list-unstyled">
+                                                                <li> Acetaminophen</li>
+                                                                <li> Gabapentin enacarbil</li>
+                                                                <li> Dolo</li>
+                                                                <li> Methylprednisolone </li>
+                                                                <li> Divalproex sodium</li>
+                                                                <li> Wart Remover </li>
+                                                            </ul>
                                                         </div>
-                                                    </div>
-                                                    <div className="mt-4 tabletslistview">
-                                                        <h4 className="tablets_list pb-2">
-                                                            Tablet List
-                                                        </h4>
-                                                        <ul class="list-unstyled">
-                                                            <li> Acetaminophen</li>
-                                                            <li> Gabapentin enacarbil</li>
-                                                            <li> Dolo</li>
-                                                            <li> Methylprednisolone </li>
-                                                            <li> Divalproex sodium</li>
-                                                            <li> Wart Remover </li>
-                                                        </ul>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="col-md-6 margin_tp_22">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div className="row">
-                                                        <div className="col-6">
-                                                            <h5 className="card-title"><i class="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
+                                            <div className="">
+                                                <div className="card">
+                                                    <div className="card-body">
+                                                        <div className="row">
+                                                            <div className="col-6">
+                                                                <h5 className="card-title"><i class="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
+                                                            </div>
+                                                            <div className="col-6">
+                                                                <span className="dateSpan">12-03-2024</span>
+                                                            </div>
                                                         </div>
-                                                        <div className="col-6">
-                                                            <span className="dateSpan">12-03-2024</span>
+                                                        <div className="mt-4 tabletslistview">
+                                                            <h4 className="tablets_list pb-2">
+                                                                Tablet List
+                                                            </h4>
+                                                            <ul class="list-unstyled">
+                                                                <li> Acetaminophen</li>
+                                                                <li> Gabapentin enacarbil</li>
+                                                                <li> Dolo</li>
+                                                                <li> Methylprednisolone </li>
+                                                                <li> Divalproex sodium</li>
+                                                                <li> Wart Remover </li>
+                                                            </ul>
                                                         </div>
-                                                    </div>
-                                                    <div className="mt-4 tabletslistview">
-                                                        <h4 className="tablets_list pb-2">
-                                                            Tablet List
-                                                        </h4>
-                                                        <ul class="list-unstyled">
-                                                            <li> Acetaminophen</li>
-                                                            <li> Gabapentin enacarbil</li>
-                                                            <li> Dolo</li>
-                                                            <li> Methylprednisolone </li>
-                                                            <li> Divalproex sodium</li>
-                                                            <li> Wart Remover </li>
-                                                        </ul>
                                                     </div>
                                                 </div>
                                             </div>
+                                            </div>
+                                            
                                         </div>
-                                    </div>
                                     </div>
                                 </div>
-                                <div className="col-md-6">
-                                    <div className="card">
-                                        <img src="https://cdn-images.resumelab.com/pages/teaching_assistant_cta1_new.jpg" />
+                                {!isRightBranchHidden && (
+                                    <div className="col-md-6" id="rightBranch">
+                                        <div className="card">
+                                            <img src="https://cdn-images.resumelab.com/pages/teaching_assistant_cta1_new.jpg" />
+                                        </div>
                                     </div>
-                                </div>
+                                )}
+
                             </div>
                         </div>
                     </div>
@@ -300,3 +320,4 @@ export default class MedicineScreen extends Component {
         )
     }
 }
+

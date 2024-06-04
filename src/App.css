@@ -639,6 +639,11 @@ input[type="file"] {
   width: 100%;
 }
 
+.sub_tabs_view {
+  overflow: auto;
+  margin-top: 10px;
+}
+
 .info-text {
   font-size: 19px;
   margin: 0;
@@ -682,31 +687,36 @@ input[type="file"] {
 .add_btn:hover .show_add_new {
   display: block;
 }
-.cards_view .card{
+
+.cards_view .card {
   background: #ffffff;
   padding: 8px;
   box-shadow: 0px 0px 5px 0px rgba(171, 171, 171, 1);
   border: 0px;
   border-radius: 10px;
 }
-.cards_view .card-body{
+
+.cards_view .card-body {
   background: #ffedec;
   padding: 12px 13px;
   border-radius: 10px;
   position: relative;
 }
-.cards_view .card-title{
+
+.cards_view .card-title {
   font-size: 16px;
   color: #333;
-  margin:0;
+  margin: 0;
 }
-.cards_view .card-title .fa{
+
+.cards_view .card-title .fa {
   font-size: 18px;
   color: #4e67ff;
   padding-right: 5px;
   vertical-align: top;
 }
-.dateSpan{
+
+.dateSpan {
   background: #fbc8be;
   padding: 8px 5px 8px 10px;
   border-radius: 20px 10px 0px 20px;
@@ -718,18 +728,22 @@ input[type="file"] {
   top: 0px;
   right: 0;
 }
-.tabletslistview ul{
-  margin:0;
+
+.tabletslistview ul {
+  margin: 0;
   padding: 0;
 }
-.tabletslistview ul li{ 
+
+.tabletslistview ul li {
   padding-left: 10px;
 }
-.tablets_list{
+
+.tablets_list {
   color: #6c4337;
   font-size: 16px;
   margin: 0;
 }
+
 .top-right-icons {
   font-size: 19px;
   position: absolute;
@@ -738,13 +752,18 @@ input[type="file"] {
   cursor: pointer;
   color: #6a6a6a;
 }
-.margin_tp_22{
+
+.margin_tp_22 {
   margin-top: 22px;
 }
 
 
-.pdf-height{
-  height:500px;
+.pdf-height {
+  height: 500px;
+}
+
+.p_align p {
+  margin: 0;
 }
 
 

@@ -22,8 +22,8 @@ function getData() {
     return fetchWrapper.get(getall_states)
   
   }
-  function insert_patientdetails(){
-    return fetchWrapper.post(postpatientdeials)
+  function insert_patientdetails(item){
+    return fetchWrapper.post(postpatientdeials,item)
   }
   function getmedaticationdetails(){
     return fetchWrapper.get(get_madication)

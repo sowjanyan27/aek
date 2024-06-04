@@ -12,6 +12,7 @@ import TablePaginationActions from "../helpers/Pagination";
 import BoostModal from "./BoostModal";
 import MedicineScreen from './MedicineScreen';
 import FIleUpload from "./FIleUpload";
+import { Tooltip } from "react-bootstrap";
 
 
 class LoginScreen extends Component {
@@ -603,24 +604,45 @@ class LoginScreen extends Component {
                                     <div className="show_content  p-2 rounded">Add New</div>
                                 </div>
                                 <TableContainer className="mt-2 mb-4" component={Paper}>
-                                    <div className="mt-2 mb-3 width_100 space-between display_flex fliters-sec" >
-                                        <input
+                                    <div className="width_100 p_align space-between display_flex fliters-sec" >
+                                        {/* <input
                                             ref={this.inputRef}
                                             className="font_family_serif"
                                             type="text"
                                             value={this.state.searchId}
                                             onChange={(text) => { this.handleFilterId(text) }} // Changed parameter to e.target.value
                                             placeholder="Search Id"
-                                        />
+                                        /> */}
                                         <input
-                                            className="font_family_serif"
-                                            // value={this.state.searchValue}
+                                            style={{ width: 350 }}
+                                            value={this.state.searchValue}
                                             onChange={(text) => { this.handleFilter(text) }} // Changed parameter to e.target.value
-                                            placeholder="Search..."
+                                            placeholder="Search by patient info..."
                                         />
+                                        <TablePagination
+                                            rowsPerPageOptions={[10, 20, 30, { label: 'All', value: -1 }]}
+                                            count={this.state.Maindata.length}
+                                            rowsPerPage={this.state.rowsPerPage}
+                                            page={this.state.page}
+                                            onPageChange={this.handleChangePage}
+                                            onRowsPerPageChange={this.handleChangeRowsPerPage}
+                                        // ActionsComponent={TablePaginationActions}
+                                        />
+
                                     </div>
                                     <Table className="table table-bordered align_p_tag">
                                         <TableHead className="table_header_light_grey">
+                                            <TableRow style={{ background: "white" }}>
+                                                {/* <TablePagination
+                                                    rowsPerPageOptions={[10, 20, 30, { label: 'All', value: -1 }]}
+                                                    count={this.state.Maindata.length}
+                                                    rowsPerPage={this.state.rowsPerPage}
+                                                    page={this.state.page}
+                                                    onPageChange={this.handleChangePage}
+                                                    onRowsPerPageChange={this.handleChangeRowsPerPage}
+                                                    // ActionsComponent={TablePaginationActions}
+                                                /> */}
+                                            </TableRow>
                                             <TableRow>
                                                 <TableCell className="font_family_serif table_header_text_maroon">ID</TableCell>
                                                 <TableCell className="font_family_serif table_header_text_maroon">First Name</TableCell>
@@ -632,6 +654,7 @@ class LoginScreen extends Component {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
+
                                             {(this.state.rowsPerPage > 0
                                                 ? this.state.Maindata.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                                 : this.state.Maindata
@@ -644,11 +667,20 @@ class LoginScreen extends Component {
                                                     <TableCell className="font_family_serif">{row.gender_name}</TableCell>
                                                     <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
                                                     <TableCell>
-                                                            <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}><i class="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
+                                                        <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}><i class="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
                                                         <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleFileScreen(row) }}><i class="fa fa-file-o" style={{ color: row.attachment_name ? "#00d000" : 'red' }} aria-hidden="true"></i></Button>
-                                                            <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleMedicinePage() }}><i class="fa fa-medkit" style={{ color: "orange" }} aria-hidden="true"></i></Button>                                                        </TableCell>
+                                                        <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleMedicinePage() }}><i class="fa fa-medkit" style={{ color: "orange" }} aria-hidden="true"></i></Button>                                                        </TableCell>
                                                 </TableRow>
                                             ))}
+                                            {this.state.nodataFound &&
+                                                <TableRow >
+                                                    <TableCell colSpan={7}>
+                                                        <div style={{ textAlign: "center", width: "100%" }}>no data found</div>
+                                                    </TableCell>
+                                                </TableRow>
+
+                                            }
+
                                         </TableBody>
                                         <TableFooter>
                                             <TableRow>

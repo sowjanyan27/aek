@@ -9,6 +9,7 @@ export const fetchWrapper = {
     post,
     put,
     delete: _delete,
+    postformData
   
   };
   // get method used to get the  response
@@ -25,6 +26,16 @@ export const fetchWrapper = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
+    };
+    const response = await fetch(url, requestOptions);
+    return handleResponse(response);
+  }
+  async function postformData(url, formData) {
+    const requestOptions = {
+      method: "POST",
+      body: formData,
+      // headers: {"Authorization" : `Bearer ${localStorage.getItem('token')}` }
+      
     };
     const response = await fetch(url, requestOptions);
     return handleResponse(response);

@@ -77,6 +77,9 @@ class LoginScreen extends Component {
             country_id: "",
             is_active: "",
             file_name: "",
+            db_img_path: "",
+            menu_ing_name: "",
+            showImage: false,
 
             dropDown_menu: [
                 { itemName: "Options 1", value: 1 },
@@ -110,11 +113,12 @@ class LoginScreen extends Component {
             dummyData: [],
             page: 0,
             rowsPerPage: 10,
-            fileScreenData: [],
-            fileuploadScreenrow: []
+            fileScreenpatientid: 0,
+            patient_attachment_path: "",
+            showImage: false,
         }
         this.inputRef = React.createRef()
-        // this.handleFileChange = this.handleFileChange.bind(this);
+        this.handlemenuImgchange = this.handlemenuImgchange.bind(this);
         // this.uploadFile = this.uploadFile.bind(this);
         this.fileInputRef = React.createRef();
     }
@@ -125,12 +129,14 @@ class LoginScreen extends Component {
         // alert("hello")
         // this.inputRef.current.focus() 
         this.getAllStates();
+       
+
     }
 
 
     async getAllStates() {
         try {
-            const response = await Employee.getallstates();
+            const response = await Employee.getallpatientdetails();
             console.log(response, 'data get --')
             if (response.length > 0) {
                 this.setState({
@@ -139,6 +145,64 @@ class LoginScreen extends Component {
                 })
                 console.log(this.state.Maindata, 'patients')
             }
+        } catch (e) {
+            console.log(e);
+        } finally {
+            this.setState({
+                isLoading: false,
+            });
+        }
+    }
+    async getPatientbyid(id, typeid) {
+        this.setState({ isLoading: true });
+        try {
+            const response = await Employee.get_patientdatabyid({ patient_id: id, actionid: typeid });
+            console.log(response, ' getpatientdatabyid --')
+            console.log(response[0].patient_tob, 'time of birth');
+
+            const parseTimeString = (timeString) => {
+                let date;
+                if (timeString.includes("AM") || timeString.includes("PM")) {
+                    // Parse 12-hour format
+                    date = new Date("2024-06-03" + timeString);
+                } else {
+                    // Parse 24-hour format
+                    const [hours, minutes] = timeString.split(":");
+                    date = new Date();
+                    date.setHours(parseInt(hours, 10), parseInt(minutes, 10));
+                }
+                // Return formatted time in "HH:mm" format
+                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+            };
+
+            const formattedTimeString = parseTimeString(response[0].patient_tob);
+            console.log(formattedTimeString, "formattedTimeString");
+
+            this.setState({ isFormView: true, isTableView: true, disabledInput: false, showSave_btn: false, showedit_btn: true, showUpDate_btn: false, showDelete_cancel_btn: true, disabledInput_part2: false }, () => {
+                this.setState({
+                    patientid: response[0].patient_details_id,
+                    patientnum: response[0].patient_number,
+                    firstName: response[0].patient_first_name,
+                    lastName: response[0].patient_last_name,
+                    phoneNumber: response[0].patient_mobile_no,
+                    gender_name: String(response[0].patient_gender_id),
+                    dateofBirth: response[0].patient_dob,
+                    birthofPlace: response[0].patient_birth_place,
+                    nearestBirthPlace: response[0].patient_nearest_birth_place,
+                    age: response[0].patient_age,
+                    timeofBirth: formattedTimeString,
+                    address: response[0].patient_address,
+                    state: response[0].state_name,
+                    district: response[0].patient_district,
+                    firstVisit: response[0].patient_first_visit_date,
+                    file_name: response[0].attachment_name
+
+
+
+
+                })
+            })
+
         } catch (e) {
             console.log(e);
         } finally {
@@ -357,30 +421,28 @@ class LoginScreen extends Component {
         });
 
         const patientDetails = {
-            // patient_details_id: this.state.patient_details_id,
-            patient_number: this.state.patient_number,
-            patient_first_visit_date: this.state.patient_first_visit_date,
-            patient_first_name: this.state.patient_first_name,
-            patient_last_name: this.state.patient_last_name,
-            patient_gender_id: this.state.patient_gender_id,
-            patient_age: this.state.patient_age,
-            patient_dob: this.state.patient_dob,
-            patient_tob: this.state.patient_tob,
-            patient_birth_place: this.state.patient_birth_place,
-            patient_nearest_birth_place: this.state.patient_nearest_birth_place,
-            patient_address: this.state.patient_address,
-            patient_mobile_no: this.state.patient_mobile_no,
-            patient_district: this.state.patient_district,
-            patient_state_id: this.state.patient_state_id,
-            gender_id: this.state.gender_id,
-            // gender_name: this.state.gender_name,
-            state_id: this.state.state_id,
-            state_name: this.state.state_name,
-            country_id: this.state.country_id,
-            is_active: this.state.is_active,
-            attachment: this.state.file_name
+            patientid:  Number(0) ,
+            patient_num: this.state.patientnum,
+            first_visitdate: this.state.firstVisit,
+            p_first_name: this.state.firstName,
+            p_last_name: this.state.lastName,
+            p_gender: Number(1),
+            p_age: Number(this.state.age),
+            p_dob: this.state.dateofBirth,
+            p_tob: this.state.timeofBirth,
+            p_birthplace: this.state.birthofPlace,
+            pn_birthplace: this.state.nearestBirthPlace,
+            p_address: this.state.address,
+            p_mobileno: Number(this.state.phoneNumber),
+            p_district: this.state.district || '',
+            p_stateid:  2,
+            attachment: this.state.db_img_path,
+            created_by: 2,
+            created_date: '2024-05-10',
+            branch_id: 1
         }
-        console.log(patientDetails, 'patientdetails')
+
+        console.log(patientDetails, '-----patientdetails----')
         this.CreateItem(patientDetails)
 
         this.setState({ isFormView: false });
@@ -396,6 +458,7 @@ class LoginScreen extends Component {
             toast.success(ValidationMessage.P_added, {
                 toastId: "add_success",
             });
+            return;
         }
         catch (e) {
             console.log(e)
@@ -412,7 +475,7 @@ class LoginScreen extends Component {
 
                 },
                 () => {
-
+                    this.setState({isTableView:true})                    
                     this.getAllStates();
 
                 }
@@ -492,12 +555,14 @@ class LoginScreen extends Component {
 
         this.setState({ isFormView: true, isTableView: true, disabledInput: false, showSave_btn: false, showedit_btn: true, showUpDate_btn: false, showDelete_cancel_btn: true, disabledInput_part2: false }, () => {
             this.setState({
+                patientnum: item.patient_number,
                 patientid: (item.patient_details_id != null && item.patient_details_id != undefined) ? item.patient_details_id : "",
                 firstName: (item.patient_first_name != null && item.patient_first_name != undefined) ? item.patient_first_name : "",
                 lastName: (item.patient_last_name != null && item.patient_last_name != undefined) ? item.patient_last_name : "",
                 phoneNumber: (item.patient_mobile_no != null && item.patient_mobile_no != undefined) ? item.patient_mobile_no : "",
                 gender: (item.gender_name != null && item.gender_name != undefined) ? item.gender_name : "",
-                dateofBirth: (item.patient_dob != null && item.patient_dob != undefined) ? item.patient_dob : ""
+                dateofBirth: (item.patient_dob != null && item.patient_dob != undefined) ? item.patient_dob : "",
+                patient_attachment_name: item.attachment_name,
             })
         })
         console.warn("++item", item)
@@ -526,8 +591,9 @@ class LoginScreen extends Component {
         this.setState({ isTableView: true, isMadicineScreen: true })
     }
     handleFileScreen = (data) => {
-        var rowData = { ...this.state.fileuploadScreenrow, data }
-        this.setState({ isTableView: true, fileScreenView: true, fileScreenData: rowData }, () => {
+        // this.setState({ patient_attachment_name: data.attachment_name })
+        // var rowData = { ...this.state.fileuploadScreenrow, data }
+        this.setState({ isTableView: true, fileScreenView: true, fileScreenpatientid: data }, () => {
             // console.log(this.state.fileScreenData,'filedata')
         })
         // this.setState({selectedPatient:data}) 
@@ -535,6 +601,9 @@ class LoginScreen extends Component {
 
     closeMedicineScreen = () => {
         this.setState({ isMadicineScreen: false, isTableView: false })
+    }
+    closeFileScreen = () => {
+        this.setState({ isTableView: false, fileScreenView: false,isFormView:false,isMadicineScreen:false})
     }
 
     // file upload starts
@@ -545,21 +614,6 @@ class LoginScreen extends Component {
         });
 
         const file = event.target.files[0];
-        const fileExtension = file.name.split('.').pop().toLowerCase();
-
-        if (fileExtension !== 'pdf') {
-            toast.warn('Please select a PDF file.', {
-                toastId: 'invalid_file_format',
-            });
-            return;
-        }
-
-        if (file.size > 2000000) { // 2MB limit
-            toast.warn('File size exceeds 2MB limit', {
-                toastId: 'file_size',
-            });
-            return;
-        }
 
         this.setState(
             {
@@ -667,9 +721,11 @@ class LoginScreen extends Component {
                                                     <TableCell className="font_family_serif">{row.gender_name}</TableCell>
                                                     <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
                                                     <TableCell>
-                                                        <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}><i class="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
-                                                        <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleFileScreen(row) }}><i class="fa fa-file-o" style={{ color: row.attachment_name ? "#00d000" : 'red' }} aria-hidden="true"></i></Button>
-                                                        <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleMedicinePage() }}><i class="fa fa-medkit" style={{ color: "orange" }} aria-hidden="true"></i></Button>                                                        </TableCell>
+                                                            <Button variant="outlined" className="font_family_serif" onClick={() => { this.getPatientbyid(row.patient_details_id,1) }}><i class="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
+                                                        <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleFileScreen(row.patient_details_id) }}><i class="fa fa-file-o" style={{ color: row.attachment_name ? "#00d000" : 'red' }} aria-hidden="true"></i></Button>
+                                                            <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleMedicinePage() }}><i class="fa fa-medkit" style={{ color: "orange" }} aria-hidden="true"></i></Button>                                                        </TableCell>
+                                                        {/* <Button variant="outlined" className="font_family_serif" onClick={() => { this.getPatientbyid(row.patient_details_id, 1) }}><i class="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button> */}
+                                                        
                                                 </TableRow>
                                             ))}
                                             {this.state.nodataFound &&
@@ -913,13 +969,28 @@ class LoginScreen extends Component {
                                                     className="form-control font_family_serif input_hight_38"
                                                     id="fileInput"
                                                     name="objection_letter"
-                                                    onChange={this.handleFileChange}
+                                                    onChange={this.handlemenuImgchange}
                                                     onClick={(event) => {
                                                         event.target.value = null;
                                                     }}
-                                                    ref={this.fileInputRef}
+                                                    ref={this.myRef2}
                                                 />
                                             </div>
+                                            <div>
+                                                <div className="uploadFileName">
+                                                    {this.state.menu_ing_name && (
+                                                        <a href={this.state.db_img_path} target="_blank" rel="noreferrer">
+                                                            <span>{this.state.menu_ing_name}</span>
+                                                        </a>
+                                                    )}
+                                                </div>
+                                                {this.state.showImage && (
+                                                    <div className="imageContainer">
+                                                        <img src={this.state.db_img_path} alt="Uploaded" />
+                                                    </div>
+                                                )}
+                                            </div>
+
                                         </div>
 
                                     </div>
@@ -949,7 +1020,7 @@ class LoginScreen extends Component {
 
                         }
                         {this.state.fileScreenView &&
-                            <FIleUpload fileScreenData={this.state.fileScreenData} ></FIleUpload>
+                            <FIleUpload fileScreenData={this.state.fileScreenpatientid} closescreen={this.closeFileScreen} />
                         }
                     </div>
                 </div >

@@ -124,6 +124,8 @@ class LoginScreen extends Component {
         // alert("hello")
         // this.inputRef.current.focus() 
         this.getAllStates();
+       
+
     }
 
 
@@ -138,6 +140,64 @@ class LoginScreen extends Component {
                 })
                 console.log(this.state.Maindata, 'patients')
             }
+        } catch (e) {
+            console.log(e);
+        } finally {
+            this.setState({
+                isLoading: false,
+            });
+        }
+    }
+    async getPatientbyid(id, typeid) {
+        this.setState({ isLoading: true });
+        try {
+            const response = await Employee.get_patientdatabyid({ patient_id: id, actionid: typeid });
+            console.log(response, ' getpatientdatabyid --')
+            console.log(response[0].patient_tob, 'time of birth');
+
+            const parseTimeString = (timeString) => {
+                let date;
+                if (timeString.includes("AM") || timeString.includes("PM")) {
+                    // Parse 12-hour format
+                    date = new Date("2024-06-03" + timeString);
+                } else {
+                    // Parse 24-hour format
+                    const [hours, minutes] = timeString.split(":");
+                    date = new Date();
+                    date.setHours(parseInt(hours, 10), parseInt(minutes, 10));
+                }
+                // Return formatted time in "HH:mm" format
+                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+            };
+
+            const formattedTimeString = parseTimeString(response[0].patient_tob);
+            console.log(formattedTimeString, "formattedTimeString");
+
+            this.setState({ isFormView: true, isTableView: true, disabledInput: false, showSave_btn: false, showedit_btn: true, showUpDate_btn: false, showDelete_cancel_btn: true, disabledInput_part2: false }, () => {
+                this.setState({
+                    patientid: response[0].patient_details_id,
+                    patientnum: response[0].patient_number,
+                    firstName: response[0].patient_first_name,
+                    lastName: response[0].patient_last_name,
+                    phoneNumber: response[0].patient_mobile_no,
+                    gender_name: String(response[0].patient_gender_id),
+                    dateofBirth: response[0].patient_dob,
+                    birthofPlace: response[0].patient_birth_place,
+                    nearestBirthPlace: response[0].patient_nearest_birth_place,
+                    age: response[0].patient_age,
+                    timeofBirth: formattedTimeString,
+                    address: response[0].patient_address,
+                    state: response[0].state_name,
+                    district: response[0].patient_district,
+                    firstVisit: response[0].patient_first_visit_date,
+                    file_name: response[0].attachment_name
+
+
+
+
+                })
+            })
+
         } catch (e) {
             console.log(e);
         } finally {
@@ -644,7 +704,7 @@ class LoginScreen extends Component {
                                                     <TableCell className="font_family_serif">{row.gender_name}</TableCell>
                                                     <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
                                                     <TableCell>
-                                                        <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row) }}><i class="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
+                                                        <Button variant="outlined" className="font_family_serif" onClick={() => { this.getPatientbyid(row.patient_details_id, 1) }}><i class="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
                                                         <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleFileScreen(row) }}><i class="fa fa-file-o" style={{ color: row.attachment_name ? "#00d000" : 'red' }} aria-hidden="true"></i></Button>
                                                         <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleMedicinePage() }}><i class="fa fa-medkit" style={{ color: "orange" }} aria-hidden="true"></i></Button>                                                        </TableCell>
                                                 </TableRow>

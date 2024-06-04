@@ -4,22 +4,26 @@ import { fetchWrapper } from "../helpers/fetch-wrapper";
 
 export const Employee = {
   getData,
-  getallstates,
-  insert_patientdetails
-
+  getallpatientdetails,
+  insert_patientdetails,
+  ins_img_service
 };
 const get_data = API_URLS.getdata_api;
-const getall_states=API_URLS.getallstates
+const getall_patients=API_URLS.getallpatients
 const  postpatientdeials=API_URLS.insertpatientdetails
+const insimg_service = API_URLS.uploadfile
 
 
 function getData() {
     return fetchWrapper.get(get_data);
   }
-  function getallstates(){
-    return fetchWrapper.get(getall_states)
+  function getallpatientdetails(){
+    return fetchWrapper.get(getall_patients)
   
   }
-  function insert_patientdetails(){
-    return fetchWrapper.post(postpatientdeials)
+  function insert_patientdetails(item){
+    return fetchWrapper.post(postpatientdeials,item)
+  }
+  function ins_img_service(item) {
+    return fetchWrapper.postformData(insimg_service, item);
   }

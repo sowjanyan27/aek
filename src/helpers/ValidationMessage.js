@@ -19,4 +19,8 @@ export const ValidationMessage = {
     p_firstvisit:"Please select the patient first visit date",
 
 
+
+    
+    p_cs_update:"Patient Case Sheet Uploaded",
+
 }

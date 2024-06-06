@@ -12,6 +12,7 @@ import TablePaginationActions from "../helpers/Pagination";
 import BoostModal from "./BoostModal";
 import MedicineScreen from './MedicineScreen';
 import FIleUpload from "./FIleUpload";
+import { Tooltip } from "react-bootstrap";
 
 
 class LoginScreen extends Component {

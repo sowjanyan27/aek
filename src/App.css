@@ -998,6 +998,11 @@ input[type="file"] {
   width: 100%;
 }
 
+.sub_tabs_view {
+  overflow: auto;
+  margin-top: 10px;
+}
+
 .info-text {
   font-size: 19px;
   margin: 0;

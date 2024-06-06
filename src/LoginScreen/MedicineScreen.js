@@ -1100,7 +1100,6 @@ export default class MedicineScreen extends Component {
                         </div>
                     </div>
                 </div>
-
             </div >
             // </div >
         )

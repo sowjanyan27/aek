@@ -666,19 +666,6 @@ export default class MedicineScreen extends Component {
                                         </div>
                                     </div>
                                 </div>
-                            <div style={{ textAlign: "end" }}>
-                                {!this.state.isShowMedicine &&
-                                    <Button className="btn btn-success me-4"
-                                        // onClick={() => {  this.getmedaticationdetails() }}
-                                        onClick={() => { this.handleHide_show(); this.getmedaticationdetails() }}
-                                    > Add </Button>
-                                }
-                                {this.state.isShowMedicine &&
-                                    <Button className="btn btn-success me-4"
-                                        // onClick={() => {  this.getmedaticationdetails() }}
-                                        onClick={() => { this.handleHide() }}
-                                    > Hide </Button>
-                                }
                             </div>
                         </div>
 

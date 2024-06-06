@@ -31,11 +31,7 @@ export const Strings = {
     update: "Update",
     city: "City",
     upload_file: "file upload",
-    main: "main",
-    mother_tinctures: "mother tinctures",
-    tissue_salts: "tissue salts",
-    medicine: "medicine",
-    purpose: "purpose"
-
+    purpose: "purpose",
+    medicine: "medicine"
 
 }

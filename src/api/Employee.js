@@ -8,29 +8,35 @@ export const Employee = {
   insert_patientdetails,
   getmedaticationdetails,
   get_patientdatabyid,
+  insertmedicationdetails
 
 };
 const get_data = API_URLS.getdata_api;
-const getall_states=API_URLS.getallstates
-const  postpatientdeials=API_URLS.insertpatientdetails
-const get_madication=API_URLS.getmedicationdetails
-const get_patient_databyid=API_URLS.getpatientdatabyid
+const getall_states = API_URLS.getallstates
+const postpatientdeials = API_URLS.insertpatientdetails
+const get_madication = API_URLS.getmedicationdetails
+const get_patient_databyid = API_URLS.getpatientdatabyid
+const insert_medicationdetails = API_URLS.insertmedicationdetails
+
 
 
 function getData() {
-    return fetchWrapper.get(get_data);
-  }
-  function getallstates(){
-    return fetchWrapper.get(getall_states)
-  
-  }
-  function insert_patientdetails(){
-    return fetchWrapper.post(postpatientdeials)
-  }
-  function getmedaticationdetails(){
-    return fetchWrapper.get(get_madication)
-  
-  }
-  function get_patientdatabyid(item){
-    return fetchWrapper.post(get_patient_databyid,item)
-  }
+  return fetchWrapper.get(get_data);
+}
+function getallstates() {
+  return fetchWrapper.get(getall_states)
+
+}
+function insert_patientdetails() {
+  return fetchWrapper.post(postpatientdeials)
+}
+function getmedaticationdetails() {
+  return fetchWrapper.get(get_madication)
+
+}
+function get_patientdatabyid(item) {
+  return fetchWrapper.post(get_patient_databyid, item)
+}
+function insertmedicationdetails(item) {
+  return fetchWrapper.post(insert_medicationdetails, item)
+}

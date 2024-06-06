@@ -9,6 +9,10 @@ export const ValidationMessage = {
     p_birth_date: "Please Enter Patient Birth Date",
     p_gender: "Please Select Patient Gender",
     P_added:"Data Added Successfylly",
-    p_failed:"Failed to Insert the data"
+    p_failed:"Failed to Insert the data",
+
+
+    
+    p_cs_update:"Patient Case Sheet Uploaded",
 
 }

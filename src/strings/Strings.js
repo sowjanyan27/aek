@@ -30,6 +30,8 @@ export const Strings = {
     delete: "Delete",
     update: "Update",
     city: "City",
-    upload_file: "file upload"
+    upload_file: "file upload",
+    purpose: "purpose",
+    medicine: "medicine"
 
 }

@@ -129,7 +129,7 @@ class LoginScreen extends Component {
         // alert("hello")
         // this.inputRef.current.focus() 
         this.getAllStates();
-       
+
 
     }
 
@@ -421,7 +421,7 @@ class LoginScreen extends Component {
         });
 
         const patientDetails = {
-            patientid:  Number(0) ,
+            patientid: Number(0),
             patient_num: this.state.patientnum,
             first_visitdate: this.state.firstVisit,
             p_first_name: this.state.firstName,
@@ -435,7 +435,7 @@ class LoginScreen extends Component {
             p_address: this.state.address,
             p_mobileno: Number(this.state.phoneNumber),
             p_district: this.state.district || '',
-            p_stateid:  2,
+            p_stateid: 2,
             attachment: this.state.db_img_path,
             created_by: 2,
             created_date: '2024-05-10',
@@ -475,7 +475,7 @@ class LoginScreen extends Component {
 
                 },
                 () => {
-                    this.setState({isTableView:true})                    
+                    this.setState({ isTableView: true })
                     this.getAllStates();
 
                 }
@@ -603,7 +603,7 @@ class LoginScreen extends Component {
         this.setState({ isMadicineScreen: false, isTableView: false })
     }
     closeFileScreen = () => {
-        this.setState({ isTableView: false, fileScreenView: false,isFormView:false,isMadicineScreen:false})
+        this.setState({ isTableView: false, fileScreenView: false, isFormView: false, isMadicineScreen: false })
     }
 
     // file upload starts
@@ -680,7 +680,7 @@ class LoginScreen extends Component {
                                                 /> */}
                                                 <input
                                                     className=""
-                                                    style={{width: "200px",marginTop: "10px"}}
+                                                    style={{ width: "200px", marginTop: "10px" }}
                                                     value={this.state.searchValue}
                                                     onChange={(text) => { this.handleFilter(text) }} // Changed parameter to e.target.value
                                                     placeholder="Search by patient details..."
@@ -722,7 +722,7 @@ class LoginScreen extends Component {
                                                             <TableCell className="font_family_serif">{row.gender_name}</TableCell>
                                                             <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
                                                             <TableCell>
-                                                                <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row.patient_details_id, 1) }}><i className="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
+                                                                <Button variant="outlined" className="font_family_serif" onClick={() => { this.getPatientbyid(row.patient_details_id, 1) }}><i className="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
                                                                 <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleFileScreen(row.patient_details_id) }}><i className="fa fa-file-o" style={{ color: row.attachment_name ? "#00d000" : 'red' }} aria-hidden="true"></i></Button>
                                                                 <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleMedicinePage(row.patient_details_id) }}><i className="fa fa-medkit" style={{ color: "orange" }} aria-hidden="true"></i></Button>                                                        </TableCell>
                                                         </TableRow>
@@ -757,10 +757,10 @@ class LoginScreen extends Component {
                                         <div className="margin_bottom_15 w-75 me-auto ms-auto evens-align mt-4 position-relative">
                                             <h3 className="info-text">{Strings.registration}</h3>
                                             <div className="top-right-icons">
-                                            <span onClick={() => { this.handleDeletion() }}>
-                                                <i className="fa fa-arrow-left" aria-hidden="true"></i>
-                                            </span>
-                                             
+                                                <span onClick={() => { this.handleDeletion() }}>
+                                                    <i className="fa fa-arrow-left" aria-hidden="true"></i>
+                                                </span>
+
                                             </div>
                                         </div>
                                         <div className="w-75 me-auto ms-auto">

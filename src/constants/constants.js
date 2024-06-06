@@ -7,4 +7,8 @@ export const API_URLS = {
     insertpatientdetails:`${dev_url}/eakapi/addpatientdetails/`,
     getmedicationdetails:`${dev_url}/eakapi/getmedicationdetails/`,
     getpatientdatabyid:`${dev_url}/eakapi/getpatientdatabyid/`,
+
+
+    
+    updatepatientcs:`${dev_url}/eakapi/updatepatentcasesheet/`
 }

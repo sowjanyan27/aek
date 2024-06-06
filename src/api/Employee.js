@@ -11,6 +11,9 @@ export const Employee = {
   getmedaticationdetails,
   get_patientdatabyid,
 
+
+  update_patientcs,
+
 };
 const get_data = API_URLS.getdata_api;
 const getall_patients=API_URLS.getallpatients
@@ -18,6 +21,9 @@ const  postpatientdeials=API_URLS.insertpatientdetails
 const insimg_service = API_URLS.uploadfile
 const get_madication=API_URLS.getmedicationdetails
 const get_patient_databyid=API_URLS.getpatientdatabyid
+
+
+const update_patient_cs = API_URLS.updatepatientcs
 
 
 function getData() {
@@ -38,4 +44,11 @@ function getData() {
   }
   function get_patientdatabyid(item){
     return fetchWrapper.post(get_patient_databyid,item)
+  }
+
+
+
+  
+  function update_patientcs(item){
+    return fetchWrapper.post(update_patient_cs,item)
   }

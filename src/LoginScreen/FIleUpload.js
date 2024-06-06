@@ -68,7 +68,15 @@ export default class FIleUpload extends Component {
 
         const file = event.target.files[0];
         const sanitizedFileName = file.name.replace(/\s+/g, '_');
+        const fileExtension = file.name.split('.').pop().toLowerCase();
 
+        if (fileExtension !== 'pdf') {
+            toast.warn('Please select a PDF file.', {
+                toastId: 'invalid_file_format',
+            });
+            
+            return;
+        }
 
         this.setState(
             {
@@ -100,7 +108,14 @@ export default class FIleUpload extends Component {
 
 
     handlesaveattachment() {
+        
         const fileName = this.state.db_img_path.replace(/\s+/g, '_');
+        if (!fileName) {
+            toast.warn(ValidationMessage.p_cs_file, {
+                toastId: "p_cs_file",
+            });
+            return;
+        }
         const obj = {
             patient_id: this.state.patien_data,
             attachmentname: fileName

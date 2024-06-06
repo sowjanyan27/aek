@@ -613,10 +613,18 @@ class LoginScreen extends Component {
         });
 
         const file = event.target.files[0];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
 
+        if (fileExtension !== 'pdf') {
+            toast.warn('Please select a PDF file.', {
+                toastId: 'invalid_file_format',
+            });
+            return;
+        }
+        const sanitizedFileName = file.name.replace(/\s+/g, '_');
         this.setState(
             {
-                menu_ing_name: file.name,
+                menu_ing_name: sanitizedFileName,
             },
             () => {
                 let formData = new FormData();

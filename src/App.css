@@ -232,7 +232,8 @@ ul.child-sub-menu li:hover a span {
 .p_tag_align p {
   margin: 0
 }
-.p_tag_align .css-9wcvca-MuiTableCell-root-MuiTablePagination-root{
+
+.p_tag_align .css-9wcvca-MuiTableCell-root-MuiTablePagination-root {
   border-bottom: 0px;
 }
 
@@ -687,16 +688,24 @@ ul.child-sub-menu li:hover a span {
   margin-bottom: 8px;
 }
 
-.bottom_hightlets{
+.bottom_hightlets {
   background: aliceblue;
   display: inline-block;
   border: 1px dashed #333;
   padding: 4px 10px;
   font-size: 15px;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   border-radius: 5px;
+  margin: 10px 20px 10px 0px;
 }
-.btn-danger_cross{
+
+.border_1_solid_5r_grey {
+  border: 1px solid #232323;
+  border-radius: 5px;
+
+}
+
+.btn-danger_cross {
   padding: 0px;
   color: #333;
   background: none;
@@ -704,11 +713,13 @@ ul.child-sub-menu li:hover a span {
   vertical-align: top;
   margin-left: 15px;
 }
-.btn-danger_cross:hover{
+
+.btn-danger_cross:hover {
   background: none;
   color: #000;
 }
-.btn-danger_cross .fa{
+
+.btn-danger_cross .fa {
   vertical-align: initial;
   font-size: 17px;
 }
@@ -1011,6 +1022,11 @@ input[type="file"] {
   display: flex;
   justify-content: space-between;
   width: 100%;
+}
+
+.sub_tabs_view {
+  overflow: auto;
+  margin-top: 10px;
 }
 
 .info-text {

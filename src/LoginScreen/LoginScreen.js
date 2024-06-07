@@ -9,9 +9,9 @@ import { Employee } from "../api/Employee";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, TableFooter } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css"
 import TablePaginationActions from "../helpers/Pagination";
-import BoostModal from "./BoostModal";
 import MedicineScreen from './MedicineScreen';
 import FIleUpload from "./FIleUpload";
+import Tooltip from "@mui/material/Tooltip";
 
 
 class LoginScreen extends Component {
@@ -118,22 +118,17 @@ class LoginScreen extends Component {
         }
         this.inputRef = React.createRef()
         this.handlemenuImgchange = this.handlemenuImgchange.bind(this);
-        // this.uploadFile = this.uploadFile.bind(this);
         this.fileInputRef = React.createRef();
     }
 
 
 
     componentDidMount() {
-        // alert("hello")
-        // this.inputRef.current.focus() 
-        this.getAllStates();
-
-
+        this.getallpatientdetails();
     }
 
 
-    async getAllStates() {
+    async getallpatientdetails() {
         try {
             const response = await Employee.getallpatientdetails();
             console.log(response, 'data get --')
@@ -406,20 +401,15 @@ class LoginScreen extends Component {
             });
             return;
         }
-        // else {
-        //     this.setState()
-        // }
-        // console.log("test")
-        // this.props.router.navigate(`/Login`);
-        toast.success(ValidationMessage.V_Added, {
-            toastId: 'success',
-            onClose: () => {
-                this.setState({ isFormView: false });
-                // this.dataClear()
-            }
-        });
+        // toast.success(ValidationMessage.V_Added, {
+        //     toastId: 'success',
+        //     onClose: () => {
+        //         this.setState({ isFormView: false });
+        //     }
+        // });
 
         const patientDetails = {
+            patientid: Number(0),
             patientid: Number(0),
             patient_num: this.state.patientnum,
             first_visitdate: this.state.firstVisit,
@@ -444,44 +434,33 @@ class LoginScreen extends Component {
         console.log(patientDetails, '-----patientdetails----')
         this.CreateItem(patientDetails)
 
-        this.setState({ isFormView: false });
+        // this.setState({ isFormView: false });
     }
 
 
 
     async CreateItem(item) {
-        // console.log(item);
         try {
             const response = await Employee.insert_patientdetails(item);
             console.log(response);
             toast.success(ValidationMessage.P_added, {
-                toastId: "add_success",
+                toastId: "Patientdetails",
             });
-            return;
-        }
-        catch (e) {
-            console.log(e)
+            this.setState({ isTableView: false, isFormView: false }, () => {
+                this.getallpatientdetails();
+            });
+
+        } catch (e) {
+            console.log(e);
             toast.error(ValidationMessage.p_failed, {
                 toastId: "addFail",
             });
+
+            // Set state to maintain form view on failure
+            this.setState({ isTableView: false, isFormView: true });
         }
-        finally {
-
-
-            this.setState(
-                {
-
-
-                },
-                () => {
-                    this.setState({ isTableView: true })
-                    this.getAllStates();
-
-                }
-            );
-        }
-
     }
+
     dataClear() {
         this.setState({
             patientid: "1",
@@ -507,7 +486,6 @@ class LoginScreen extends Component {
     }
 
     handleFilterId = async (text) => {
-        // var value = text.target.value.toLowerCase();
         var value = await Common.getNumericValue(text.target.value); // validate the numberic values
         this.setState({ searchId: value })
         var filteredArray = this.state.dummyData.filter(item => {
@@ -613,10 +591,18 @@ class LoginScreen extends Component {
         });
 
         const file = event.target.files[0];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
 
+        if (fileExtension !== 'pdf') {
+            toast.warn('Please select a PDF file.', {
+                toastId: 'invalid_file_format',
+            });
+            return;
+        }
+        const sanitizedFileName = file.name.replace(/\s+/g, '_');
         this.setState(
             {
-                menu_ing_name: file.name,
+                menu_ing_name: sanitizedFileName,
             },
             () => {
                 let formData = new FormData();
@@ -713,9 +699,16 @@ class LoginScreen extends Component {
                                                             <TableCell className="font_family_serif">{row.gender_name}</TableCell>
                                                             <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
                                                             <TableCell>
-                                                                <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleView(row.patient_details_id, 1) }}><i className="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
-                                                                <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleFileScreen(row.patient_details_id) }}><i className="fa fa-file-o" style={{ color: row.attachment_name ? "#00d000" : 'red' }} aria-hidden="true"></i></Button>
-                                                                <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleMedicinePage(row.patient_details_id) }}><i className="fa fa-medkit" style={{ color: "orange" }} aria-hidden="true"></i></Button>                                                        </TableCell>
+                                                                <Tooltip title="View" arrow>
+                                                                    <Button variant="outlined" className="font_family_serif" onClick={() => { this.getPatientbyid(row.patient_details_id, 1) }}><i className="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
+                                                                </Tooltip>
+                                                                <Tooltip title="File" arrow>
+                                                                    <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleFileScreen(row.patient_details_id) }}><i className="fa fa-file-o" style={{ color: row.attachment_name ? "#00d000" : 'red' }} aria-hidden="true"></i></Button>
+                                                                </Tooltip>
+                                                                <Tooltip title="Medication" arrow>
+                                                                    <Button variant="outlined" className="font_family_serif" onClick={() => { this.handleMedicinePage(row.patient_details_id) }}><i className="fa fa-medkit" style={{ color: "orange" }} aria-hidden="true"></i></Button>
+                                                                </Tooltip>
+                                                            </TableCell>
                                                         </TableRow>
                                                     ))}
                                                 </TableBody>
@@ -841,20 +834,6 @@ class LoginScreen extends Component {
                                                         <textarea rows={4} cols={40} disabled={!this.state.disabledInput} style={{ resize: "none" }} className="form-control input_hight_45" onChange={(text) => { this.handleSelectedData(text, Strings.address) }} value={this.state.address} placeholder={Strings.address} />
                                                     </div>
                                                 </div>
-
-                                                {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
-                                                <div className="form-group t{ext_align_left" >
-                                                    <label htmlFor="State" className="font_family_serif">{Strings.state}</label>
-                                                    <input type="text" disabled={!this.state.disabledInput} onChange={(text) => { this.handleSelectedData(text, Strings.state) }} className="form-control font_family_serif input_hight_45" id="state" value={this.state.state} placeholder={Strings.state} />
-                                                </div>
-                                            </div>
-                                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20 ">
-                                                <div className="form-group text_align_left" >
-                                                    <label htmlFor="District" className="font_family_serif">{Strings.district}</label>
-                                                    <input type="text" disabled={!this.state.disabledInput} onChange={(text) => this.handleSelectedData(text, Strings.district)} className="form-control font_family_serif input_hight_45" id="district" value={this.state.district} placeholder={Strings.district} />
-                                                </div>
-                                            </div> */}
-
                                                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                                     <div className="form-group text_align_left" >
                                                         <label htmlFor="selectOption" className="label_texts mar_b_8"> {Strings.state} </label>
@@ -867,20 +846,6 @@ class LoginScreen extends Component {
                                                         </select>
                                                     </div>
                                                 </div>
-
-                                                {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
-                                                <div className="form-group text_align_left" >
-                                                    <label htmlFor="selectOption" className="font_family_serif"> {Strings.district} </label>
-                                                    <select disabled={this.state.state == ""} className="form-select font_family_serif input_hight_45" id="state" onChange={(text) => this.handleSelectedData(text, Strings.district)} value={this.state.district} placeholder={Strings.district} >
-                                                        {this.state.dropDown_districts.map(item => {
-                                                            return (
-                                                                <option className="font_family_serif" value={item.value}>{item.itemName}</option>
-                                                            )
-                                                        })}
-                                                    </select>
-                                                </div>
-                                            </div> */}
-
                                                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20 ">
                                                     <div className="form-group text_align_left" >
                                                         <label htmlFor="District" className="label_texts mar_b_8">{Strings.district}</label>
@@ -900,33 +865,6 @@ class LoginScreen extends Component {
                                                     </div>
                                                 </div>
 
-                                                {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
-                                                <div className="form-group text_align_left" >
-                                                    <label htmlFor="selectOption" className="font_family_serif"> {Strings.select_option} </label>
-                                                    <select disabled={!this.state.disabledInput} className="form-select font_family_serif input_hight_45" id="selectOption" onChange={(text) => this.handleSelectedData(text, Strings.select_option)}>
-                                                        {this.state.dropDown_districts.map(item => {
-                                                            return (
-                                                                <option className="font_family_serif" value={item.value}>{item.itemName}</option>
-                                                            )
-                                                        })}
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_Radio_btn_50
-                                    ">
-                                                <div className="form-group text_align_left" >
-                                                    <label className="me-2 font_family_serif">Gender: <span className="logo_color_red"> *</span></label>
-                                                    <div class="form-check form-check-inline">
-                                                        <input required disabled={!this.state.disabledInput} className="form-check-input font_family_serif" type="radio" name="inlineRadioOptions" id="inlineRadio1" value={Strings.male} checked={this.state.gender_name === Strings.male} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
-                                                        <label className="form-check-label font_family_serif" for="inlineRadio1">{Strings.male}</label>
-                                                    </div>
-                                                    <div className="form-check form-check-inline">
-                                                        <input required disabled={!this.state.disabledInput} className="form-check-input font_family_serif" type="radio" name="inlineRadioOptions" id="inlineRadio2" value={Strings.female} checked={this.state.gender_name === Strings.female} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
-                                                        <label className="form-check-label font_family_serif" for="inlineRadio2">{Strings.female}</label>
-                                                    </div>
-                                                    {this.state.showgenderSelectionview && <span className="font_family_serif" style={{ color: "red", fontSize: 12 }}>{Strings.please_select_one}</span>}
-                                                </div>
-                                                    </div> */}
                                                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
                                                     <div className="form-group text_align_left marginTop_20" >
                                                         <label className="me-2 label_texts">Gender: <span className="logo_color_red"> *</span></label>
@@ -952,7 +890,7 @@ class LoginScreen extends Component {
                                                             className="form-control input_hight_38"
                                                             id="fileInput"
                                                             name="objection_letter"
-                                                            onChange={this.handleFileChange}
+                                                            onChange={this.handlemenuImgchange}
                                                             onClick={(event) => {
                                                                 event.target.value = null;
                                                             }}
@@ -968,7 +906,7 @@ class LoginScreen extends Component {
                                                 {/* <Button onClick={() => { this.handleDeletion() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button> */}
                                                 {this.state.showedit_btn &&
                                                     <div className="d-inline-block">
-                                                        <Button onClick={() => this.handleDisable()} className="btn btn-info me-2  font_family_serif"> <i className="fa fa-pencil-square-o" aria-hidden="true"></i></Button>
+                                                        <Button onClick={() => this.handleDisable()} className="btn btn-info me-2  font_family_serif"> {Strings.edit}</Button>
                                                     </div>
                                                 }
                                                 {this.state.showUpDate_btn &&

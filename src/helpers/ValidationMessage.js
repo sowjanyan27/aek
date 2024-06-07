@@ -14,5 +14,6 @@ export const ValidationMessage = {
 
     
     p_cs_update:"Patient Case Sheet Uploaded",
+    p_cs_file:"Please Select Patient Case Sheet",
 
 }

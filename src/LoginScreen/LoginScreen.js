@@ -9,7 +9,6 @@ import { Employee } from "../api/Employee";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, TableFooter } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css"
 import TablePaginationActions from "../helpers/Pagination";
-import BoostModal from "./BoostModal";
 import MedicineScreen from './MedicineScreen';
 import FIleUpload from "./FIleUpload";
 import Tooltip from "@mui/material/Tooltip";
@@ -125,11 +124,11 @@ class LoginScreen extends Component {
 
 
     componentDidMount() {
-        this.getAllStates();
+        this.getallpatientdetails();
     }
 
 
-    async getAllStates() {
+    async getallpatientdetails() {
         try {
             const response = await Employee.getallpatientdetails();
             console.log(response, 'data get --')
@@ -402,12 +401,12 @@ class LoginScreen extends Component {
             });
             return;
         }
-        toast.success(ValidationMessage.V_Added, {
-            toastId: 'success',
-            onClose: () => {
-                this.setState({ isFormView: false });
-            }
-        });
+        // toast.success(ValidationMessage.V_Added, {
+        //     toastId: 'success',
+        //     onClose: () => {
+        //         this.setState({ isFormView: false });
+        //     }
+        // });
 
         const patientDetails = {
             patientid: Number(0),
@@ -434,44 +433,33 @@ class LoginScreen extends Component {
         console.log(patientDetails, '-----patientdetails----')
         this.CreateItem(patientDetails)
 
-        this.setState({ isFormView: false });
+        // this.setState({ isFormView: false });
     }
 
 
 
     async CreateItem(item) {
-        // console.log(item);
         try {
             const response = await Employee.insert_patientdetails(item);
             console.log(response);
             toast.success(ValidationMessage.P_added, {
-                toastId: "add_success",
+                toastId: "Patientdetails",
             });
-            return;
-        }
-        catch (e) {
-            console.log(e)
+            this.setState({ isTableView: false, isFormView: false }, () => {
+                this.getallpatientdetails();
+            });
+
+        } catch (e) {
+            console.log(e);
             toast.error(ValidationMessage.p_failed, {
                 toastId: "addFail",
             });
+
+            // Set state to maintain form view on failure
+            this.setState({ isTableView: false, isFormView: true });
         }
-        finally {
-
-
-            this.setState(
-                {
-
-
-                },
-                () => {
-                    this.setState({ isTableView: true })
-                    this.getAllStates();
-
-                }
-            );
-        }
-
     }
+
     dataClear() {
         this.setState({
             patientid: "1",
@@ -900,7 +888,7 @@ class LoginScreen extends Component {
                                                             className="form-control input_hight_38"
                                                             id="fileInput"
                                                             name="objection_letter"
-                                                            onChange={this.handleFileChange}
+                                                            onChange={this.handlemenuImgchange}
                                                             onClick={(event) => {
                                                                 event.target.value = null;
                                                             }}

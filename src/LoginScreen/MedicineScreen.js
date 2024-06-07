@@ -1091,7 +1091,15 @@ export default class MedicineScreen extends Component {
                                                         </div>
                                                     </div>
                                                 } */}
-                                                <img src="https://cdn-images.resumelab.com/pages/teaching_assistant_cta1_new.jpg" className="w-100" />
+                                                {/* <img src="https://ajapi.masterek.org/Content/WebsiteFiles/BOOK_OF_RITUALS.pdf" className="w-100" /> */}
+                                                <embed
+                                                    src="https://ajapi.masterek.org/Content/WebsiteFiles/BOOK_OF_RITUALS.pdf"
+                                                    className="w-100 pdf-height"
+                                                    type="application/pdf"
+                                                    name='X-Frame-Options'
+                                                    value='sameorigin'
+                                                // style={{ height: '500px' }} // Set an appropriate height for the PDF viewer
+                                                />
                                             </div>
                                         </div>
                                     }

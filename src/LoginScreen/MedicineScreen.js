@@ -9,34 +9,6 @@ import { Common } from "../helpers/common";
 export default class MedicineScreen extends Component {
     constructor(props) {
         super(props)
-        // this.state = {
-        //     MainMadicationdata: [],
-        //     dummyMainMadicationdata: [],
-        //     activeTab: "",
-        //     filterData: "",
-        //     filterdArray: [],
-        //     medicineNames: [],
-        //     master_medincine_potencies_name: [],
-        //     selcted_master_name: "",
-        //     seletedMedicine: "",
-        //     selectedDosage: "",
-        //     medicinelist: [],
-        //     medicine_type_id: null,
-        //     usage_time: "",
-        //     selected_potencies_type_id: null,
-        //     dosage: 1,
-        //     selected_medicine_type_index: null,
-        //     medicationlistjson: [],
-        //     spe_instruct: "",
-        //     next_med: "",
-        //     patient_ailment: "",
-        //     patient_medicalreports: "",
-        //     purpose: "",
-        //     syntomus: "",
-        //     isRightBranchHidden: false
-        // }
-
-        //  // new 
         this.state = {
             MainMadicationdata: [],
             dummyMainMadicationdata: [],
@@ -90,8 +62,12 @@ export default class MedicineScreen extends Component {
             master_index: null, // Selected potencial index EX:- 1c, 2c, lc,
             isShoweye_btn: false,
             master_idex: null,
-            consume_dose: [{}],
-
+            consume_dose_timings: [{ timing: "M", value: "Morning" },
+            { timing: "A", value: "Afternoon" },
+            { timing: "E", value: "Evening" },
+            { timing: "N", value: "Night" }
+            ],
+            selectedTimings: []
         }
     }
 
@@ -153,8 +129,6 @@ export default class MedicineScreen extends Component {
         }
     }
 
-
-
     setActiveTab = (tabName) => {
         this.setState({ activeTab: tabName });
     };
@@ -183,27 +157,9 @@ export default class MedicineScreen extends Component {
     }
 
     enterDose = (text) => {
-        // var ageNum = Common.getNumericValue(value)
-        // console.warn("++ageNum", ageNum)
         var days = Common.getNumericValue(text)
         this.setState({ dosage: days })
     }
-
-
-    // savetoStateLevel = () => {
-    //     // var currentDate = new Date().toJSON().slice(0, 10)
-    //     var obj = {
-    //         medicineid: this.state.medicine_type_id,
-    //         potenciesid: this.state.selected_potencies_type_id,
-    //         med_dosage: this.state.dosage,
-    //         med_consume_time: this.state.usage_time
-    //     }
-    //     var medication_obj = [...this.state.medicationlistjson, obj]
-    //     this.setState({ medicationlistjson: medication_obj }, () => {
-    //         this.setState({ filterData: "", usage_time: "", dosage: 1, potenciesid: null, medicineid: null, filterdArray: [], selcted_master_name: '' })
-    //     })
-    // }
-
 
     savetoStateLevel = () => {
         var names_list = {
@@ -212,8 +168,7 @@ export default class MedicineScreen extends Component {
             potencies_type: this.state.potencies_type,
             potencies_type_name: this.state.potencies_type_name
         }
-        // console.warn("++names_list", names_list)
-        // return
+
         var obj = {
             medicineid: this.state.medicine_type_id,
             potenciesid: this.state.selected_potencies_type_id,
@@ -222,7 +177,7 @@ export default class MedicineScreen extends Component {
         }
         var names_array = [...this.state.selected_medicine_names, names_list]
         var medication_obj = [...this.state.medicationlistjson, obj]
-        this.setState({ medicationlistjson: medication_obj, selected_medicine_names: names_array }, () => {
+        this.setState({ medicationlistjson: medication_obj, selected_medicine_names: names_array, selectedTimings: [] }, () => {
             this.setState({
                 filterData: "", usage_time: "", dosage: 1, potenciesid: null, medicineid: null, filterdArray: [], selcted_master_name: '', selected_medicine_names: names_array, selected_medicine_name: "", potencies_type: "",
                 potencies_type_name: "", master_idex: null
@@ -230,28 +185,6 @@ export default class MedicineScreen extends Component {
         })
     }
 
-
-    // submitMadicationdata() {
-    //     const final_obj = {
-    //         patient_id: 2,
-    //         doctor_id: 3,
-    //         spe_instruct: this.state.spe_instruct,
-    //         next_med: this.state.next_med,
-    //         patient_ailment: this.state.patient_ailment,
-    //         patient_medicalreports: this.state.patient_medicalreports,
-    //         medicationlistjson: JSON.stringify(this.state.medicationlistjson),
-    //         createdby: 1,
-    //         consult_date: new Date().toJSON().slice(0, 10)
-
-
-    //     }
-
-    //     console.warn("++final_obj", final_obj)
-
-    //     // this.CreateMadication(item)
-
-
-    // }
     submitMadicationdata() {
         const final_obj = {
             patient_id: this.state.Medicationdata,
@@ -265,7 +198,6 @@ export default class MedicineScreen extends Component {
             consult_date: new Date().toJSON().slice(0, 10)
         }
 
-        // console.warn("++final_obj", final_obj)
         this.setState({ medicationlistjson: [], selected_medicine_names: [] })
 
         this.CreateMadication(final_obj)
@@ -273,9 +205,7 @@ export default class MedicineScreen extends Component {
 
     }
     async CreateMadication(item) {
-        // console.log(item);
         try {
-            // const response = await Employee.insert_patientdetails(item);
             const response = await Employee.insertmedicationdetails(item);
             console.log(response);
             toast.success(ValidationMessage.P_added, {
@@ -289,21 +219,13 @@ export default class MedicineScreen extends Component {
             });
         }
         finally {
-
-
-            this.setState(
-                {
-
-
-                },
+            this.setState({},
                 () => {
 
                     // this.getAllStates();
-
                 }
             );
         }
-
     }
 
 
@@ -311,11 +233,6 @@ export default class MedicineScreen extends Component {
     backToMain() {
         this.props.closeMedicineScreen()
     }
-
-
-    // handleHide_show = () => {
-    //     this.setState({ isShowMedicine: !this.state.isShowMedicine, activeTab: Strings.purpose })
-    // }
 
     handleHide_show = () => {
         this.setState({ isShowMedicine: true, activeTab: Strings.purpose, isShoweye_btn: true })
@@ -334,8 +251,8 @@ export default class MedicineScreen extends Component {
         var master_medi_potencies_type = this.state.dummyMainMadicationdata[0].potenciestype.filter(item => {
             return item.medicine_type_id === selectedItem;
         });
-        this.setState({ master_medincine_potencies_name: master_medi_potencies_type, selected_medicine_type_index: index, master_idex: null }, () => {
-            this.setState({ filterData: "", med_consume_time: "", med_dosage: 1, dosage: 1, potenciesid: null, medicineid: null })
+        this.setState({ master_medincine_potencies_name: master_medi_potencies_type, selected_medicine_type_index: index, master_idex: null, filterData: "" }, () => {
+            this.setState({ med_consume_time: "", med_dosage: 1, dosage: 1, potenciesid: null, medicineid: null })
         })
     }
     handleClick = () => {
@@ -353,6 +270,20 @@ export default class MedicineScreen extends Component {
             medicationlistjson: final_array
         });
 
+    }
+    handleSelectionTimings = (timing) => {
+        this.setState(prevState => {
+            const { selectedTimings } = prevState;
+            const selectedTimingValue = this.state.consume_dose_timings.find(t => t.timing === timing).value;
+
+            if (selectedTimings.includes(selectedTimingValue)) {
+                // If already selected, remove it
+                return { selectedTimings: selectedTimings.filter(t => t !== selectedTimingValue) };
+            } else {
+                // If not selected, add it
+                return { selectedTimings: [...selectedTimings, selectedTimingValue] };
+            }
+        }, () => { console.warn("++res", this.state.selectedTimings) });
     }
 
     render() {
@@ -450,72 +381,8 @@ export default class MedicineScreen extends Component {
                                                 </div>
                                             </div>
                                         ))}
-                                        {/* < div className="row">
-                                        <div className="col-md-4 padding-tp-10">
-                                            <div className="row">
-                                                <div className="col-6 position-relative">
-                                                    <div className="general-detailes-text label-column">
-                                                        <p>First Name</p>
-                                                    </div>
-                                                </div>
-                                                <div className="col-6">
-                                                    <span className="span-custom">Venkat</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-4 padding-tp-10">
-                                            <div className="row">
-                                                <div className="col-6 position-relative">
-                                                    <div className="general-detailes-text label-column">
-                                                        <p>Last Name</p>
-                                                    </div>
-                                                </div>
-                                                <div className="col-6">
-                                                    <span className="span-custom">Padyala</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-4 padding-tp-10">
-                                            <div className="row">
-                                                <div className="col-6 position-relative">
-                                                    <div className="general-detailes-text label-column">
-                                                        <p>D.O.B</p>
-                                                    </div>
-                                                </div>
-                                                <div className="col-6">
-                                                    <span className="span-custom">19/02/1998</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-4 padding-tp-10">
-                                            <div className="row">
-                                                <div className="col-6 position-relative">
-                                                    <div className="general-detailes-text label-column">
-                                                        <p>Gender</p>
-                                                    </div>
-                                                </div>
-                                                <div className="col-6">
-                                                    <span className="span-custom">Male</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-md-4 padding-tp-10">
-                                            <div className="row">
-                                                <div className="col-6 position-relative">
-                                                    <div className="general-detailes-text label-column">
-                                                        <p>Phone Number</p>
-                                                    </div>
-                                                </div>
-                                                <div className="col-6">
-                                                    <span className="span-custom">9966622122</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> */}
-
                                     </div>
                                     :
-
                                     <div>
                                         {this.state.medication_patient_details && this.state.medication_patient_details.map((detailes) => (
                                             <div className="row" >
@@ -557,47 +424,7 @@ export default class MedicineScreen extends Component {
                                                 </div>
                                             </div>
                                         ))}
-
                                     </div>
-                                    // <div className="row" >
-                                    //     <div className="col-md-4 padding-tp-10">
-                                    //         <div className="row">
-                                    //             <div className="col-6 position-relative">
-                                    //                 <div className="general-detailes-text label-column">
-                                    //                     <p>First Name</p>
-                                    //                 </div>
-                                    //             </div>
-                                    //             <div className="col-6">
-                                    //                 <span className="span-custom">Venkat  Padyala</span>
-                                    //             </div>
-                                    //         </div>
-                                    //     </div>
-                                    //     <div className="col-md-4 padding-tp-10">
-                                    //         <div className="row">
-                                    //             <div className="col-6 position-relative">
-                                    //                 <div className="general-detailes-text label-column">
-                                    //                     <p>Visit Date</p>
-                                    //                 </div>
-                                    //             </div>
-                                    //             <div className="col-6">
-                                    //                 <span className="span-custom">{new Date().toJSON().slice(0, 10)}</span>
-                                    //             </div>
-                                    //         </div>
-                                    //     </div>
-                                    //     <div className="col-md-4 padding-tp-10">
-                                    //         <div className="row">
-                                    //             <div className="col-6 position-relative">
-                                    //                 <div className="general-detailes-text label-column">
-                                    //                     <p>Patient No</p>
-                                    //                 </div>
-                                    //             </div>
-                                    //             <div className="col-6">
-                                    //                 <span className="span-custom">10</span>
-                                    //             </div>
-                                    //         </div>
-                                    //     </div>
-                                    // </div>
-
                                 }
 
                                 <div style={{ textAlign: "end" }}>
@@ -638,31 +465,33 @@ export default class MedicineScreen extends Component {
                                 <div className="offcanvas-body">
                                     <div className="cards_view">
                                         <div className="grid-system equal-height">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div className="row">
-                                                        <div className="col-6">
-                                                            <span className="dateSpan">12-03-2024</span>
+                                            {this.state.medication_details && this.state.medication_details.map((item, index) => (
+                                                <div className="">
+                                                    <div className="card">
+                                                        <div className="card-body">
+                                                            <div className="row">
+                                                                <div className="col-6">
+                                                                    <span className="dateSpan">{item.patient_consultaion_date}</span>
+                                                                </div>
+                                                                <div className="col-6">
+                                                                    <h5 className="card-title text-end"><i className="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
+                                                                </div>
+                                                            </div>
+                                                            <div className="mt-4 tabletslistview">
+                                                                <h4 className="tablets_list pb-2">
+                                                                    Tablet List
+                                                                </h4>
+                                                                <ul className="list-unstyled">
+                                                                    {item.med_details.map((sub_item, sub_index) => (
+                                                                        <li key={sub_index}>{sub_item.medicine_master_name}</li>
+                                                                    ))}
+                                                                </ul>
+                                                            </div>
                                                         </div>
-                                                        <div className="col-6">
-                                                            <h5 className="card-title text-end"><i className="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
-                                                        </div>
-                                                    </div>
-                                                    <div className="mt-4 tabletslistview">
-                                                        <h4 className="tablets_list pb-2">
-                                                            Tablet List
-                                                        </h4>
-                                                        <ul className="list-unstyled">
-                                                            <li> Acetaminophen</li>
-                                                            <li> Gabapentin enacarbil</li>
-                                                            <li> Dolo</li>
-                                                            <li> Methylprednisolone </li>
-                                                            <li> Divalproex sodium</li>
-                                                            <li> Wart Remover </li>
-                                                        </ul>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            ))}
+
                                         </div>
                                     </div>
                                 </div>
@@ -695,14 +524,7 @@ export default class MedicineScreen extends Component {
                                                                                 Tablet List
                                                                             </h4>
                                                                             <ul className="list-unstyled">
-                                                                                {/* <li> Acetaminophen</li>
-                                                                            <li> Gabapentin enacarbil</li>
-                                                                            <li> Dolo</li>
-                                                                            <li> Methylprednisolone </li>
-                                                                            <li> Divalproex sodium</li>
-                                                                            <li> Wart Remover </li> */}
                                                                                 {item.med_details.map((sub_item, sub_index) => (
-                                                                                    // console.warn("++item", item)
                                                                                     <li key={sub_index}>{sub_item.medicine_master_name}</li>
                                                                                 ))}
                                                                             </ul>
@@ -711,170 +533,7 @@ export default class MedicineScreen extends Component {
                                                                 </div>
                                                             </div>
                                                         ))}
-                                                        {/* <div className="">
-                                                            <div className="card">
-                                                                <div className="card-body">
-                                                                    <div className="row">
-                                                                        <div className="col-6">
-                                                                            <span className="dateSpan">12-03-2024</span>
-                                                                        </div>
-                                                                        <div className="col-6">
-                                                                            <h5 className="card-title text-end"><i className="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="mt-4 tabletslistview">
-                                                                        <h4 className="tablets_list pb-2">
-                                                                            Tablet List
-                                                                        </h4>
-                                                                        <ul className="list-unstyled">
-                                                                            <li> Acetaminophen</li>
-                                                                            <li> Gabapentin enacarbil</li>
-                                                                            <li> Dolo</li>
-                                                                            <li> Methylprednisolone </li>
-                                                                            <li> Divalproex sodium</li>
-                                                                            <li> Wart Remover </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="">
-                                                            <div className="card">
-                                                                <div className="card-body">
-                                                                    <div className="row">
-                                                                        <div className="col-6">
-                                                                            <span className="dateSpan">18-05-2024</span>
-                                                                        </div>
-                                                                        <div className="col-6">
-                                                                            <h5 className="card-title text-end"><i className="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="mt-4 tabletslistview">
-                                                                        <h4 className="tablets_list pb-2">
-                                                                            Tablet List
-                                                                        </h4>
-                                                                        <ul className="list-unstyled">
-                                                                            <li> Acetaminophen</li>
-                                                                            <li> Gabapentin enacarbil</li>
-                                                                            <li> Dolo</li>
-                                                                            <li> Methylprednisolone </li>
-                                                                            <li> Divalproex sodium</li>
-                                                                            <li> Wart Remover </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
 
-                                                        <div className="">
-                                                            <div className="card">
-                                                                <div className="card-body">
-                                                                    <div className="row">
-                                                                        <div className="col-6">
-                                                                            <span className="dateSpan">11-03-2024</span>
-                                                                        </div>
-                                                                        <div className="col-6">
-                                                                            <h5 className="card-title text-end"><i className="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="mt-4 tabletslistview">
-                                                                        <h4 className="tablets_list pb-2">
-                                                                            Tablet List
-                                                                        </h4>
-                                                                        <ul className="list-unstyled">
-                                                                            <li> Acetaminophen</li>
-                                                                            <li> Gabapentin enacarbil</li>
-                                                                            <li> Dolo</li>
-                                                                            <li> Methylprednisolone </li>
-                                                                            <li> Divalproex sodium</li>
-                                                                            <li> Wart Remover </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="">
-                                                            <div className="card">
-                                                                <div className="card-body">
-                                                                    <div className="row">
-                                                                        <div className="col-6">
-                                                                            <span className="dateSpan">30-05-2024</span>
-                                                                        </div>
-                                                                        <div className="col-6">
-                                                                            <h5 className="card-title text-end"><i className="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="mt-4 tabletslistview">
-                                                                        <h4 className="tablets_list pb-2">
-                                                                            Tablet List
-                                                                        </h4>
-                                                                        <ul className="list-unstyled">
-                                                                            <li> Acetaminophen</li>
-                                                                            <li> Gabapentin enacarbil</li>
-                                                                            <li> Dolo</li>
-                                                                            <li> Methylprednisolone </li>
-                                                                            <li> Divalproex sodium</li>
-                                                                            <li> Wart Remover </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="">
-                                                            <div className="card">
-                                                                <div className="card-body">
-                                                                    <div className="row">
-                                                                        <div className="col-6">
-                                                                            <span className="dateSpan">18-03-2024</span>
-                                                                        </div>
-                                                                        <div className="col-6">
-                                                                            <h5 className="card-title text-end"><i className="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="mt-4 tabletslistview">
-                                                                        <h4 className="tablets_list pb-2">
-                                                                            Tablet List
-                                                                        </h4>
-                                                                        <ul className="list-unstyled">
-                                                                            <li> Acetaminophen</li>
-                                                                            <li> Gabapentin enacarbil</li>
-                                                                            <li> Dolo</li>
-                                                                            <li> Methylprednisolone </li>
-                                                                            <li> Divalproex sodium</li>
-                                                                            <li> Wart Remover </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="">
-                                                            <div className="card">
-                                                                <div className="card-body">
-                                                                    <div className="row">
-                                                                        <div className="col-6">
-                                                                            <span className="dateSpan">13-04-2024</span>
-                                                                        </div>
-                                                                        <div className="col-6">
-                                                                            <h5 className="card-title text-end"><i className="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="mt-4 tabletslistview">
-                                                                        <h4 className="tablets_list pb-2">
-                                                                            Tablet List
-                                                                        </h4>
-                                                                        <ul className="list-unstyled">
-                                                                            <li> Acetaminophen</li>
-                                                                            <li> Gabapentin enacarbil</li>
-                                                                            <li> Dolo</li>
-                                                                            <li> Methylprednisolone </li>
-                                                                            <li> Divalproex sodium</li>
-                                                                            <li> Wart Remover </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div> */}
                                                     </div>
                                                 </div>
                                             </div>
@@ -945,35 +604,31 @@ export default class MedicineScreen extends Component {
                                                             <span style={{ position: "absolute", bottom: 0, right: 0, background: "grey", padding: "9px 5px", overflow: "hidden", borderRadius: "0px 4px 4px 0px", color: "white", fontSize: "13px" }}> Dose </span>
                                                         </div>
                                                         <div style={{ display: "inline-block", position: "relative" }}>
-                                                            {/* <input style={{ marginTop: 10, marginLeft: 10 }} className="dose_input"
-                                                                placeholder="Usage Time"
-                                                                value={this.state.usage_time}
-                                                                onChange={(text) => { this.setState({ usage_time: text.target.value }) }} /> */}
-                                                            {/* <span style={{ position: "absolute", bottom: 0, right: 0, background: "grey", padding: 3, overflow: "hidden", color: "white" }}> Weaks  </span> */}
 
                                                             <div className="ms-3 day_wise">
                                                                 <ul className="list-inline">
-                                                                    <li className="list-inline-item">M</li>
-                                                                    <li className="list-inline-item">A</li>
-                                                                    <li className="list-inline-item">E</li>
-                                                                    <li className="list-inline-item">N</li>
+                                                                    {this.state.consume_dose_timings.map(((item, index) => (
+                                                                        <li className="list-inline-item border_1_solid_5r_grey" onClick={() => { this.handleSelectionTimings(item.timing) }} style={{ background: this.state.selectedTimings.includes(item.value) ? '#003d74' : '#dcdcdc', color: this.state.selectedTimings.includes(item.value) ? 'white' : 'black' }}>{item.timing}</li>
+
+                                                                    )))}
                                                                 </ul>
                                                             </div>
                                                         </div>
-                                                        <div className="sub_tabs_view overflow-auto" style={{ height: this.state.filterData ? 250 : null }}>
-                                                            <ul className="list-unstyled">
-                                                                {this.state.filterdArray.map((item, index) => (
-                                                                    <li style={{ fontSize: "14px", color: "#626262" }}
-                                                                        key={index}
-                                                                        onClick={() => {
-                                                                            this.setState({ selcted_master_name: item.medicine_master_name, filterData: item.medicine_master_name });
-                                                                        }} >
-                                                                        {item.medicine_master_name}
-                                                                    </li>
-                                                                ))}
-                                                            </ul>
-
-                                                        </div>
+                                                        {this.state.filterData &&
+                                                            <div className="sub_tabs_view overflow-auto" style={{ height: this.state.filterData ? 250 : 0 }}>
+                                                                <ul className="list-unstyled">
+                                                                    {this.state.filterdArray.map((item, index) => (
+                                                                        <li style={{ fontSize: "14px", color: "#626262" }}
+                                                                            key={index}
+                                                                            onClick={() => {
+                                                                                this.setState({ selcted_master_name: item.medicine_master_name, filterData: item.medicine_master_name });
+                                                                            }} >
+                                                                            {item.medicine_master_name}
+                                                                        </li>
+                                                                    ))}
+                                                                </ul>
+                                                            </div>
+                                                        }
                                                         {this.state.selcted_master_name &&
                                                             <div className="selected_medicine">
                                                                 <div style={{ color: "black", fontSize: 17 }}>
@@ -1002,7 +657,7 @@ export default class MedicineScreen extends Component {
                                                                     ></textarea>
                                                                 </div>
                                                             </div>
-                                                            <div className="col-6">
+                                                            <div className="text-end">
                                                                 <Button className="medicine_update mt-2" onClick={() => { this.submitMadicationdata() }}>Submit</Button>
                                                             </div>
                                                         </div>
@@ -1010,13 +665,13 @@ export default class MedicineScreen extends Component {
                                                             {this.state.selected_medicine_names.length > 0 &&
                                                                 <div>
                                                                     <ul className="list-unstyled">
-                                                                    {this.state.selected_medicine_names.map((item, index) => {
-                                                                        console.warn("++item", item)
-                                                                        return (<li className="bottom_hightlets" key={index}>{item.selected_medicine_name} - {item.potencies_type_name}- {item.selected_dosage}d <Button className="btn-danger_cross" onClick={() => {
-                                                                            this.handleDelete(index)
-                                                                        }}><i className="fa fa-times" aria-hidden="true"></i>
-                                                                        </Button></li>)
-                                                                    })}
+                                                                        {this.state.selected_medicine_names.map((item, index) => {
+                                                                            console.warn("++item", item)
+                                                                            return (<li className="bottom_hightlets" key={index}>{item.selected_medicine_name} - {item.potencies_type_name}- {item.selected_dosage}d <Button className="btn-danger_cross" onClick={() => {
+                                                                                this.handleDelete(index)
+                                                                            }}><i className="fa fa-times" aria-hidden="true"></i>
+                                                                            </Button></li>)
+                                                                        })}
 
                                                                     </ul>
                                                                 </div>
@@ -1029,16 +684,6 @@ export default class MedicineScreen extends Component {
                                         }
                                         {this.state.activeTab === Strings.purpose &&
                                             <div className="mt-3 purpose_shadow text_area">
-                                                {/* <div className="row">
-                                                    <div className="col-6">
-                                                        <span>Purpose</span>
-                                                        <textarea></textarea>
-                                                    </div>
-                                                    <div className="col-6">
-                                                        <span>Syntomus</span>
-                                                        <textarea></textarea>
-                                                    </div>
-                                                </div> */}
                                                 <div className="row">
                                                     <div className="col-6">
                                                         <div>
@@ -1066,32 +711,18 @@ export default class MedicineScreen extends Component {
                                     {!this.state.isRightBranchHidden &&
                                         <div className="col-md-6">
                                             <div className="card">
-                                                {/* {this.state.isShowMedicine &&
-                                                    <div>
-                                                        <div className="row">
-                                                            <div className="col-6">
-                                                                <h5 className="card-title"> 12-03-2024</h5>
-                                                            </div>
-                                                            <div className="col-6">
-                                                                <span className="dateSpan"> <i className="fa fa-user-md" aria-hidden="true"></i> Sanath K</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="mt-4 tabletslistview">
-                                                            <h4 className="tablets_list pb-2">
-                                                                Tablet List
-                                                            </h4>
-                                                            <ul className="list-unstyled">
-                                                                <li> Acetaminophen</li>
-                                                                <li> Gabapentin enacarbil</li>
-                                                                <li> Dolo</li>
-                                                                <li> Methylprednisolone </li>
-                                                                <li> Divalproex sodium</li>
-                                                                <li> Wart Remover </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                } */}
-                                                <img src="https://cdn-images.resumelab.com/pages/teaching_assistant_cta1_new.jpg" className="w-100" />
+                                                <div>
+                                                    <h5 className="card-title">Patient Case Sheet</h5>
+                                                    <img src="https://cdn-images.resumelab.com/pages/teaching_assistant_cta1_new.jpg" className="w-100" />
+                                                    {/* <embed
+                                                        src={"https://cdn-images.resumelab.com/pages/teaching_assistant_cta1_new.jpg"}
+                                                        className="w-100 pdf-height"
+                                                        type="application/pdf"
+                                                        name='X-Frame-Options'
+                                                        value='sameorigin'
+                                                    // style={{ height: '500px' }} // Set an appropriate height for the PDF viewer
+                                                    /> */}
+                                                </div>
                                             </div>
                                         </div>
                                     }

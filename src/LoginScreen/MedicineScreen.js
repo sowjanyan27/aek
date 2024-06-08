@@ -5,6 +5,7 @@ import { Strings } from "../strings/Strings";
 import { toast } from "react-toastify";
 import { ValidationMessage } from "../helpers/ValidationMessage";
 import { Common } from "../helpers/common";
+// import { Tooltip } from "@mui/material/Tooltip";
 
 export default class MedicineScreen extends Component {
     constructor(props) {
@@ -173,7 +174,7 @@ export default class MedicineScreen extends Component {
             medicineid: this.state.medicine_type_id,
             potenciesid: this.state.selected_potencies_type_id,
             med_dosage: this.state.dosage,
-            med_consume_time: this.state.usage_time
+            med_consume_time: this.state.selectedTimings.join(",")
         }
         var names_array = [...this.state.selected_medicine_names, names_list]
         var medication_obj = [...this.state.medicationlistjson, obj]
@@ -198,7 +199,7 @@ export default class MedicineScreen extends Component {
             consult_date: new Date().toJSON().slice(0, 10)
         }
 
-        this.setState({ medicationlistjson: [], selected_medicine_names: [] })
+        this.setState({ medicationlistjson: [], selected_medicine_names: [], patient_ailment: "", patient_medicalreports: "", next_med: "", spe_instruct: "" })
 
         this.CreateMadication(final_obj)
 
@@ -429,12 +430,14 @@ export default class MedicineScreen extends Component {
 
                                 <div style={{ textAlign: "end" }}>
                                     {!this.state.isShowMedicine &&
+                                        // <Tooltip title="Add Medicine" arrow>
                                         <Button className="btn btn-success me-3"
                                             data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" id="clicksButton"
                                             onClick={() => { this.handleHide_show(); this.getmedaticationdetails() }}
                                         >
                                             <i className="fa fa-plus" aria-hidden="true"></i>
                                         </Button>
+                                        // </Tooltip>
                                     }
                                     {this.state.isShowMedicine &&
                                         <Button className="btn btn-success me-3"
@@ -454,6 +457,9 @@ export default class MedicineScreen extends Component {
                                     }
 
                                 </div>
+                                <div className="text-end mt-3 mb-4 position-relative">
+                                    <span className="sidelabel_view">Case Sheet</span>
+                                </div>
                             </div>
                         </div>
                         <div className="side_panel">
@@ -465,32 +471,33 @@ export default class MedicineScreen extends Component {
                                 <div className="offcanvas-body">
                                     <div className="cards_view">
                                         <div className="grid-system equal-height">
-                                            {this.state.medication_details && this.state.medication_details.map((item, index) => (
+                                            {this.state.medication_details && this.state.medication_details.length > 0 && (
                                                 <div className="">
                                                     <div className="card">
                                                         <div className="card-body">
                                                             <div className="row">
                                                                 <div className="col-6">
-                                                                    <span className="dateSpan">{item.patient_consultaion_date}</span>
+                                                                    <span className="dateSpan">{this.state.medication_details[0].patient_consultaion_date}</span>
                                                                 </div>
                                                                 <div className="col-6">
                                                                     <h5 className="card-title text-end"><i className="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
                                                                 </div>
                                                             </div>
                                                             <div className="mt-4 tabletslistview">
-                                                                <h4 className="tablets_list pb-2">
+                                                                {/* <h4 className="tablets_list pb-2">
                                                                     Tablet List
-                                                                </h4>
+                                                                </h4> */}
                                                                 <ul className="list-unstyled">
-                                                                    {item.med_details.map((sub_item, sub_index) => (
-                                                                        <li key={sub_index}>{sub_item.medicine_master_name}</li>
+                                                                    {this.state.medication_details[0].med_details.map((sub_item, sub_index) => (
+                                                                        <li key={sub_index}>{sub_item.medicine_master_name} - <span style={{ color: "maroon", fontWeight: 700 }}>{sub_item.potencies_type_name} </span> - <span style={{ color: "blue", fontWeight: 700 }}> {sub_item.dosage} d </span></li>
                                                                     ))}
                                                                 </ul>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            ))}
+                                            )
+                                            }
 
                                         </div>
                                     </div>
@@ -509,7 +516,7 @@ export default class MedicineScreen extends Component {
                                                     <div className="grid-system equal-height">
                                                         {this.state.medication_details && this.state.medication_details.map((item, index) => (
                                                             <div className="">
-                                                                <div className="card">
+                                                                <div className="card" style={{ cursor: "pointer" }} data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                                                     <div className="card-body">
                                                                         <div className="row">
                                                                             <div className="col-6">
@@ -525,7 +532,9 @@ export default class MedicineScreen extends Component {
                                                                             </h4>
                                                                             <ul className="list-unstyled">
                                                                                 {item.med_details.map((sub_item, sub_index) => (
-                                                                                    <li key={sub_index}>{sub_item.medicine_master_name}</li>
+                                                                                    // <li key={sub_index}>{sub_item.medicine_master_name}</li>
+                                                                                    <li key={sub_index}>{sub_item.medicine_master_name} - {sub_item.potencies_type_name} -{sub_item.dosage} d</li>
+
                                                                                 ))}
                                                                             </ul>
                                                                         </div>
@@ -535,6 +544,25 @@ export default class MedicineScreen extends Component {
                                                         ))}
 
                                                     </div>
+                                                    {/* popup-view-start */}
+                                                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">TABLET LIST</h1>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    lorem ipsum
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="button" class="btn btn-primary">Understood</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {/* popup-view-end */}
                                                 </div>
                                             </div>
                                         }
@@ -578,6 +606,7 @@ export default class MedicineScreen extends Component {
                                                 </div>
                                                 <div className="mt-2">
                                                     <div className="">
+
                                                         {this.state.filterData &&
                                                             <div className="center_content">
                                                                 <ul className="list-unstyled">
@@ -587,35 +616,37 @@ export default class MedicineScreen extends Component {
                                                                 </ul>
                                                             </div>
                                                         }
-                                                        <input className="dose_input"
-                                                            style={{ marginTop: 10 }}
-                                                            placeholder="Search for medicine"
-                                                            value={this.state.filterData}
-                                                            onChange={(text) => { this.filterMedicen(text.target.value) }}
-                                                        // onFocus={() => { this.handle_medicineSearch() }}
+                                                        <div className="center_content">
+                                                            <input className="dose_input"
+                                                                style={{ marginTop: 10 }}
+                                                                placeholder="Search for medicine"
+                                                                value={this.state.filterData}
+                                                                onChange={(text) => { this.filterMedicen(text.target.value) }}
+                                                            // onFocus={() => { this.handle_medicineSearch() }}
 
-                                                        />
-                                                        <div style={{ display: "inline-block", position: "relative" }}>
-                                                            <input style={{ marginTop: 10, marginLeft: 10, width: "145px" }} className="dose_input"
-                                                                placeholder="Enter Dose"
-                                                                value={this.state.dosage}
-                                                                maxLength={10}
-                                                                onChange={(text) => { this.enterDose(text.target.value) }} />
-                                                            <span style={{ position: "absolute", bottom: 0, right: 0, background: "grey", padding: "9px 5px", overflow: "hidden", borderRadius: "0px 4px 4px 0px", color: "white", fontSize: "13px" }}> Dose </span>
-                                                        </div>
-                                                        <div style={{ display: "inline-block", position: "relative" }}>
+                                                            />
+                                                            <div style={{ display: "inline-block", position: "relative" }}>
+                                                                <input style={{ marginTop: 10, marginLeft: 10, width: "145px" }} className="dose_input"
+                                                                    placeholder="Enter Dose"
+                                                                    value={this.state.dosage}
+                                                                    maxLength={10}
+                                                                    onChange={(text) => { this.enterDose(text.target.value) }} />
+                                                                <span style={{ position: "absolute", bottom: 0, right: 0, background: "grey", padding: "9px 5px", overflow: "hidden", borderRadius: "0px 4px 4px 0px", color: "white", fontSize: "13px" }}> Dose </span>
+                                                            </div>
+                                                            <div style={{ display: "inline-block", marginTop: 10, position: "relative" }}>
 
-                                                            <div className="ms-3 day_wise">
-                                                                <ul className="list-inline">
-                                                                    {this.state.consume_dose_timings.map(((item, index) => (
-                                                                        <li className="list-inline-item border_1_solid_5r_grey" onClick={() => { this.handleSelectionTimings(item.timing) }} style={{ background: this.state.selectedTimings.includes(item.value) ? '#003d74' : '#dcdcdc', color: this.state.selectedTimings.includes(item.value) ? 'white' : 'black' }}>{item.timing}</li>
+                                                                <div className="ms-3 day_wise">
+                                                                    <ul className="list-inline mb-0">
+                                                                        {this.state.consume_dose_timings.map(((item, index) => (
+                                                                            <li className="list-inline-item border_1_solid_5r_grey" onClick={() => { this.handleSelectionTimings(item.timing) }} style={{ background: this.state.selectedTimings.includes(item.value) ? '#003d74' : '#dcdcdc', color: this.state.selectedTimings.includes(item.value) ? 'white' : 'black' }}>{item.timing}</li>
 
-                                                                    )))}
-                                                                </ul>
+                                                                        )))}
+                                                                    </ul>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         {this.state.filterData &&
-                                                            <div className="sub_tabs_view overflow-auto" style={{ height: this.state.filterData ? 250 : 0 }}>
+                                                            <div className="sub_tabs_view search_list overflow-auto" style={{ height: this.state.filterData ? 250 : 0 }}>
                                                                 <ul className="list-unstyled">
                                                                     {this.state.filterdArray.map((item, index) => (
                                                                         <li style={{ fontSize: "14px", color: "#626262" }}
@@ -629,6 +660,7 @@ export default class MedicineScreen extends Component {
                                                                 </ul>
                                                             </div>
                                                         }
+
                                                         {this.state.selcted_master_name &&
                                                             <div className="selected_medicine">
                                                                 <div style={{ color: "black", fontSize: 17 }}>
@@ -657,11 +689,27 @@ export default class MedicineScreen extends Component {
                                                                     ></textarea>
                                                                 </div>
                                                             </div>
+                                                            <div>
+                                                                {this.state.selected_medicine_names.length > 0 &&
+                                                                    <div>
+                                                                        <ul className="list-unstyled">
+                                                                            {this.state.selected_medicine_names.map((item, index) => {
+                                                                                console.warn("++item", item)
+                                                                                return (<li className="bottom_hightlets" key={index}>{item.selected_medicine_name} - {item.potencies_type_name}- {item.selected_dosage}d <Button className="btn-danger_cross" onClick={() => {
+                                                                                    this.handleDelete(index)
+                                                                                }}><i className="fa fa-times" aria-hidden="true"></i>
+                                                                                </Button></li>)
+                                                                            })}
+
+                                                                        </ul>
+                                                                    </div>
+                                                                }
+                                                            </div>
                                                             <div className="text-end">
                                                                 <Button className="medicine_update mt-2" onClick={() => { this.submitMadicationdata() }}>Submit</Button>
                                                             </div>
                                                         </div>
-                                                        <div>
+                                                        {/* <div>
                                                             {this.state.selected_medicine_names.length > 0 &&
                                                                 <div>
                                                                     <ul className="list-unstyled">
@@ -676,7 +724,7 @@ export default class MedicineScreen extends Component {
                                                                     </ul>
                                                                 </div>
                                                             }
-                                                        </div>
+                                                        </div> */}
                                                     </div>
                                                 </div>
                                             </div>
@@ -711,6 +759,7 @@ export default class MedicineScreen extends Component {
                                     {!this.state.isRightBranchHidden &&
                                         <div className="col-md-6">
                                             <div className="card">
+                                                <span className="minus_circle"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
                                                 <div>
                                                     <h5 className="card-title">Patient Case Sheet</h5>
                                                     <img src="https://cdn-images.resumelab.com/pages/teaching_assistant_cta1_new.jpg" className="w-100" />

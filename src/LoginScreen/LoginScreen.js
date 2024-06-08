@@ -18,7 +18,7 @@ class LoginScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            patientid: "1",
+            patientid: 0,
             patientnum: "",
             firstName: "",
             lastName: "",
@@ -205,6 +205,12 @@ class LoginScreen extends Component {
             });
         }
     }
+
+    formatDate(dateString) {
+        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        return new Date(dateString).toLocaleDateString('en-GB', options);
+    }
+    
     handleChangePage = (event, newPage) => {
         this.setState({ page: newPage });
     };
@@ -300,59 +306,6 @@ class LoginScreen extends Component {
 
 
     loginclick() {
-
-        //   // extra text view // // 
-
-        // if (!this.state.patientid) {
-        //     this.setState({ showpatientIdview: true })
-        //     return
-        // }
-        // if (!this.state.patientnum) {
-        //     this.setState({ showpatientNumview: true })
-        //     return
-        // }
-        // if (!this.state.firstName) {
-        //     this.setState({ showpatientFirstnameview: true })
-        //     return
-        // }
-        // if (!this.state.lastName) {
-        //     this.setState({ showpatientLastnameview: true })
-        //     return
-        // }
-        // if (!this.state.age) {
-        //     this.setState({ showageview: true })
-        //     return
-        // }
-        // if (!this.state.dateofBirth) {
-        //     this.setState({ showBirtDateview: true })
-        //     return
-        // }
-        // if (!this.state.timeofBirth) {
-        //     this.setState({ showBirthTimeview: true })
-        //     return
-        // }
-        // if (!this.state.gender) {
-        //     this.setState({ showgenderSelectionview: true })
-        //     return
-        // }
-        // toast.success(ValidationMessage.V_Added, {
-        //     toastId: "success"
-        // });
-        // setTimeout(() => {
-
-        //     this.setState({ isFormView: false })
-        // }, 1000)
-
-        // return
-
-        // // Showing pop up // //
-
-        if (!this.state.patientid) {
-            toast.warn(ValidationMessage.p_id, {
-                toastId: "pid",
-            });
-            return;
-        }
         if (!this.state.patientnum) {
             toast.warn(ValidationMessage.p_num, {
                 toastId: "p_num",
@@ -368,12 +321,6 @@ class LoginScreen extends Component {
         if (!this.state.lastName) {
             toast.warn(ValidationMessage.p_lastname, {
                 toastId: "p_lastname",
-            });
-            return;
-        }
-        if (!this.state.patientid) {
-            toast.warn(ValidationMessage.p_id, {
-                toastId: "pid",
             });
             return;
         }
@@ -401,15 +348,10 @@ class LoginScreen extends Component {
             });
             return;
         }
-        // toast.success(ValidationMessage.V_Added, {
-        //     toastId: 'success',
-        //     onClose: () => {
-        //         this.setState({ isFormView: false });
-        //     }
-        // });
-
+       
+       
         const patientDetails = {
-            patientid: Number(0),
+            patientid: this.state.showSave_btn?Number(0):this.state.patientid,
             patient_num: this.state.patientnum,
             first_visitdate: this.state.firstVisit,
             p_first_name: this.state.firstName,
@@ -431,6 +373,7 @@ class LoginScreen extends Component {
         }
 
         console.log(patientDetails, '-----patientdetails----')
+        alert(patientDetails.patientid)
         this.CreateItem(patientDetails)
 
         // this.setState({ isFormView: false });
@@ -442,7 +385,8 @@ class LoginScreen extends Component {
         try {
             const response = await Employee.insert_patientdetails(item);
             console.log(response);
-            toast.success(ValidationMessage.P_added, {
+          
+            toast.success((this.state.showSave_btn?ValidationMessage.P_added:ValidationMessage.p_updated), {
                 toastId: "Patientdetails",
             });
             this.setState({ isTableView: false, isFormView: false }, () => {
@@ -462,7 +406,7 @@ class LoginScreen extends Component {
 
     dataClear() {
         this.setState({
-            patientid: "1",
+            patientid: 0,
             patientnum: "",
             firstName: "",
             lastName: "",
@@ -538,7 +482,7 @@ class LoginScreen extends Component {
                 phoneNumber: (item.patient_mobile_no != null && item.patient_mobile_no != undefined) ? item.patient_mobile_no : "",
                 gender: (item.gender_name != null && item.gender_name != undefined) ? item.gender_name : "",
                 dateofBirth: (item.patient_dob != null && item.patient_dob != undefined) ? item.patient_dob : "",
-                patient_attachment_name: item.attachment_name,
+                file_name: item.attachment_name,
             })
         })
         console.warn("++item", item)
@@ -558,6 +502,7 @@ class LoginScreen extends Component {
     }
     handleDeletion() {
         // this.dataClear(),
+        this.getallpatientdetails()
         this.handleFormView(false)
     }
     onSubmit = () => {
@@ -601,7 +546,7 @@ class LoginScreen extends Component {
         const sanitizedFileName = file.name.replace(/\s+/g, '_');
         this.setState(
             {
-                menu_ing_name: sanitizedFileName,
+                db_img_path: sanitizedFileName,
             },
             () => {
                 let formData = new FormData();
@@ -638,8 +583,10 @@ class LoginScreen extends Component {
                             <div className="position_relative">
                                 <div className="margin_bottom_15 evens-align mt-4">
                                     <h3 className="info-text">Patient Info</h3>
+                                    <Tooltip title="Add Patient Details">
                                     <Button className="btn handle_content" onClick={() => { this.handleFormView(true) }}><i className="fa fa-plus handle_add_button_color_white  font_size_14_normal" aria-hidden="true"></i>
                                     </Button>
+                                    </Tooltip>
                                     <div className="show_content  p-2 rounded">Add New</div>
                                 </div>
                                 <div className="w-100 mt-2 mb-4 tables-shadow">
@@ -676,7 +623,7 @@ class LoginScreen extends Component {
                                             <Table className="table table-bordered align_p_tag">
                                                 <TableHead className="table_header_light_grey">
                                                     <TableRow>
-                                                        <TableCell className="font_family_serif table_header_text_maroon">ID</TableCell>
+                                                        <TableCell className="font_family_serif table_header_text_maroon"> Patient Code</TableCell>
                                                         <TableCell className="font_family_serif table_header_text_maroon">First Name</TableCell>
                                                         <TableCell className="font_family_serif table_header_text_maroon">Last Name</TableCell>
                                                         <TableCell className="font_family_serif table_header_text_maroon">D.O.B</TableCell>
@@ -691,10 +638,10 @@ class LoginScreen extends Component {
                                                         : this.state.Maindata
                                                     ).map((row) => (
                                                         <TableRow key={row.patient_details_id}>
-                                                            <TableCell className="font_family_serif">{row.patient_details_id}</TableCell>
+                                                            <TableCell className="font_family_serif">{row.patient_number}</TableCell>
                                                             <TableCell className="font_family_serif">{row.patient_first_name}</TableCell>
                                                             <TableCell className="font_family_serif">{row.patient_last_name}</TableCell>
-                                                            <TableCell className="font_family_serif">{row.patient_dob}</TableCell>
+                                                            <TableCell className="font_family_serif">{this.formatDate(row.patient_dob)}</TableCell>
                                                             <TableCell className="font_family_serif">{row.gender_name}</TableCell>
                                                             <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
                                                             <TableCell>
@@ -738,23 +685,18 @@ class LoginScreen extends Component {
                                 <div className="background_color_light_grey shadow_box">
                                     <form>
                                         <div className="margin_bottom_15 w-75 me-auto ms-auto evens-align mt-4 position-relative">
-                                            <h3 className="info-text">{Strings.registration}</h3>
+                                            <h3 className="info-text">{Strings.patientdetails}</h3>
                                             <div className="top-right-icons">
+                                            <Tooltip title="Back" arrow>
                                                 <span onClick={() => { this.handleDeletion() }}>
                                                     <i className="fa fa-arrow-left" aria-hidden="true"></i>
                                                 </span>
-
+                                                </Tooltip>
                                             </div>
+               
                                         </div>
                                         <div className="w-75 me-auto ms-auto">
                                             <div className="row">
-                                                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20 ">
-                                                    <div className="form-group text_align_left ">
-                                                        <label htmlFor="PatientId" className="label_texts mar_b_8"> {Strings.patient_id} <span className="logo_color_red"> *</span></label>
-                                                        <input type="text" disabled={true} onChange={(text) => this.handleSelectedData(text, Strings.patient_id)} className="form-control input_hight_45" id="near_area" value={this.state.patientid} placeholder={Strings.patient_id} />
-                                                        {this.state.showpatientIdview && <span className="" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
-                                                    </div>
-                                                </div>
                                                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                                     <div className="form-group text_align_left" >
                                                         <label htmlFor="PatientNumber" className="label_texts mar_b_8">{Strings.patient_num} <span className="logo_color_red"> *</span></label>
@@ -788,24 +730,32 @@ class LoginScreen extends Component {
                                                         {this.state.showpatientLastnameview && <span className="" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
                                                     </div>
                                                 </div>
-                                                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
-                                                    <div className="form-group text_align_left" >
-                                                        <label htmlFor="BirthPlace" className="label_texts mar_b_8">{Strings.birth_place}</label>
-                                                        <input type="text" disabled={!this.state.disabledInput} onChange={(text) => { this.handleSelectedData(text, Strings.birth_place) }} className="form-control input_hight_45" id="birth_place" value={this.state.birthofPlace} placeholder={Strings.birth_place} />
+                                                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
+                                                    <div className="form-group text_align_left marginTop_20" >
+                                                        <label className="me-2 label_texts">Gender: <span className="logo_color_red"> *</span></label>
+                                                        <div className="form-check form-check-inline">
+                                                            <input required disabled={!this.state.disabledInput} className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value={"1"} checked={this.state.gender_name === "1"} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
+                                                            <label className="form-check-label" for="inlineRadio1">{Strings.male}</label>
+                                                        </div>
+                                                        <div className="form-check form-check-inline">
+                                                            <input required disabled={!this.state.disabledInput} className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value={"2"} checked={this.state.gender_name === "2"} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
+                                                            <label className="form-check-label" for="inlineRadio2">{Strings.female}</label>
+                                                        </div>
+                                                        {this.state.showgenderSelectionview && <span className="" style={{ color: "red", fontSize: 12 }}>{Strings.please_select_one}</span>}
                                                     </div>
                                                 </div>
                                                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                                     <div className="form-group text_align_left" >
-                                                        <label htmlFor="NearBirthPlace" className="label_texts mar_b_8">{Strings.nearest_birth_place}</label>
-                                                        <input type="text" disabled={!this.state.disabledInput} onChange={(text) => this.handleSelectedData(text, Strings.nearest_birth_place)} className="form-control input_hight_45" id="near_area" value={this.state.nearestBirthPlace} placeholder={Strings.nearest_birth_place} />
+                                                        <label htmlFor="Address" className="label_texts mar_b_8">{Strings.address}</label>
+                                                        <textarea rows={3} cols={40} disabled={!this.state.disabledInput} className="form-control" onChange={(text) => { this.handleSelectedData(text, Strings.address) }} value={this.state.address} placeholder={Strings.address} />
                                                     </div>
                                                 </div>
                                                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                                     <div className="row">
                                                         <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
                                                             <div className="form-group text_align_left" >
-                                                                <label htmlFor="EnterAge" className="label_texts mar_b_8"> {Strings.enter_age} <span className="logo_color_red"> *</span></label>
-                                                                <input required type="text" disabled={!this.state.disabledInput} onChange={(text) => { this.handleSelectedData(text, Strings.enter_age) }} className="form-control input_hight_45" id="age" value={this.state.age} placeholder={Strings.enter_age} />
+                                                                <label htmlFor="Age" className="label_texts mar_b_8"> {Strings.enter_age} <span className="logo_color_red"> *</span></label>
+                                                                <input required type="text"  maxLength="3"disabled={!this.state.disabledInput} onChange={(text) => { this.handleSelectedData(text, Strings.enter_age) }} className="form-control input_hight_45" id="age" value={this.state.age} placeholder={Strings.enter_age} />
                                                                 {this.state.showageview && <span className="" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
                                                             </div>
                                                         </div>
@@ -828,10 +778,18 @@ class LoginScreen extends Component {
                                                 </div>
                                                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                                     <div className="form-group text_align_left" >
-                                                        <label htmlFor="Address" className="label_texts mar_b_8">{Strings.address}</label>
-                                                        <textarea rows={4} cols={40} disabled={!this.state.disabledInput} style={{ resize: "none" }} className="form-control input_hight_45" onChange={(text) => { this.handleSelectedData(text, Strings.address) }} value={this.state.address} placeholder={Strings.address} />
+                                                        <label htmlFor="BirthPlace" className="label_texts mar_b_8">{Strings.birth_place}</label>
+                                                        <input type="text" disabled={!this.state.disabledInput} onChange={(text) => { this.handleSelectedData(text, Strings.birth_place) }} className="form-control input_hight_45" id="birth_place" value={this.state.birthofPlace} placeholder={Strings.birth_place} />
                                                     </div>
                                                 </div>
+                                                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
+                                                    <div className="form-group text_align_left" >
+                                                        <label htmlFor="NearBirthPlace" className="label_texts mar_b_8">{Strings.nearest_birth_place}</label>
+                                                        <input type="text" disabled={!this.state.disabledInput} onChange={(text) => this.handleSelectedData(text, Strings.nearest_birth_place)} className="form-control input_hight_45" id="near_area" value={this.state.nearestBirthPlace} placeholder={Strings.nearest_birth_place} />
+                                                    </div>
+                                                </div>
+                                              
+                                               
                                                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                                     <div className="form-group text_align_left" >
                                                         <label htmlFor="selectOption" className="label_texts mar_b_8"> {Strings.state} </label>
@@ -863,20 +821,7 @@ class LoginScreen extends Component {
                                                     </div>
                                                 </div>
 
-                                                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
-                                                    <div className="form-group text_align_left marginTop_20" >
-                                                        <label className="me-2 label_texts">Gender: <span className="logo_color_red"> *</span></label>
-                                                        <div className="form-check form-check-inline">
-                                                            <input required disabled={!this.state.disabledInput} className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value={"1"} checked={this.state.gender_name === "1"} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
-                                                            <label className="form-check-label" for="inlineRadio1">{Strings.male}</label>
-                                                        </div>
-                                                        <div className="form-check form-check-inline">
-                                                            <input required disabled={!this.state.disabledInput} className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value={"2"} checked={this.state.gender_name === "2"} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
-                                                            <label className="form-check-label" for="inlineRadio2">{Strings.female}</label>
-                                                        </div>
-                                                        {this.state.showgenderSelectionview && <span className="" style={{ color: "red", fontSize: 12 }}>{Strings.please_select_one}</span>}
-                                                    </div>
-                                                </div>
+                                               
 
                                                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 marginTop_20 margin_bottom_25">
                                                     <div className="form-group text_align_left">
@@ -910,7 +855,7 @@ class LoginScreen extends Component {
                                                 {this.state.showUpDate_btn &&
                                                     <div>
                                                         <Button onClick={() => { this.handleDeletion() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
-                                                        <Button onClick={() => this.handleEditedValues()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.update}</Button>
+                                                        <Button onClick={() => this.loginclick()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.update}</Button>
                                                     </div>
                                                 }
                                                 {this.state.showDelete_cancel_btn &&

@@ -1,5 +1,5 @@
 export const Strings = {
-    registration: "Registration",
+    patientdetails: " Patient Details",
     enter_first_name: "Enter First Name",
     save: "Save",
     cancel: "Cancel",
@@ -11,7 +11,7 @@ export const Strings = {
     last_name: "Last Name",
     birth_place: "Place of birth",
     nearest_birth_place: "Nearest birth place",
-    enter_age: "Enter age",
+    enter_age: "Age",
     birth_Date: "Birth Date",
     birth_time: "Birth Time",
     address: "Address",

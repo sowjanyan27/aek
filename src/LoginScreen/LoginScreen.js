@@ -682,19 +682,20 @@ class LoginScreen extends Component {
 
                         {this.state.isFormView &&
                             <div className="w-100 mt-4 mb-4 tables-shadow">
-                                <div className="background_color_light_grey shadow_box">
-                                    <form>
-                                        <div className="margin_bottom_15 w-75 me-auto ms-auto evens-align mt-4 position-relative">
-                                            <h3 className="info-text">{Strings.patientdetails}</h3>
-                                            <div className="top-right-icons">
-                                            <Tooltip title="Back" arrow>
+                                <div>
+                                    <div className="margin_bottom_15 evens-align mt-4 position-relative">
+                                        <h3 className="info-text">{Strings.registration}</h3>
+                                        <div className="top-right-icons">
+                                        <Tooltip title="Back" arrow>
                                                 <span onClick={() => { this.handleDeletion() }}>
                                                     <i className="fa fa-arrow-left" aria-hidden="true"></i>
                                                 </span>
                                                 </Tooltip>
-                                            </div>
-               
                                         </div>
+                                    </div>
+                                </div>
+                                <div className="background_color_light_grey shadow_box">
+                                    <form>
                                         <div className="w-75 me-auto ms-auto">
                                             <div className="row">
                                                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">

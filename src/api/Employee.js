@@ -12,6 +12,7 @@ export const Employee = {
   get_patientdatabyid,
   insertmedicationdetails,
   update_patientcs,
+  delete_patientdetailsbyid
 
 };
 const get_data = API_URLS.getdata_api;
@@ -22,6 +23,7 @@ const postpatientdeials = API_URLS.insertpatientdetails
 const get_madication = API_URLS.getmedicationdetails
 const get_patient_databyid = API_URLS.getpatientdatabyid
 const insert_medicationdetails = API_URLS.insertmedicationdetails
+const delete_patient_details = API_URLS.deletePatientdetails
 
 
 
@@ -58,4 +60,8 @@ function get_patientdatabyid(item) {
 }
 function insertmedicationdetails(item) {
   return fetchWrapper.post(insert_medicationdetails, item)
+}
+function delete_patientdetailsbyid(item) {
+  // console.warn("++item", item)
+  return fetchWrapper.post(delete_patient_details, item)
 }

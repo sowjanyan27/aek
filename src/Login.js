@@ -50,7 +50,7 @@ export default class Login extends Component {
           Maindata: response, dummyData: response, isLoading: false
 
         })
-        console.log(this.state.Maindata, 'patients')
+        // console.log(this.state.Maindata, 'patients')
       }
     } catch (e) {
       console.log(e);
@@ -89,7 +89,7 @@ export default class Login extends Component {
                         <input className="login_common" type="password" placeholder="Password" />
                         <span className="user_fa"><i class="fa fa-lock" aria-hidden="true"></i></span>
                       </div>
-                      
+
                       <div>
                         <button className="log_in_btn mt-4">Login</button>
                       </div>
@@ -100,7 +100,7 @@ export default class Login extends Component {
             </div>
           </div>
         </div>
-        
+
         {/* <div className="login_center">
           <div className="content">
             <div className="text_login">

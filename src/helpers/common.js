@@ -7,7 +7,8 @@ export const Common = {
   preventSpace,
   allowdecimal,
   getNumericValue,
-  mobileNumberFormat
+  mobileNumberFormat,
+  formatDate
 };
 
 function allowNumbersOnPaste(e) {
@@ -94,6 +95,12 @@ function mobileNumberFormat(input) {
   return null; // Return null if the input is invalid
 }
 
+function formatDate(dateString) {
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  const date = new Date(dateString);
+  const [day, month, year] = date.toLocaleDateString('en-GB', options).split('/');
+  return `${day}-${month}-${year}`;
+}
 
 
 

@@ -80,26 +80,12 @@ class LoginScreen extends Component {
             menu_ing_name: "",
             showImage: false,
             medicationpatientid: null,
-            dropDown_menu: [
-                { itemName: "Options 1", value: 1 },
-                { itemName: "Options 2", value: 2 },
-                { itemName: "Options 3", value: 3 },
-                { itemName: "Options 4", value: 4 },
-            ],
-
             showDelete_cancel_btn: false,
             dropDown_States: [
                 { itemName: "Select State", value: "" },
                 { itemName: "Andhra Pradesh", value: "Andhra Pradesh" },
                 { itemName: "Tamilnadu", value: "Tamilnadu" },
                 { itemName: "Telangana", value: "Telangana" },
-            ],
-            dropDown_districts: [
-                { itemName: "Select District", value: "" },
-                { itemName: "Guntur ", value: "Guntur" },
-                { itemName: "Krishna ", value: "Krishna" },
-                { itemName: "Nalgonda", value: "Nalgonda" },
-                { itemName: "RangaReddy", value: "RangaReddy" },
             ],
             Maindata: [],
             // Maindata: [{ patient_details_id: "1", patient_first_name: "venkat", patient_last_name: "Padyala", patient_dob: "1995-04-23", gender_name: "Male", patient_mobile_no: "8989898989" },
@@ -115,6 +101,8 @@ class LoginScreen extends Component {
             fileScreenpatientid: 0,
             patient_attachment_path: "",
             showImage: false,
+            is_edit_View: false,
+            primary_key: null
         }
         this.inputRef = React.createRef()
         this.handlemenuImgchange = this.handlemenuImgchange.bind(this);
@@ -131,13 +119,13 @@ class LoginScreen extends Component {
     async getallpatientdetails() {
         try {
             const response = await Employee.getallpatientdetails();
-            console.log(response, 'data get --')
+            console.log('data get --', response)
             if (response.length > 0) {
                 this.setState({
                     Maindata: response, dummyData: response, isLoading: false
 
                 })
-                console.log(this.state.Maindata, 'patients')
+                // console.log(this.state.Maindata, 'patients')
             }
         } catch (e) {
             console.log(e);
@@ -148,11 +136,11 @@ class LoginScreen extends Component {
         }
     }
     async getPatientbyid(id, typeid) {
-        this.setState({ isLoading: true });
+        this.setState({ isLoading: true, is_edit_View: true, primary_key: id });
         try {
             const response = await Employee.get_patientdatabyid({ patient_id: id, actionid: typeid });
-            console.log(response, ' getpatientdatabyid --')
-            console.log(response[0].patient_tob, 'time of birth');
+            // console.log(response, ' getpatientdatabyid --')
+            // console.log(response[0].patient_tob, 'time of birth');
 
             const parseTimeString = (timeString) => {
                 let date;
@@ -170,7 +158,7 @@ class LoginScreen extends Component {
             };
 
             const formattedTimeString = parseTimeString(response[0].patient_tob);
-            console.log(formattedTimeString, "formattedTimeString");
+            // console.log(formattedTimeString, "formattedTimeString");
 
             this.setState({ isFormView: true, isTableView: true, disabledInput: false, showSave_btn: false, showedit_btn: true, showUpDate_btn: false, showDelete_cancel_btn: true, disabledInput_part2: false }, () => {
                 this.setState({
@@ -206,11 +194,28 @@ class LoginScreen extends Component {
         }
     }
 
-    formatDate(dateString) {
-        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-        return new Date(dateString).toLocaleDateString('en-GB', options);
+    async deletepatientdetails(item) {
+        try {
+            const response = await Employee.delete_patientdetailsbyid(item);
+            console.log('data get --', response)
+            if (response.length > 0) {
+                console.warn("++deleteRes", response)
+            }
+        } catch (e) {
+            console.log("delete_error", JSON.parse(e));
+        } finally {
+            this.setState({
+                isLoading: false,
+            });
+        }
     }
-    
+
+    formatDate(dateString) {
+        // const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        // return new Date(dateString).toLocaleDateString('en-GB', options);
+        return Common.formatDate(dateString)
+    }
+
     handleChangePage = (event, newPage) => {
         this.setState({ page: newPage });
     };
@@ -287,7 +292,7 @@ class LoginScreen extends Component {
             this.setState({ dropDownVal: value })
         }
         if (field === Strings.radioButtonVal) {
-            console.warn("++value", value)
+            // console.warn("++value", value)
             if (value !== "") {
                 this.setState({ showgenderSelectionview: false })
             }
@@ -305,7 +310,7 @@ class LoginScreen extends Component {
     }
 
 
-    loginclick() {
+    saveToServer() {
         if (!this.state.patientnum) {
             toast.warn(ValidationMessage.p_num, {
                 toastId: "p_num",
@@ -348,10 +353,10 @@ class LoginScreen extends Component {
             });
             return;
         }
-       
-       
+
+
         const patientDetails = {
-            patientid: this.state.showSave_btn?Number(0):this.state.patientid,
+            patientid: this.state.showSave_btn ? Number(0) : this.state.patientid,
             patient_num: this.state.patientnum,
             first_visitdate: this.state.firstVisit,
             p_first_name: this.state.firstName,
@@ -372,8 +377,8 @@ class LoginScreen extends Component {
             branch_id: 1
         }
 
-        console.log(patientDetails, '-----patientdetails----')
-        alert(patientDetails.patientid)
+        console.log('-----patientdetails----', patientDetails)
+        // alert(patientDetails.patientid)
         this.CreateItem(patientDetails)
 
         // this.setState({ isFormView: false });
@@ -385,8 +390,8 @@ class LoginScreen extends Component {
         try {
             const response = await Employee.insert_patientdetails(item);
             console.log(response);
-          
-            toast.success((this.state.showSave_btn?ValidationMessage.P_added:ValidationMessage.p_updated), {
+
+            toast.success((this.state.showSave_btn ? ValidationMessage.P_added : ValidationMessage.p_updated), {
                 toastId: "Patientdetails",
             });
             this.setState({ isTableView: false, isFormView: false }, () => {
@@ -458,8 +463,22 @@ class LoginScreen extends Component {
         this.setState({ Maindata: filteredArray, nodataFound: filteredArray.length === 0 })
     };
 
+    handleAdd_btn = (item) => {
+        this.setState({ isTableView: item, isFormView: item, disabledInput: true, disabledInput_part2: true, showDelete_cancel_btn: false, is_edit_View: false, showUpDate_btn: false, showedit_btn: false, showSave_btn: true })
+        this.dataClear()
+    }
+
+    handleDelete_btn = () => {
+        var patient_id = this.state.primary_key
+        this.deletepatientdetails({
+            "patientid":patient_id
+          })
+        this.setState({ isTableView: false, isFormView: false, disabledInput: true, disabledInput_part2: true, showDelete_cancel_btn: false, is_edit_View: false, showUpDate_btn: false })
+        this.dataClear()
+    }
+
     handleFormView = (item) => {
-        this.setState({ isTableView: item, isFormView: item, disabledInput: true, disabledInput_part2: true, showDelete_cancel_btn: false })
+        this.setState({ isTableView: item, isFormView: item, disabledInput: true, disabledInput_part2: true, showDelete_cancel_btn: false, is_edit_View: false })
         this.dataClear()
         if (!item) {
             this.setState({ showUpDate_btn: false })
@@ -471,22 +490,6 @@ class LoginScreen extends Component {
         }
     }
 
-    handleView = (item) => {
-
-        this.setState({ isFormView: true, isTableView: true, disabledInput: false, showSave_btn: false, showedit_btn: true, showUpDate_btn: false, showDelete_cancel_btn: true, disabledInput_part2: false }, () => {
-            this.setState({
-                patientnum: item.patient_number,
-                patientid: (item.patient_details_id != null && item.patient_details_id != undefined) ? item.patient_details_id : "",
-                firstName: (item.patient_first_name != null && item.patient_first_name != undefined) ? item.patient_first_name : "",
-                lastName: (item.patient_last_name != null && item.patient_last_name != undefined) ? item.patient_last_name : "",
-                phoneNumber: (item.patient_mobile_no != null && item.patient_mobile_no != undefined) ? item.patient_mobile_no : "",
-                gender: (item.gender_name != null && item.gender_name != undefined) ? item.gender_name : "",
-                dateofBirth: (item.patient_dob != null && item.patient_dob != undefined) ? item.patient_dob : "",
-                file_name: item.attachment_name,
-            })
-        })
-        console.warn("++item", item)
-    }
     handleDisable() {
         this.setState({ disabledInput: true, showUpDate_btn: true, showedit_btn: false, showDelete_cancel_btn: false })
     }
@@ -500,10 +503,12 @@ class LoginScreen extends Component {
             }
         });
     }
-    handleDeletion() {
-        // this.dataClear(),
+
+    handleCancel_btn() {
         this.getallpatientdetails()
-        this.handleFormView(false)
+        // this.handleFormView(false)
+        this.setState({ isTableView: false, isFormView: false, disabledInput: true, disabledInput_part2: true, showDelete_cancel_btn: false, is_edit_View: false, showUpDate_btn: false })
+        this.dataClear()
     }
     onSubmit = () => {
         alert("hi")
@@ -584,8 +589,8 @@ class LoginScreen extends Component {
                                 <div className="margin_bottom_15 evens-align mt-4">
                                     <h3 className="info-text">Patient Info</h3>
                                     <Tooltip title="Add Patient Details">
-                                    <Button className="btn handle_content" onClick={() => { this.handleFormView(true) }}><i className="fa fa-plus handle_add_button_color_white  font_size_14_normal" aria-hidden="true"></i>
-                                    </Button>
+                                        <Button className="btn handle_content" onClick={() => { this.handleAdd_btn(true) }}><i className="fa fa-plus handle_add_button_color_white  font_size_14_normal" aria-hidden="true"></i>
+                                        </Button>
                                     </Tooltip>
                                     <div className="show_content  p-2 rounded">Add New</div>
                                 </div>
@@ -629,7 +634,7 @@ class LoginScreen extends Component {
                                                         <TableCell className="font_family_serif table_header_text_maroon">D.O.B</TableCell>
                                                         <TableCell className="font_family_serif table_header_text_maroon">Gender</TableCell>
                                                         <TableCell className="font_family_serif table_header_text_maroon">Phone Number</TableCell>
-                                                        <TableCell className="font_family_serif table_header_text_maroon">Action</TableCell>
+                                                        <TableCell className="font_family_serif table_header_text_maroon text_align_center">Action</TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
@@ -644,7 +649,7 @@ class LoginScreen extends Component {
                                                             <TableCell className="font_family_serif">{this.formatDate(row.patient_dob)}</TableCell>
                                                             <TableCell className="font_family_serif">{row.gender_name}</TableCell>
                                                             <TableCell className="font_family_serif">{row.patient_mobile_no}</TableCell>
-                                                            <TableCell>
+                                                            <TableCell className="text_align_center">
                                                                 <Tooltip title="View" arrow>
                                                                     <Button variant="outlined" className="font_family_serif" onClick={() => { this.getPatientbyid(row.patient_details_id, 1) }}><i className="fa fa-eye" style={{ color: "blue" }} aria-hidden="true"></i></Button>
                                                                 </Tooltip>
@@ -675,8 +680,6 @@ class LoginScreen extends Component {
                                         </TableContainer>
                                     </div>
                                 </div>
-
-
                             </div>
                         }
 
@@ -684,13 +687,13 @@ class LoginScreen extends Component {
                             <div className="w-100 mt-4 mb-4 tables-shadow">
                                 <div>
                                     <div className="margin_bottom_15 evens-align mt-4 position-relative">
-                                        <h3 className="info-text">{Strings.registration}</h3>
+                                        <h3 className="info-text">{Strings.patientdetails}</h3>
                                         <div className="top-right-icons">
-                                        <Tooltip title="Back" arrow>
-                                                <span onClick={() => { this.handleDeletion() }}>
+                                            <Tooltip title="Back" arrow>
+                                                <span onClick={() => { this.handleCancel_btn() }}>
                                                     <i className="fa fa-arrow-left" aria-hidden="true"></i>
                                                 </span>
-                                                </Tooltip>
+                                            </Tooltip>
                                         </div>
                                     </div>
                                 </div>
@@ -698,14 +701,16 @@ class LoginScreen extends Component {
                                     <form>
                                         <div className="w-75 me-auto ms-auto">
                                             <div className="row">
-                                                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
-                                                    <div className="form-group text_align_left" >
-                                                        <label htmlFor="PatientNumber" className="label_texts mar_b_8">{Strings.patient_num} <span className="logo_color_red"> *</span></label>
-                                                        <input required type="text" disabled={!this.state.disabledInput_part2} onChange={(text) => this.handleSelectedData(text, Strings.patient_num)} className="form-control input_hight_45" id="patientId" value={this.state.patientnum} placeholder={Strings.patient_num} />
-                                                        {this.state.showpatientNumview && <span className="" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
+                                                {!this.state.is_edit_View &&
+                                                    <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
+                                                        <div className="form-group text_align_left" >
+                                                            <label htmlFor="Casesheetnum" className="label_texts mar_b_8">{Strings.case_sheet_num} <span className="logo_color_red"> *</span></label>
+                                                            <input required type="text" disabled={!this.state.disabledInput_part2} onChange={(text) => this.handleSelectedData(text, Strings.patient_num)} className="form-control input_hight_45" id="patientId" value={this.state.patientnum} placeholder={Strings.patient_num} />
+                                                            {this.state.showpatientNumview && <span className="" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
 
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                }
                                                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                                     <div className="form-group text_align_left" >
                                                         <label htmlFor="firstName" className="label_texts mar_b_8">  {Strings.first_name} <span className="logo_color_red"> *</span>
@@ -731,9 +736,10 @@ class LoginScreen extends Component {
                                                         {this.state.showpatientLastnameview && <span className="" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
                                                     </div>
                                                 </div>
-                                                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
+                                                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 " style={{ alignContent: "center" }}>
                                                     <div className="form-group text_align_left marginTop_20" >
                                                         <label className="me-2 label_texts">Gender: <span className="logo_color_red"> *</span></label>
+                                                        <div></div>
                                                         <div className="form-check form-check-inline">
                                                             <input required disabled={!this.state.disabledInput} className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value={"1"} checked={this.state.gender_name === "1"} onChange={(text) => { this.handleSelectedData(text, Strings.radioButtonVal) }} />
                                                             <label className="form-check-label" for="inlineRadio1">{Strings.male}</label>
@@ -745,22 +751,17 @@ class LoginScreen extends Component {
                                                         {this.state.showgenderSelectionview && <span className="" style={{ color: "red", fontSize: 12 }}>{Strings.please_select_one}</span>}
                                                     </div>
                                                 </div>
-                                                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
-                                                    <div className="form-group text_align_left" >
-                                                        <label htmlFor="Address" className="label_texts mar_b_8">{Strings.address}</label>
-                                                        <textarea rows={3} cols={40} disabled={!this.state.disabledInput} className="form-control" onChange={(text) => { this.handleSelectedData(text, Strings.address) }} value={this.state.address} placeholder={Strings.address} />
-                                                    </div>
-                                                </div>
+
                                                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                                     <div className="row">
-                                                        <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
+                                                        <div className="col-xl-2 col-lg-2 col-md-4 col-sm-2 col-2">
                                                             <div className="form-group text_align_left" >
                                                                 <label htmlFor="Age" className="label_texts mar_b_8"> {Strings.enter_age} <span className="logo_color_red"> *</span></label>
-                                                                <input required type="text"  maxLength="3"disabled={!this.state.disabledInput} onChange={(text) => { this.handleSelectedData(text, Strings.enter_age) }} className="form-control input_hight_45" id="age" value={this.state.age} placeholder={Strings.enter_age} />
+                                                                <input required type="text" maxLength="3" disabled={!this.state.disabledInput} onChange={(text) => { this.handleSelectedData(text, Strings.enter_age) }} className="form-control input_hight_45" id="age" value={this.state.age} placeholder={Strings.enter_age} />
                                                                 {this.state.showageview && <span className="" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
                                                             </div>
                                                         </div>
-                                                        <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
+                                                        <div className="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-5">
                                                             <div className="form-group text_align_left" >
                                                                 <label htmlFor="BirthDate" className="label_texts mar_b_8"> {Strings.birth_Date} <span className="logo_color_red"> *</span></label>
                                                                 <input required type="date" disabled={!this.state.disabledInput} onChange={(text) => { this.handleSelectedData(text, Strings.birth_Date) }} className="form-control input_hight_45 handle_padding_text_input-birthdat" id="firstName" value={this.state.dateofBirth} />
@@ -768,13 +769,19 @@ class LoginScreen extends Component {
 
                                                             </div>
                                                         </div>
-                                                        <div className="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
+                                                        <div className="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-5">
                                                             <div className="form-group text_align_left" >
                                                                 <label htmlFor="BirthTime" className="label_texts mar_b_8">{Strings.birth_time} <span className="logo_color_red"> *</span></label>
                                                                 <input required type="time" disabled={!this.state.disabledInput} onChange={(text) => this.handleSelectedData(text, Strings.birth_time)} className="form-control input_hight_45 " value={this.state.timeofBirth} id="birthTime" />
                                                                 {this.state.showBirthTimeview && <span className="" style={{ color: "red", fontSize: 12 }}>{Strings.please_enter_value}</span>}
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
+                                                    <div className="form-group text_align_left" >
+                                                        <label htmlFor="Address" className="label_texts mar_b_8">{Strings.address}</label>
+                                                        <textarea rows={3} cols={40} disabled={!this.state.disabledInput} className="form-control" onChange={(text) => { this.handleSelectedData(text, Strings.address) }} value={this.state.address} placeholder={Strings.address} />
                                                     </div>
                                                 </div>
                                                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
@@ -789,8 +796,8 @@ class LoginScreen extends Component {
                                                         <input type="text" disabled={!this.state.disabledInput} onChange={(text) => this.handleSelectedData(text, Strings.nearest_birth_place)} className="form-control input_hight_45" id="near_area" value={this.state.nearestBirthPlace} placeholder={Strings.nearest_birth_place} />
                                                     </div>
                                                 </div>
-                                              
-                                               
+
+
                                                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 marginTop_20">
                                                     <div className="form-group text_align_left" >
                                                         <label htmlFor="selectOption" className="label_texts mar_b_8"> {Strings.state} </label>
@@ -822,7 +829,7 @@ class LoginScreen extends Component {
                                                     </div>
                                                 </div>
 
-                                               
+
 
                                                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 marginTop_20 margin_bottom_25">
                                                     <div className="form-group text_align_left">
@@ -847,7 +854,7 @@ class LoginScreen extends Component {
 
                                             <div className="width_100 text-end save_btn_margin_bottom_15 ">
 
-                                                {/* <Button onClick={() => { this.handleDeletion() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button> */}
+                                                {/* <Button onClick={() => { this.handleCancel_btn() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button> */}
                                                 {this.state.showedit_btn &&
                                                     <div className="d-inline-block">
                                                         <Button onClick={() => this.handleDisable()} className="btn btn-info me-2  font_family_serif"> {Strings.edit}</Button>
@@ -855,20 +862,20 @@ class LoginScreen extends Component {
                                                 }
                                                 {this.state.showUpDate_btn &&
                                                     <div>
-                                                        <Button onClick={() => { this.handleDeletion() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
-                                                        <Button onClick={() => this.loginclick()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.update}</Button>
+                                                        <Button onClick={() => { this.handleCancel_btn() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
+                                                        <Button onClick={() => this.saveToServer()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.update}</Button>
                                                     </div>
                                                 }
                                                 {this.state.showDelete_cancel_btn &&
                                                     <div className="d-inline-block">
-                                                        <Button onClick={() => { this.handleDeletion() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
-                                                        <Button onClick={() => this.handleFormView(false)} className="btn btn-danger padding_horizental_35 font_family_serif">{Strings.delete}</Button>
+                                                        <Button onClick={() => { this.handleCancel_btn() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
+                                                        <Button onClick={() => this.handleDelete_btn(false)} className="btn btn-danger padding_horizental_35 font_family_serif">{Strings.delete}</Button>
                                                     </div>
                                                 }
                                                 {this.state.showSave_btn &&
                                                     <div>
-                                                        <Button onClick={() => { this.handleDeletion() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
-                                                        <Button onClick={() => this.loginclick()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.save}</Button>
+                                                        <Button onClick={() => { this.handleCancel_btn() }} className="btn btn-secondary padding_horizental_35 margin_right_10 font_family_serif">{Strings.cancel}</Button>
+                                                        <Button onClick={() => this.saveToServer()} className="btn btn-success padding_horizental_35 font_family_serif">{Strings.save}</Button>
                                                     </div>
                                                 }
                                             </div>

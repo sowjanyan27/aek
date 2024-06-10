@@ -91,8 +91,8 @@ h5 {
 }
 
 .bg-master {
-  /* background: #fd8111; */
-  background: #00918f;
+  background: #1a504c;
+  /* background: #00918f; */
   padding: 0px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   position: sticky;
@@ -116,7 +116,12 @@ h5 {
 }
 
 .navbar-nav .nav-link.active {
-  color: #1e1e1e;
+  color: #ffffff;
+}
+
+.navbar-nav .nav-link:hover {
+  background: #228a87;
+  color: #fff;
 }
 
 .navbar-nav .nav-item {
@@ -386,6 +391,10 @@ ul.child-sub-menu li:hover a span {
   position: relative;
 }
 
+.cards_view .card-body:hover {
+  background: #ffedec;
+}
+
 .cards_view .card-title {
   font-size: 16px;
   color: #333;
@@ -398,7 +407,8 @@ ul.child-sub-menu li:hover a span {
   padding-right: 5px;
   vertical-align: top;
 }
-.casesheet{
+
+.casesheet {
   border-bottom: 3px solid #ddd;
   color: #00918f !important;
   font-weight: 600;
@@ -429,6 +439,10 @@ ul.child-sub-menu li:hover a span {
 .tabletslistview ul li {
   padding-left: 10px;
 }
+
+/* .tabletslistview ul li:hover{
+  color: #0d6efd;
+} */
 
 .tablets_list {
   color: #6c4337;
@@ -604,6 +618,12 @@ ul.child-sub-menu li:hover a span {
   color: #6a6a6a;
 }
 
+.dose_input_less_width {
+  margin-top: 10px;
+  margin-left: 10px;
+  width: 100px;
+}
+
 .day_wise ul li {
   background: #dcdcdc;
   padding: 6px 12px 6px 12px;
@@ -618,9 +638,10 @@ ul.child-sub-menu li:hover a span {
   letter-spacing: 0.3px;
   border: 0px;
 }
-.medicine_save:hover{
+
+.medicine_save:hover {
   background: #0d6efd;
-  box-shadow: 0px 0px 10px 0px rgba(13,109,253,1);
+  box-shadow: 0px 0px 10px 0px rgba(13, 109, 253, 1);
 }
 
 
@@ -749,7 +770,33 @@ ul.child-sub-menu li:hover a span {
 }
 
 .background_color_light_grey {
-  background-color: #fbfbfb;
+  /* background-color: #fbfbfb; */
+  background: #f7f8f5;
+}
+
+.minus_circle {
+  position: absolute;
+  right: -11px;
+  top: -15px;
+  content: "";
+  cursor: pointer;
+}
+
+.minus_circle .fa {
+  color: red;
+  font-size: 30px;
+}
+
+.sidelabel_view {
+  display: inline-block;
+  padding: 6px 10px;
+  background: #fff;
+  position: absolute;
+  right: -35px;
+  top: -9px;
+  font-size: 14px;
+  border-radius: 15px 0px 0px 15px;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
 }
 
 .bg_orange {
@@ -1029,6 +1076,15 @@ input[type="file"] {
   margin-top: 10px;
 }
 
+.search_list ul li {
+  padding: 3px 5px;
+}
+
+.search_list ul li:hover {
+  background: #efefef;
+  padding: 3px 5px;
+}
+
 .info-text {
   font-size: 19px;
   margin: 0;
@@ -1062,7 +1118,7 @@ input[type="file"] {
 }
 
 .text_align_center {
-  text-align: center;
+  text-align: center !important;
 }
 
 .show_add_new {

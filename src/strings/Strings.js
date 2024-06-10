@@ -32,6 +32,9 @@ export const Strings = {
     city: "City",
     upload_file: "file upload",
     purpose: "purpose",
-    medicine: "medicine"
+    medicine: "medicine",
+    Last_Medicine_details: "Last Medicine details",
+    dose: "Dose",
+    case_sheet_num:"Case Sheet No."
 
 }

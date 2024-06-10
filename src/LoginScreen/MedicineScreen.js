@@ -5,6 +5,9 @@ import { Strings } from "../strings/Strings";
 import { toast } from "react-toastify";
 import { ValidationMessage } from "../helpers/ValidationMessage";
 import { Common } from "../helpers/common";
+// import { Tooltip } from "@mui/material/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
+
 
 export default class MedicineScreen extends Component {
     constructor(props) {
@@ -20,11 +23,12 @@ export default class MedicineScreen extends Component {
             selcted_master_name: "",
             seletedMedicine: "",
             selectedDosage: "",
-            medicine_type_id: null,
+            selected_medicine_master_id: null,
             usage_time: "",
             selected_potencies_type_id: null,
             dosage: 1,
             selected_medicine_type_index: null, // Selected medicinetype index  Ex:- main, mothertincher ...
+            selected_medicine_type_Id: null, // Selected medicinetype index  Ex:- {main = 1, mothertincher = 2 ...
             medicationlistjson: [], // medicie list with id's
             spe_instruct: "",
             next_med: "",
@@ -67,7 +71,8 @@ export default class MedicineScreen extends Component {
             { timing: "E", value: "Evening" },
             { timing: "N", value: "Night" }
             ],
-            selectedTimings: []
+            selectedTimings: [],
+            data_for_modal: []
         }
     }
 
@@ -85,18 +90,19 @@ export default class MedicineScreen extends Component {
             "patient_id": this.state.Medicationdata,
             "actionid": 3
         }
-        console.warn("++obj", obj)
+        // console.warn("++obj", obj)
         try {
             const response = await Employee.get_patientdatabyid(obj);
             if (response.length > 0) {
+                console.warn("++main_res_medi", response)
                 var medication_patient_details = response[0].patients_details
                 // console.warn("++medication_patient_details", medication_patient_details)
                 var medicationdetails = response[0].medicationdetails
-                console.warn("++medicationdetails", medicationdetails)
+                // console.warn("++medicationdetails", medicationdetails)
                 this.setState({
                     Mainpaitentdetails: response, dummyMainpaitentdetails: response, medication_patient_details: medication_patient_details, medication_details: medicationdetails, isLoading: false
                 }, () => {
-                    console.warn('medication_details', this.state.medication_details)
+                    // console.warn('medication_details', this.state.medication_details)
                 })
             }
         } catch (e) {
@@ -112,7 +118,7 @@ export default class MedicineScreen extends Component {
         try {
             const response = await Employee.getmedaticationdetails();
             if (response.length > 0) {
-                console.warn("++response", response)
+                // console.warn("++response_binding", response)
                 var medicine_type = response[0].medicinetype
                 this.setState({
                     medicineNames: medicine_type,
@@ -165,19 +171,22 @@ export default class MedicineScreen extends Component {
         var names_list = {
             selected_medicine_name: this.state.selcted_master_name,
             selected_dosage: this.state.dosage,
-            potencies_type: this.state.potencies_type,
+            // potencies_type: this.state.potencies_type,
             potencies_type_name: this.state.potencies_type_name
         }
 
         var obj = {
-            medicineid: this.state.medicine_type_id,
-            potenciesid: this.state.selected_potencies_type_id,
-            med_dosage: this.state.dosage,
-            med_consume_time: this.state.usage_time
+            medicineid: this.state.selected_medicine_master_id,  // medicine id
+            potenciesid: this.state.selected_potencies_type_id, //
+            med_dosage: this.state.dosage, // dosage 
+            med_consume_time: this.state.selectedTimings.join(",") // consume time
         }
+        console.warn("++names_list", names_list)
+        console.warn("++obj", obj)
         var names_array = [...this.state.selected_medicine_names, names_list]
         var medication_obj = [...this.state.medicationlistjson, obj]
         this.setState({ medicationlistjson: medication_obj, selected_medicine_names: names_array, selectedTimings: [] }, () => {
+            console.warn("++Medidcine_list", this.state.medicationlistjson)
             this.setState({
                 filterData: "", usage_time: "", dosage: 1, potenciesid: null, medicineid: null, filterdArray: [], selcted_master_name: '', selected_medicine_names: names_array, selected_medicine_name: "", potencies_type: "",
                 potencies_type_name: "", master_idex: null
@@ -197,8 +206,8 @@ export default class MedicineScreen extends Component {
             createdby: 1,
             consult_date: new Date().toJSON().slice(0, 10)
         }
-
-        this.setState({ medicationlistjson: [], selected_medicine_names: [] })
+        console.warn("++final_obj", final_obj)
+        this.setState({ medicationlistjson: [], selected_medicine_names: [], patient_ailment: "", patient_medicalreports: "", next_med: "", spe_instruct: "" })
 
         this.CreateMadication(final_obj)
 
@@ -207,9 +216,10 @@ export default class MedicineScreen extends Component {
     async CreateMadication(item) {
         try {
             const response = await Employee.insertmedicationdetails(item);
-            console.log(response);
-            toast.success(ValidationMessage.P_added, {
+            // console.log(response);
+            toast.success(ValidationMessage.m_added, {
                 toastId: "add_success",
+                onClose: this.backToMain()
             });
         }
         catch (e) {
@@ -226,6 +236,10 @@ export default class MedicineScreen extends Component {
                 }
             );
         }
+    }
+
+    handleSCreen = () => {
+        this.setState({})
     }
 
 
@@ -251,7 +265,9 @@ export default class MedicineScreen extends Component {
         var master_medi_potencies_type = this.state.dummyMainMadicationdata[0].potenciestype.filter(item => {
             return item.medicine_type_id === selectedItem;
         });
+
         this.setState({ master_medincine_potencies_name: master_medi_potencies_type, selected_medicine_type_index: index, master_idex: null, filterData: "" }, () => {
+            console.warn("++master_medincine_potencies_name", this.state.master_medincine_potencies_name)
             this.setState({ med_consume_time: "", med_dosage: 1, dosage: 1, potenciesid: null, medicineid: null })
         })
     }
@@ -283,7 +299,23 @@ export default class MedicineScreen extends Component {
                 // If not selected, add it
                 return { selectedTimings: [...selectedTimings, selectedTimingValue] };
             }
-        }, () => { console.warn("++res", this.state.selectedTimings) });
+        }
+            // , () => { console.warn("++res", this.state.selectedTimings) }
+        );
+    }
+    handleSelecionMedicines(item) {
+
+        this.setState({ selcted_master_name: item.medicine_master_name, filterData: item.medicine_master_name, filterdArray: [], selected_medicine_master_id: item.medicine_master_id });
+    }
+
+    handle_modal_view = (item) => {
+        this.setState({ data_for_modal: [] }, () => {
+            var array = [...this.state.data_for_modal, item]
+            this.setState({ data_for_modal: array }, () => {
+                console.warn("++chcking", this.state.data_for_modal)
+            })
+        })
+
     }
 
     render() {
@@ -339,7 +371,7 @@ export default class MedicineScreen extends Component {
                                                             </div>
                                                         </div>
                                                         <div className="col-6">
-                                                            <span className="span-custom">{detailes.patient_dob}</span>
+                                                            <span className="span-custom"> {Common.formatDate(detailes.patient_dob)}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -406,7 +438,7 @@ export default class MedicineScreen extends Component {
                                                             </div>
                                                         </div>
                                                         <div className="col-6">
-                                                            <span className="span-custom">{detailes.patient_first_visit_date}</span>
+                                                            <span className="span-custom">{Common.formatDate(detailes.patient_first_visit_date)}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -429,31 +461,42 @@ export default class MedicineScreen extends Component {
 
                                 <div style={{ textAlign: "end" }}>
                                     {!this.state.isShowMedicine &&
-                                        <Button className="btn btn-success me-3"
-                                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" id="clicksButton"
-                                            onClick={() => { this.handleHide_show(); this.getmedaticationdetails() }}
-                                        >
-                                            <i className="fa fa-plus" aria-hidden="true"></i>
-                                        </Button>
+                                        <Tooltip title="Add Medicine" arrow>
+                                            <Button className="btn btn-success me-3"
+                                                data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" id="clicksButton"
+                                                onClick={() => { this.handleHide_show(); this.getmedaticationdetails() }}
+                                            >
+                                                <i className="fa fa-plus" aria-hidden="true"></i>
+                                            </Button>
+                                        </Tooltip>
                                     }
                                     {this.state.isShowMedicine &&
-                                        <Button className="btn btn-success me-3"
-                                            onClick={() => { this.handleHide() }}
-                                        >
-                                            <i class="fa fa-minus" aria-hidden="true"></i>
-                                        </Button>
+                                        <Tooltip title="Show all medication">
+                                            <Button className="btn btn-success me-3"
+                                                onClick={() => { this.handleHide() }}
+                                            >
+                                                <i class="fa fa-minus" aria-hidden="true"></i>
+                                            </Button>
+                                        </Tooltip>
                                     }
-                                    <Button className="btn btn-success me-3" onClick={() => { this.handleClick() }} id="clicksButton">
+                                    {/* <Button className="btn btn-success me-3" onClick={() => { this.handleClick() }} id="clicksButton">
                                         <i className="fa fa-expand" aria-hidden="true"></i>
-                                    </Button>
+                                    </Button> */}
                                     {this.state.isShoweye_btn &&
-                                        <Button className="btn btn-success"
-                                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" id="clicksButton">
-                                            <i className="fa fa-eye" aria-hidden="true"></i>
-                                        </Button>
+                                        <Tooltip title="Show previous medicine" arrow>
+                                            <Button className="btn btn-success"
+                                                data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" id="clicksButton">
+                                                <i className="fa fa-eye" aria-hidden="true"></i>
+                                            </Button>
+                                        </Tooltip>
                                     }
 
                                 </div>
+                                {this.state.isRightBranchHidden &&
+                                    <div className="text-end mt-3 mb-4 position-relative">
+                                        <span onClick={() => { this.handleClick() }} className="sidelabel_view">Case Sheet</span>
+                                    </div>
+                                }
                             </div>
                         </div>
                         <div className="side_panel">
@@ -465,32 +508,34 @@ export default class MedicineScreen extends Component {
                                 <div className="offcanvas-body">
                                     <div className="cards_view">
                                         <div className="grid-system equal-height">
-                                            {this.state.medication_details && this.state.medication_details.map((item, index) => (
+                                            <div>{Strings.Last_Medicine_details}</div>
+                                            {this.state.medication_details && this.state.medication_details.length > 0 && (
                                                 <div className="">
                                                     <div className="card">
                                                         <div className="card-body">
                                                             <div className="row">
                                                                 <div className="col-6">
-                                                                    <span className="dateSpan">{item.patient_consultaion_date}</span>
+                                                                    <span className="dateSpan">{Common.formatDate(this.state.medication_details[0].patient_consultaion_date)}</span>
                                                                 </div>
                                                                 <div className="col-6">
                                                                     <h5 className="card-title text-end"><i className="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
                                                                 </div>
                                                             </div>
                                                             <div className="mt-4 tabletslistview">
-                                                                <h4 className="tablets_list pb-2">
+                                                                {/* <h4 className="tablets_list pb-2">
                                                                     Tablet List
-                                                                </h4>
+                                                                </h4> */}
                                                                 <ul className="list-unstyled">
-                                                                    {item.med_details.map((sub_item, sub_index) => (
-                                                                        <li key={sub_index}>{sub_item.medicine_master_name}</li>
+                                                                    {this.state.medication_details[0].med_details.map((sub_item, sub_index) => (
+                                                                        <li key={sub_index}>{sub_item.medicine_master_name} - <span style={{ color: "maroon", fontWeight: 700 }}>{sub_item.potencies_type_name} </span> - <span style={{ color: "blue", fontWeight: 700 }}> {sub_item.dosage} d </span></li>
                                                                     ))}
                                                                 </ul>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            ))}
+                                            )
+                                            }
 
                                         </div>
                                     </div>
@@ -509,23 +554,25 @@ export default class MedicineScreen extends Component {
                                                     <div className="grid-system equal-height">
                                                         {this.state.medication_details && this.state.medication_details.map((item, index) => (
                                                             <div className="">
-                                                                <div className="card">
+                                                                <div onClick={() => { this.handle_modal_view(item) }} className="card" style={{ cursor: "pointer" }} data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                                                     <div className="card-body">
                                                                         <div className="row">
                                                                             <div className="col-6">
-                                                                                <span className="dateSpan">{item.patient_consultaion_date}</span>
+                                                                                <span className="dateSpan">{Common.formatDate(item.patient_consultaion_date)}</span>
                                                                             </div>
                                                                             <div className="col-6">
                                                                                 <h5 className="card-title text-end"><i className="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
                                                                             </div>
                                                                         </div>
                                                                         <div className="mt-4 tabletslistview">
-                                                                            <h4 className="tablets_list pb-2">
+                                                                            {/* <h4 className="tablets_list pb-2">
                                                                                 Tablet List
-                                                                            </h4>
+                                                                            </h4> */}
                                                                             <ul className="list-unstyled">
                                                                                 {item.med_details.map((sub_item, sub_index) => (
-                                                                                    <li key={sub_index}>{sub_item.medicine_master_name}</li>
+                                                                                    // <li key={sub_index}>{sub_item.medicine_master_name}</li>
+                                                                                    <li key={sub_index}>{sub_item.medicine_master_name} - {sub_item.potencies_type_name} -{sub_item.dosage} d</li>
+
                                                                                 ))}
                                                                             </ul>
                                                                         </div>
@@ -535,6 +582,39 @@ export default class MedicineScreen extends Component {
                                                         ))}
 
                                                     </div>
+                                                    {/* popup-view-start */}
+                                                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered" style={{ borderColor: "#00918f17" }}>
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <div class="modal-title fs-5" id="staticBackdropLabel">Medicine details</div>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                {this.state.data_for_modal && this.state.data_for_modal.map((item, index) => (
+                                                                    <div style={{ margin: 10 }}>
+                                                                        <div style={{ textAlign: "start" }}>
+                                                                            <div> Patient Ailment:- <span style={{ color: "green" }}>{item.ailment}</span></div>
+                                                                            <div> Next Medicine:- <span style={{ color: "green" }}>{item.next_medicine}</span></div>
+                                                                            <div> Medical Reports:- <span style={{ color: "green" }}>{item.patient_medical_reports}</span></div>
+                                                                            <div> Special Instructions:- <span style={{ color: "green" }}>{item.special_instructions}</span></div>
+                                                                            <div style={{ color: "blue", fontWeight: 600 }}>Medicines:-</div>
+                                                                            <ul className="list-unstyled">
+                                                                                {item.med_details && item.med_details.map((item, index) => (
+                                                                                    <li key={index}>{item.medicine_master_name} - <span>{item.potencies_type_name}</span> - <span>{item.dosage} d</span> </li>
+                                                                                ))}
+
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                                {/* <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="button" class="btn btn-primary">Understood</button>
+                                                                </div> */}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {/* popup-view-end */}
                                                 </div>
                                             </div>
                                         }
@@ -570,7 +650,6 @@ export default class MedicineScreen extends Component {
                                                 <div className="center_content">
                                                     <ul className="list-unstyled">
                                                         {this.state.medicineNames.map((item, index) => {
-                                                            // console.warn("+=item", item)
                                                             return <li onClick={() => { this.handleTabs(item.medicine_type_id, index) }} style={{ display: "inline-block", marginRight: 20, padding: "3px 12px", textTransform: "capitalize", borderRadius: "6px", cursor: "pointer", borderStyle: "solid", borderWidth: 1, borderColor: "#b0b0b0", background: this.state.selected_medicine_type_index === index ? "#1fbab8" : "#fff", color: this.state.selected_medicine_type_index === index ? "white" : "black", }} key={index}> {item.medicine_type_name}</li>
                                                         })
                                                         }
@@ -578,50 +657,59 @@ export default class MedicineScreen extends Component {
                                                 </div>
                                                 <div className="mt-2">
                                                     <div className="">
-                                                        {this.state.filterData &&
+
+                                                        {(this.state.filterData) &&
+                                                            // // view for potencies names 1c 2c 
                                                             <div className="center_content">
                                                                 <ul className="list-unstyled">
                                                                     {this.state.master_medincine_potencies_name.map((item, index) => {
-                                                                        return <li style={{ display: "inline-block", marginRight: 10, borderStyle: "solid", borderWidth: 1, borderColor: "#b0b0b0", borderRadius: "3px", padding: "3px 9px", background: index === this.state.master_idex ? "green" : "white", color: index === this.state.master_idex ? "white" : "black" }} onClick={() => { this.setState({ master_idex: index, selected_potencies_type_id: item.potencies_type_id, medicine_type_id: item.medicine_type_id, potencies_type_name: item.potencies_type_name }) }} key={index} > {item.potencies_type_name}</li>
+                                                                        return <li style={{ display: "inline-block", marginRight: 10, borderStyle: "solid", borderWidth: 1, borderColor: "#b0b0b0", borderRadius: "3px", padding: "3px 9px", background: index === this.state.master_idex ? "green" : "white", color: index === this.state.master_idex ? "white" : "black" }} onClick={() => { this.setState({ master_idex: index, selected_potencies_type_id: item.potencies_type_id, potencies_type_name: item.potencies_type_name }) }} key={index} > {item.potencies_type_name}</li>
                                                                     })}
                                                                 </ul>
                                                             </div>
                                                         }
-                                                        <input className="dose_input"
-                                                            style={{ marginTop: 10 }}
-                                                            placeholder="Search for medicine"
-                                                            value={this.state.filterData}
-                                                            onChange={(text) => { this.filterMedicen(text.target.value) }}
-                                                        // onFocus={() => { this.handle_medicineSearch() }}
+                                                        <div className="center_content">
+                                                            {/* search for medicines list */}
+                                                            <input className="dose_input"
+                                                                style={{ marginTop: 10 }}
+                                                                placeholder="Search for medicine"
+                                                                value={this.state.filterData}
+                                                                onChange={(text) => { this.filterMedicen(text.target.value) }}
+                                                            // onFocus={() => { this.handle_medicineSearch() }}
 
-                                                        />
-                                                        <div style={{ display: "inline-block", position: "relative" }}>
-                                                            <input style={{ marginTop: 10, marginLeft: 10, width: "145px" }} className="dose_input"
-                                                                placeholder="Enter Dose"
-                                                                value={this.state.dosage}
-                                                                maxLength={10}
-                                                                onChange={(text) => { this.enterDose(text.target.value) }} />
-                                                            <span style={{ position: "absolute", bottom: 0, right: 0, background: "grey", padding: "9px 5px", overflow: "hidden", borderRadius: "0px 4px 4px 0px", color: "white", fontSize: "13px" }}> Dose </span>
-                                                        </div>
-                                                        <div style={{ display: "inline-block", position: "relative" }}>
+                                                            />
+                                                            <div style={{ display: "inline-block", position: "relative" }}>
+                                                                {/* entry for dose */}
+                                                                <input className="dose_input dose_input_less_width"
+                                                                    placeholder={Strings.dose}
+                                                                    value={this.state.dosage}
+                                                                    maxLength={10}
+                                                                    onChange={(text) => { this.enterDose(text.target.value) }} />
+                                                                <span style={{ position: "absolute", bottom: 0, right: 0, background: "grey", padding: "9px 5px", overflow: "hidden", borderRadius: "0px 4px 4px 0px", color: "white", fontSize: "13px" }}>{Strings.dose} </span>
+                                                            </div>
+                                                            <div style={{ display: "inline-block", marginTop: 10, position: "relative" }}>
 
-                                                            <div className="ms-3 day_wise">
-                                                                <ul className="list-inline">
-                                                                    {this.state.consume_dose_timings.map(((item, index) => (
-                                                                        <li className="list-inline-item border_1_solid_5r_grey" onClick={() => { this.handleSelectionTimings(item.timing) }} style={{ background: this.state.selectedTimings.includes(item.value) ? '#003d74' : '#dcdcdc', color: this.state.selectedTimings.includes(item.value) ? 'white' : 'black' }}>{item.timing}</li>
+                                                                <div className="ms-3 day_wise">
+                                                                    {/* for timings */}
+                                                                    <ul className="list-inline mb-0">
+                                                                        {this.state.consume_dose_timings.map(((item, index) => (
+                                                                            <li className="list-inline-item border_1_solid_5r_grey" onClick={() => { this.handleSelectionTimings(item.timing) }} style={{ background: this.state.selectedTimings.includes(item.value) ? '#003d74' : '#dcdcdc', color: this.state.selectedTimings.includes(item.value) ? 'white' : 'black' }}>{item.timing}</li>
 
-                                                                    )))}
-                                                                </ul>
+                                                                        )))}
+                                                                    </ul>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         {this.state.filterData &&
-                                                            <div className="sub_tabs_view overflow-auto" style={{ height: this.state.filterData ? 250 : 0 }}>
+                                                            //  // showing the medicines
+                                                            <div className="sub_tabs_view search_list overflow-auto" style={{ height: this.state.filterdArray.length > 0 ? 250 : 0 }}>
                                                                 <ul className="list-unstyled">
                                                                     {this.state.filterdArray.map((item, index) => (
                                                                         <li style={{ fontSize: "14px", color: "#626262" }}
                                                                             key={index}
                                                                             onClick={() => {
-                                                                                this.setState({ selcted_master_name: item.medicine_master_name, filterData: item.medicine_master_name });
+                                                                                this.handleSelecionMedicines(item)
+                                                                                // this.setState({ selcted_master_name: item.medicine_master_name, filterData: item.medicine_master_name });
                                                                             }} >
                                                                             {item.medicine_master_name}
                                                                         </li>
@@ -629,6 +717,7 @@ export default class MedicineScreen extends Component {
                                                                 </ul>
                                                             </div>
                                                         }
+
                                                         {this.state.selcted_master_name &&
                                                             <div className="selected_medicine">
                                                                 <div style={{ color: "black", fontSize: 17 }}>
@@ -640,6 +729,36 @@ export default class MedicineScreen extends Component {
                                                                 </div>
                                                             </div>
                                                         }
+
+                                                        <div style={{ marginTop: 10 }}>
+                                                            {this.state.filterData != "" &&
+                                                                <div>
+                                                                    {
+                                                                        this.state.selected_medicine_names.length > 0 &&
+                                                                        <div>
+                                                                            <ul className="list-unstyled">
+                                                                                {this.state.selected_medicine_names.map((item, index) => {
+                                                                                    // console.warn("++item", item)
+                                                                                    return (<li className="bottom_hightlets" key={index}>{item.selected_medicine_name} - {item.potencies_type_name}- {item.selected_dosage}d <Button className="btn-danger_cross" onClick={() => {
+                                                                                        this.handleDelete(index)
+                                                                                    }}><i className="fa fa-times" aria-hidden="true"></i>
+                                                                                    </Button></li>)
+                                                                                })}
+
+                                                                            </ul>
+                                                                        </div>
+                                                                    }
+                                                                    {this.state.selected_medicine_names.length == 0 &&
+                                                                        <div>
+                                                                            <div>
+                                                                                No data found
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            }
+                                                        </div>
+
                                                         <div className="text_area mt-4">
                                                             <div className="row">
                                                                 <div className="col-6">
@@ -657,25 +776,10 @@ export default class MedicineScreen extends Component {
                                                                     ></textarea>
                                                                 </div>
                                                             </div>
+
                                                             <div className="text-end">
                                                                 <Button className="medicine_update mt-2" onClick={() => { this.submitMadicationdata() }}>Submit</Button>
                                                             </div>
-                                                        </div>
-                                                        <div>
-                                                            {this.state.selected_medicine_names.length > 0 &&
-                                                                <div>
-                                                                    <ul className="list-unstyled">
-                                                                        {this.state.selected_medicine_names.map((item, index) => {
-                                                                            console.warn("++item", item)
-                                                                            return (<li className="bottom_hightlets" key={index}>{item.selected_medicine_name} - {item.potencies_type_name}- {item.selected_dosage}d <Button className="btn-danger_cross" onClick={() => {
-                                                                                this.handleDelete(index)
-                                                                            }}><i className="fa fa-times" aria-hidden="true"></i>
-                                                                            </Button></li>)
-                                                                        })}
-
-                                                                    </ul>
-                                                                </div>
-                                                            }
                                                         </div>
                                                     </div>
                                                 </div>
@@ -711,6 +815,9 @@ export default class MedicineScreen extends Component {
                                     {!this.state.isRightBranchHidden &&
                                         <div className="col-md-6">
                                             <div className="card">
+                                                <Tooltip title="hide case sheet" arrow>
+                                                    <span onClick={() => { this.handleClick() }} className="minus_circle"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
+                                                </Tooltip>
                                                 <div>
                                                     <h5 className="card-title">Patient Case Sheet</h5>
                                                     <img src="https://cdn-images.resumelab.com/pages/teaching_assistant_cta1_new.jpg" className="w-100" />

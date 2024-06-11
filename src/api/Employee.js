@@ -12,18 +12,19 @@ export const Employee = {
   get_patientdatabyid,
   insertmedicationdetails,
   update_patientcs,
-  delete_patientdetailsbyid
+  delete_patientdetailsbyid,
+  getallstates
 
 };
 const get_data = API_URLS.getdata_api;
 const getall_patients = API_URLS.getallpatients
 const insimg_service = API_URLS.uploadfile
-const getall_states = API_URLS.getallstates
 const postpatientdeials = API_URLS.insertpatientdetails
 const get_madication = API_URLS.getmedicationdetails
 const get_patient_databyid = API_URLS.getpatientdatabyid
 const insert_medicationdetails = API_URLS.insertmedicationdetails
 const delete_patient_details = API_URLS.deletePatientdetails
+const getall_states = API_URLS.getAllStates
 
 
 
@@ -50,9 +51,8 @@ function getmedaticationdetails() {
 function update_patientcs(item) {
   return fetchWrapper.post(update_patient_cs, item)
 }
-function getallstates() {
-  return fetchWrapper.get(getall_states)
-
+function getallstates(item) {
+  return fetchWrapper.post(getall_states, item)
 }
 
 function get_patientdatabyid(item) {

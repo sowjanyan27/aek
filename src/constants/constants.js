@@ -9,6 +9,7 @@ export const API_URLS = {
     getpatientdatabyid: `${dev_url}/eakapi/getpatientdatabyid/`,
     updatepatientcs: `${dev_url}/eakapi/updatepatentcasesheet/`,
     insertmedicationdetails: `${dev_url}/eakapi/inspatientmedicaldetails/`,
-    deletePatientdetails: `${dev_url}/eakapi/deletepatientdetailsbyid/`
+    deletePatientdetails: `${dev_url}/eakapi/deletepatientdetailsbyid/`,
+    getAllStates: `${dev_url}/eakapi/getallstatesdetails/`
 
 }

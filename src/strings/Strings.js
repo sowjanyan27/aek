@@ -35,6 +35,7 @@ export const Strings = {
     medicine: "medicine",
     Last_Medicine_details: "Last Medicine details",
     dose: "Dose",
-    case_sheet_num:"Case Sheet No."
-
+    case_sheet_num: "Case Sheet No.",
+    case_sheet_num: "Case Sheet No.",
+    select_state: "Select States"
 }

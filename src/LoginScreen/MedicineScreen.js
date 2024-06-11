@@ -569,7 +569,7 @@ export default class MedicineScreen extends Component {
                                                                                 Tablet List
                                                                             </h4> */}
                                                                             <ul className="list-unstyled">
-                                                                                {item.med_details.map((sub_item, sub_index) => (
+                                                                                {item.med_details && item.med_details.map((sub_item, sub_index) => (
                                                                                     // <li key={sub_index}>{sub_item.medicine_master_name}</li>
                                                                                     <li key={sub_index}>{sub_item.medicine_master_name} - {sub_item.potencies_type_name} -{sub_item.dosage} d</li>
 
@@ -593,6 +593,14 @@ export default class MedicineScreen extends Component {
                                                                 {this.state.data_for_modal && this.state.data_for_modal.map((item, index) => (
                                                                     <div style={{ margin: 10 }}>
                                                                         <div style={{ textAlign: "start" }}>
+                                                                            <div className="row">
+                                                                                <div className="col-6 mb-2">
+                                                                                    <span>Consultent Date:-</span>  <span>{Common.formatDate(item.patient_consultaion_date.slice(0, 10))}</span>
+                                                                                </div>
+                                                                                <div className="col-6 mb-2">
+                                                                                    <h5 className="card-title text-end"><i className="fa fa-user-md" aria-hidden="true"></i> Sanath K</h5>
+                                                                                </div>
+                                                                            </div>
                                                                             <div> Patient Ailment:- <span style={{ color: "green" }}>{item.ailment}</span></div>
                                                                             <div> Next Medicine:- <span style={{ color: "green" }}>{item.next_medicine}</span></div>
                                                                             <div> Medical Reports:- <span style={{ color: "green" }}>{item.patient_medical_reports}</span></div>

@@ -81,12 +81,14 @@ class LoginScreen extends Component {
             showImage: false,
             medicationpatientid: null,
             showDelete_cancel_btn: false,
+
             dropDown_States: [
                 { itemName: "Select State", value: "" },
                 { itemName: "Andhra Pradesh", value: "Andhra Pradesh" },
                 { itemName: "Tamilnadu", value: "Tamilnadu" },
                 { itemName: "Telangana", value: "Telangana" },
             ],
+
             Maindata: [],
             // Maindata: [{ patient_details_id: "1", patient_first_name: "venkat", patient_last_name: "Padyala", patient_dob: "1995-04-23", gender_name: "Male", patient_mobile_no: "8989898989" },
             // { patient_details_id: "2", patient_first_name: "sanath", patient_last_name: "Padyala", patient_dob: "1995-04-23", gender_name: "Male", patient_mobile_no: "8989898989" },
@@ -102,7 +104,9 @@ class LoginScreen extends Component {
             patient_attachment_path: "",
             showImage: false,
             is_edit_View: false,
-            primary_key: null
+            primary_key: null,
+            filteredStates: [],
+            allStatedata: []
         }
         this.inputRef = React.createRef()
         this.handlemenuImgchange = this.handlemenuImgchange.bind(this);
@@ -113,13 +117,15 @@ class LoginScreen extends Component {
 
     componentDidMount() {
         this.getallpatientdetails();
+        this.getAllStates()
+
     }
 
 
     async getallpatientdetails() {
         try {
             const response = await Employee.getallpatientdetails();
-            console.log('data get --', response)
+            // console.log('data get --', response)
             if (response.length > 0) {
                 this.setState({
                     Maindata: response, dummyData: response, isLoading: false
@@ -283,6 +289,7 @@ class LoginScreen extends Component {
             this.setState({ birthofPlace: value })
         }
         if (field === Strings.state) {
+            // console.warn("++value", value)
             this.setState({ state: value })
         }
         if (field === Strings.district) {
@@ -370,15 +377,16 @@ class LoginScreen extends Component {
             p_address: this.state.address,
             p_mobileno: Number(this.state.phoneNumber),
             p_district: this.state.district || '',
-            p_stateid: 2,
+            p_stateid: Number(this.state.state),
             attachment: this.state.db_img_path,
             created_by: 2,
             created_date: '2024-05-10',
             branch_id: 1
         }
 
-        console.log('-----patientdetails----', patientDetails)
+        // console.log('-----patientdetails----', patientDetails)
         // alert(patientDetails.patientid)
+        // return
         this.CreateItem(patientDetails)
 
         // this.setState({ isFormView: false });
@@ -463,16 +471,68 @@ class LoginScreen extends Component {
         this.setState({ Maindata: filteredArray, nodataFound: filteredArray.length === 0 })
     };
 
+
     handleAdd_btn = (item) => {
         this.setState({ isTableView: item, isFormView: item, disabledInput: true, disabledInput_part2: true, showDelete_cancel_btn: false, is_edit_View: false, showUpDate_btn: false, showedit_btn: false, showSave_btn: true })
         this.dataClear()
     }
 
+    async getAllStates() {
+        try {
+            const response = await Employee.getallstates({ country_id: 1 });
+            // console.log(' getstates --', response)
+            if (response.length > 0) {
+                this.setState({
+                    allStatedata: response
+                }, () => {
+                    // console.log('Statedata', this.state.allStatedata);
+                    const filteredarray = this.state.allStatedata.map(({ state_id, state_name }) => ({ state_id, state_name }));
+                    this.setState({ filteredStates: filteredarray }, () => {
+                        // console.log('filteredStates', this.state.filteredStates);
+                    });
+                })
+
+
+            }
+
+        } catch (e) {
+            console.log(e);
+        } finally {
+            this.setState({
+                isLoading: false,
+            });
+        }
+    }
+
     handleDelete_btn = () => {
-        var patient_id = this.state.primary_key
-        this.deletepatientdetails({
-            "patientid":patient_id
-          })
+        try {
+            var patient_id = this.state.primary_key
+            var res = this.deletepatientdetails({ "patientid": patient_id })
+            toast.success("Deleted Successfully...", {
+                toastId: 'Deletion',
+                onClose: () => {
+                    this.setState({ isTableView: false, isFormView: false, disabledInput: true, disabledInput_part2: true, showDelete_cancel_btn: false, is_edit_View: false, showUpDate_btn: false })
+                    this.dataClear()
+                    this.getallpatientdetails();
+                    this.getAllStates()
+                }
+            });
+
+            // this.setState({ isTableView: false, isFormView: false, disabledInput: true, disabledInput_part2: true, showDelete_cancel_btn: false, is_edit_View: false, showUpDate_btn: false })
+            // this.dataClear()
+            // this.getallpatientdetails();
+            // this.getAllStates()
+
+        }
+        catch (e) {
+            console.error(e)
+        }
+        // var patient_id = this.state.primary_key
+        // var res = this.deletepatientdetails({ "patientid": patient_id })
+        // console.warn("++res", res)
+        // if (res) {
+
+        // }
         this.setState({ isTableView: false, isFormView: false, disabledInput: true, disabledInput_part2: true, showDelete_cancel_btn: false, is_edit_View: false, showUpDate_btn: false })
         this.dataClear()
     }
@@ -686,9 +746,23 @@ class LoginScreen extends Component {
                         {this.state.isFormView &&
                             <div className="w-100 mt-4 mb-4 tables-shadow">
                                 <div>
-                                    <div className="margin_bottom_15 evens-align mt-4 position-relative">
+                                    {/* <div className="margin_bottom_15 evens-align mt-4 position-relative">
                                         <h3 className="info-text">{Strings.patientdetails}</h3>
+                                        <span style={{ color: "blue", fontWeight: 600 }}>Case Sheet id:- <span style={{ color: "black" }}>KHD - 135-F</span></span>
                                         <div className="top-right-icons">
+                                            <Tooltip title="Back" arrow>
+                                                <span onClick={() => { this.handleCancel_btn() }}>
+                                                    <i className="fa fa-arrow-left" aria-hidden="true"></i>
+                                                </span>
+                                            </Tooltip>
+                                        </div>
+                                    </div> */}
+                                    <div className="margin_bottom_15 evens-align  mt-4 position-relative">
+                                        <h3 className="info-text">{Strings.patientdetails}</h3>
+                                        {this.state.is_edit_View &&
+                                            <span style={{ color: "blue", fontWeight: 600 }}>Case Sheet No:- <span style={{ color: "black" }}>KHD - {this.state.patientnum}</span></span>
+                                        }
+                                        <div className="">
                                             <Tooltip title="Back" arrow>
                                                 <span onClick={() => { this.handleCancel_btn() }}>
                                                     <i className="fa fa-arrow-left" aria-hidden="true"></i>
@@ -802,9 +876,10 @@ class LoginScreen extends Component {
                                                     <div className="form-group text_align_left" >
                                                         <label htmlFor="selectOption" className="label_texts mar_b_8"> {Strings.state} </label>
                                                         <select disabled={!this.state.disabledInput} className="form-select input_hight_45" id="state" onChange={(text) => this.handleSelectedData(text, Strings.state)} value={this.state.state} placeholder={Strings.state} >
-                                                            {this.state.dropDown_States.map(item => {
+                                                            <option className="" value={""}>{Strings.select_state}</option>
+                                                            {this.state.filteredStates.map(item => {
                                                                 return (
-                                                                    <option className="" value={item.value}>{item.itemName}</option>
+                                                                    <option className="" value={item.state_id}>{item.state_name}</option>
                                                                 )
                                                             })}
                                                         </select>

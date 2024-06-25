@@ -193,6 +193,8 @@ ul.child-sub-menu li:hover a span {
 
 .tables-shadow .css-11xur9t-MuiPaper-root-MuiTableContainer-root {
   box-shadow: none !important;
+  padding: 11px;
+  border-radius: 11px;
 }
 
 .fliters-sec input {
@@ -669,7 +671,7 @@ ul.child-sub-menu li:hover a span {
   background: #fff;
   padding: 15px 10px; */
   background: #fff;
-  padding: 15px 22px;
+  padding: 21px 30px;
   box-shadow: 0 1px 3px rgb(0 0 0 / 44%);
 }
 
@@ -1077,6 +1079,7 @@ input[type="file"] {
 .info-text {
   font-size: 19px;
   margin: 0;
+  font-weight: 700;
 }
 
 .logo_scope {
